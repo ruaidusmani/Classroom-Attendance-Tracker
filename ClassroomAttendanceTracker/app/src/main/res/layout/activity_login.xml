@@ -6,6 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
 
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="parent" />
+
     <TextView
         android:id="@+id/password_TextView"
         android:layout_width="wrap_content"
@@ -19,6 +26,7 @@
 
     <Button
         android:id="@+id/loginButton"
+        android:tag="login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="76dp"
@@ -46,7 +54,7 @@
         android:layout_marginTop="12dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Name"
+        android:hint="@string/student_ID_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
@@ -58,6 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:ems="10"
+        android:hint="@string/password_hint"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.487"
@@ -72,6 +81,7 @@
 
     <TextView
         android:id="@+id/register_prompt_TextView"
+        android:tag="register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
