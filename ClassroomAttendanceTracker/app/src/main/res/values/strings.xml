@@ -4,4 +4,6 @@
     <string name="loginButton">Login</string>
     <string name="student_ID_TextView">Student ID:</string>
     <string name="password_TextView">Password:</string>
+    <string name="confirm_password">Confirm Password:</string>
+    <string name="registerButton">Register</string>
 </resources>
