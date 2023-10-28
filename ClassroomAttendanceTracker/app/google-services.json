@@ -1,0 +1,164 @@
+{
+  "project_info": {
+    "project_number": "652849004158",
+    "firebase_url": "https://ledcontrol-7c9d9-default-rtdb.firebaseio.com",
+    "project_id": "ledcontrol-7c9d9",
+    "storage_bucket": "ledcontrol-7c9d9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:652849004158:android:2cff8cac72e5883bad222f",
+        "android_client_info": {
+          "package_name": "com.example.auhtenticatorfirebasetest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "652849004158-hf2etttolt0cgpov780pe34da0q88dgi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.auhtenticatorfirebasetest",
+            "certificate_hash": "340aa0a19a4825f32f442301b7f08e7fab881ed0"
+          }
+        },
+        {
+          "client_id": "652849004158-n063g9r8tqhkud4igils3ldtml385aas.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDL-wSh44WjfU7wGryPaAhM20Gl3rSGQG4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "652849004158-n063g9r8tqhkud4igils3ldtml385aas.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:652849004158:android:9005795c5d51ec1aad222f",
+        "android_client_info": {
+          "package_name": "com.example.classroomattendancetracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "652849004158-n063g9r8tqhkud4igils3ldtml385aas.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDL-wSh44WjfU7wGryPaAhM20Gl3rSGQG4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "652849004158-n063g9r8tqhkud4igils3ldtml385aas.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:652849004158:android:aa906a274b0a6ba2ad222f",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "652849004158-n063g9r8tqhkud4igils3ldtml385aas.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDL-wSh44WjfU7wGryPaAhM20Gl3rSGQG4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "652849004158-n063g9r8tqhkud4igils3ldtml385aas.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:652849004158:android:a247f41a802040baad222f",
+        "android_client_info": {
+          "package_name": "com.example.nfc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "652849004158-n063g9r8tqhkud4igils3ldtml385aas.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDL-wSh44WjfU7wGryPaAhM20Gl3rSGQG4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "652849004158-n063g9r8tqhkud4igils3ldtml385aas.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:652849004158:android:0fb72f276b43d70ead222f",
+        "android_client_info": {
+          "package_name": "com.example.updatedatabase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "652849004158-n063g9r8tqhkud4igils3ldtml385aas.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDL-wSh44WjfU7wGryPaAhM20Gl3rSGQG4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "652849004158-n063g9r8tqhkud4igils3ldtml385aas.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

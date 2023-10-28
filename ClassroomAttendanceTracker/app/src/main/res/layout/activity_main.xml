@@ -32,13 +32,38 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginButton" />
 
+    <Button
+        android:id="@+id/editPayloadButton"
+        android:layout_width="117dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="28dp"
+        android:width="300dp"
+        android:tag="editPayload"
+        android:text="@string/editPayloadButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registerButton" />
+
+    <Button
+        android:id="@+id/scanNFCButton"
+        android:layout_width="113dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="8dp"
+        android:width="300dp"
+        android:tag="scanNFC"
+        android:text="@string/scanNFCButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editPayloadButton" />
+
     <TextView
         android:id="@+id/app_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="244dp"
         android:text="@string/app_name"
-        android:boldText="true"
         android:textSize="25dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
