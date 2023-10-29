@@ -62,7 +62,7 @@ def getClassroomNumber():
   global ROOM
   ROOM = "null"
   try:
-    ROOM = ref.get()["Room"]
+    ROOM = ref.get()["room"]
     print("Room found: ", ROOM)
   except:
     print("this serial number does not have a room")
