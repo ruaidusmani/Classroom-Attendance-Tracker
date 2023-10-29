@@ -8,20 +8,20 @@
 
     <Button
         android:id="@+id/loginButton"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="168dp"
+        android:layout_marginTop="92dp"
         android:width="300dp"
         android:tag="login"
         android:text="@string/loginButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.486"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/app_title" />
 
     <Button
         android:id="@+id/registerButton"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:width="300dp"
@@ -34,8 +34,8 @@
 
     <Button
         android:id="@+id/editPayloadButton"
-        android:layout_width="117dp"
-        android:layout_height="64dp"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:width="300dp"
         android:tag="editPayload"
@@ -47,14 +47,14 @@
 
     <Button
         android:id="@+id/scanNFCButton"
-        android:layout_width="113dp"
-        android:layout_height="54dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
         android:width="300dp"
         android:tag="scanNFC"
         android:text="@string/scanNFCButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintHorizontal_bias="0.486"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editPayloadButton" />
 
