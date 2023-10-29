@@ -80,27 +80,47 @@ def setClassroomNumber(roomNumber):
   
 
 def authenticate_class(dictionary):
-  print (dictionary)
-  print()
   if (dictionary['id']== "null"):
     print("Found null, will not update database")
     return
-  elif (dictionary['id'] == "BRUH"):
-    setClassroomNumber(dictionary['id'])
-  else:
-    global ROOM
-    path = '/PRESENCE/%s/%s' %(ROOM, dictionary['id'])
-    present_status = database_present_state(path)
-
-    if (present_status == True):
-      dict_to_push = {"present" : False}
-    elif (present_status == False): 
-      dict_to_push= {"present" : True}
-    else:
-      dict_to_push={"present" : True}
+  arr = dictionary['id'].split("_")
+  print(arr)
+  try:
+      action = arr[0]
+      uid = arr[1]
+  except:
+      print("Not enough arguments")
+      return
+  try:
+      extra = arr[2]
+  except:
+      extra = None
+  global ROOM
+  if action == "CI":
+      print("CI")
     
-    database_push_data(path, dict_to_push)
-
+      path = '/PRESENCE/%s/%s' %(ROOM, uid)
+      present_status = database_present_state(path)
+      database_push_data(path, {'present': True})
+      return
+  elif action == "CO":
+      print("CO")
+      path = '/PRESENCE/%s/%s' %(ROOM, uid)
+      present_status = database_present_state(path)
+      database_push_data(path, {'present': False})
+      return
+  elif action == "UR":
+      print("UR")
+      if extra == None:
+        print("Error: No extra when it is required")
+      else:
+        setClassroomNumber(extra)
+      return
+  else :
+      print("Error: Invalid action")
+      return
+  return
+  
 def database_present_state(path):
   ref = db.reference(path)
   try:
