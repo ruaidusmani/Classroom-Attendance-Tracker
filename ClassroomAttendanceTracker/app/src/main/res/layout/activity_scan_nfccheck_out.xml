@@ -2,10 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ScanNFCActivitySignIn">
+    tools:context=".ScanNFCActivityCheckOut">
 
     <include
         android:id="@+id/toolbar"
@@ -18,9 +17,9 @@
         android:id="@+id/textViewPurpose"
         android:layout_width="385dp"
         android:layout_height="53dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="36dp"
         android:fontFamily="sans-serif-black"
-        android:text="Class Sign-In"
+        android:text="Class Checkout"
         android:textAlignment="center"
         android:textSize="30dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,7 +35,7 @@
         android:fontFamily="sans-serif-medium"
         android:text="Approach the phone to the NFC Module"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewPersonInfo" />
 
@@ -45,7 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="39dp"
-        android:text="You will sign-in as:"
+        android:text="You are signed-in as:"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -58,7 +57,7 @@
         android:layout_marginTop="28dp"
         android:text="(Placeholder for Student Info)"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
@@ -69,7 +68,7 @@
         android:orientation="horizontal"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.655"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewInstructions">
 
@@ -77,9 +76,9 @@
             android:id="@+id/imageViewError"
             android:layout_width="58dp"
             android:layout_height="88dp"
-            android:src="@android:drawable/stat_notify_error"
             android:visibility="invisible"
-            app:tint="#FFEB3B" />
+            app:tint="#FFEB3B"
+            tools:srcCompat="@android:drawable/stat_notify_error" />
 
         <TextView
             android:id="@+id/textViewError"
@@ -98,7 +97,7 @@
         android:orientation="horizontal"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.655"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewInstructions">
 
@@ -106,9 +105,9 @@
             android:id="@+id/imageViewSuccess"
             android:layout_width="58dp"
             android:layout_height="88dp"
-            android:src="@drawable/done"
             android:visibility="invisible"
-            app:tint="#4CAF50" />
+            app:tint="#4CAF50"
+            tools:srcCompat="@drawable/done_24px" />
 
         <TextView
             android:id="@+id/textViewSuccess"

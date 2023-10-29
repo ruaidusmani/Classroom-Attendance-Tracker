@@ -2,10 +2,13 @@ package com.example.classroomattendancetracker;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -55,6 +58,17 @@ public class ScanNFCActivitySignIn extends AppCompatActivity {
         tried_to_sign_in = false;
         refresh();
 
+        // Toolbar
+        Toolbar check_in_toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(check_in_toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setTitle("Classroom Checkout");
+
+        //Toolbar items
+        check_in_toolbar.showOverflowMenu();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         //start the NFC Reading service
         Intent serviceIntent1 = new Intent(this, NFCHost.class);
         Log.d("Status Main: ", preferencesController.getString("NFCString"));
@@ -99,6 +113,25 @@ public class ScanNFCActivitySignIn extends AppCompatActivity {
         Log.d("onDestroy", "onDestroy");
         Intent serviceIntent1 = new Intent(this, NFCHost.class);
         stopService(serviceIntent1);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+
+        //Back button
+        if (id == android.R.id.home){
+            this.finish();
+//            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     void refresh() {
