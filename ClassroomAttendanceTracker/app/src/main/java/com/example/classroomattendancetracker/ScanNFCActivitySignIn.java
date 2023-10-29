@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.Firebase;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,6 +30,9 @@ public class ScanNFCActivitySignIn extends AppCompatActivity {
     TextView textViewError;
     TextView textViewSuccess;
 
+    FirebaseUser user;
+    String email;
+
     boolean tried_to_sign_in;
 
     @Override
@@ -42,6 +47,13 @@ public class ScanNFCActivitySignIn extends AppCompatActivity {
         imageViewSuccess = findViewById(R.id.imageViewSuccess);
         textViewError = findViewById(R.id.textViewError);
         textViewSuccess = findViewById(R.id.textViewSuccess);
+
+        if(user != null){
+            email = user.getEmail();
+        }else{
+            email = "null";
+        }
+        Log.d("SCAN_NFC_EMAIL" , email);
 
         tried_to_sign_in = false;
         refresh();
