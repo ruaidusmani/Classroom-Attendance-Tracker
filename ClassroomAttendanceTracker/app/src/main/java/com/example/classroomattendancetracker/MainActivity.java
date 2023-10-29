@@ -13,20 +13,29 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
     Vibrator vibrator;
-    Button loginButton, registerButton, scanButton, editButton;
+    Button loginButton, registerButton, scanButton, editButton, logoutButton;
     TextView app_title;
 
 
     PreferencesController preferencesController;
 
+    FirebaseUser user;
+    FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mAuth = FirebaseAuth.getInstance();
 
         preferencesController = new PreferencesController(getApplicationContext());
         String android_id = Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID);
@@ -40,11 +49,33 @@ public class MainActivity extends AppCompatActivity {
         app_title = (TextView) findViewById(R.id.app_title);
         scanButton = (Button) findViewById(R.id.scanNFCButton);
         editButton = (Button) findViewById(R.id.editPayloadButton);
+        logoutButton = (Button) findViewById(R.id.logoutButtonMain);
 
         loginButton.setOnClickListener(Activity_Click_Listener);
         registerButton.setOnClickListener(Activity_Click_Listener);
         scanButton.setOnClickListener(Activity_Click_Listener);
         editButton.setOnClickListener(Activity_Click_Listener);
+        logoutButton.setOnClickListener(Activity_Click_Listener);
+        user = mAuth.getCurrentUser();
+        if(user != null)
+        {
+            loginButton.setVisibility(View.GONE);
+            registerButton.setVisibility(View.GONE);
+            logoutButton.setVisibility(View.VISIBLE);
+            editButton.setVisibility(View.VISIBLE);
+            scanButton.setVisibility(View.VISIBLE);
+            Toast.makeText(getApplicationContext(), "ALREADY LOGGED IN :)", Toast.LENGTH_LONG).show();
+        }else{
+
+            loginButton.setVisibility(View.VISIBLE);
+            registerButton.setVisibility(View.VISIBLE);
+            logoutButton.setVisibility(View.GONE);
+            editButton.setVisibility(View.VISIBLE);
+            scanButton.setVisibility(View.VISIBLE);
+            Toast.makeText(getApplicationContext(), "NOT LOGGED IN :(", Toast.LENGTH_LONG).show();
+        }
+
+
 
         //check for intent
         Intent intent = getIntent();
@@ -56,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
             AlertDialog dialog = builder.create();
             dialog.show();
         }
-
     }
 
     View.OnClickListener Activity_Click_Listener = new View.OnClickListener() {
@@ -79,11 +109,16 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("editPayload", "HERE");
                     openNewActivity(EditNFCPayloadActivity.class);
                     break;
-
+                case "logout" :
+                    loginButton.setVisibility(View.VISIBLE);
+                    registerButton.setVisibility(View.VISIBLE);
+                    logoutButton.setVisibility(View.GONE);
+                    editButton.setVisibility(View.GONE);
+                    scanButton.setVisibility(View.GONE);
+                    FirebaseAuth.getInstance().signOut();
             }
         }
     };
-
     //on resume
 
 
