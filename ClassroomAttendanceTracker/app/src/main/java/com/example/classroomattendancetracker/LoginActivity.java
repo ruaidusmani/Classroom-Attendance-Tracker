@@ -21,9 +21,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -37,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     TextView student_ID_TextView, password_TextView, register_prompt_TextView;
     EditText student_ID_EditText, password_EditText;
 
+    boolean signed_user = false;
 
 
 
@@ -45,9 +53,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Firebase variablbe init
+        // Firebase variable init
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+
 
         // Vibration object to give vibrate effect to buttons
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
@@ -104,12 +113,28 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("FIREBASE_AUTH_LOGIN", "signInWithEmail:success");
-                            Toast.makeText(LoginActivity.this, "Login Success",
-                                    Toast.LENGTH_SHORT).show();
+
 
                             user = mAuth.getCurrentUser();
+                            Log.d("user return before", user.toString());
+
                             hardwareSecurityService(user);
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            user = FirebaseAuth.getInstance().getCurrentUser();
+                            Log.d("user return after ", user.toString());
+
+
+                            if (!signed_user){
+                                Toast.makeText(LoginActivity.this, "Your account is not associated to this phone.", Toast.LENGTH_SHORT).show();
+                                FirebaseAuth.getInstance().signOut();
+                            }
+                            else{
+                                Toast.makeText(LoginActivity.this, "Login Success",Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+//                                // If sign in fails, display a message to the user.
+//                                Log.w("FIREBASE_AUTH_LOGIN", "hardware check failure", task.getException());
+//                                //TODO: ADD LOGIN FAIL REASON
+                            }
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("FIREBASE_AUTH_LOGIN", "signInWithEmail:failure", task.getException());
@@ -123,11 +148,46 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void hardwareSecurityService(FirebaseUser user){
-
         String android_id = Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID);
 
 
+        DocumentReference docRef = db.collection("STUDENTS").document(user.getEmail());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+
+                    if (document.exists()) {
+                        Map<String, Object> profile = new HashMap<>();
+                        profile = document.getData();
+                        String stored_android_id = profile.get("android_id").toString();
+                        Log.d("Signed email", android_id + " " + stored_android_id);
+
+
+                        if (stored_android_id.equals(android_id)) {
+                            signed_user = true;
+                            Log.d("login-security", "Android ID matches");
+                        }
+                        else{
+                            signed_user = false;
+                            Log.d("login-security", "Android ID does not match");
+                        }
+
+                        Log.d("login-security", "DocumentSnapshot data: " + document.getData());
+                    } else {
+                        Log.d("login-security", "No such document");
+                    }
+                } else {
+                    Log.d("login-security", "get failed with ", task.getException());
+                }
+            }
+
+
+        });
     }
+
     public void openNewActivity(Class activity){
         Intent intent = new Intent(getApplicationContext(), activity);
         startActivity(intent);
