@@ -72,7 +72,7 @@
             android:layout_height="88dp"
             android:visibility="invisible"
             app:tint="#FFEB3B"
-            tools:srcCompat="@android:drawable/stat_notify_error" />
+            android:src="@android:drawable/stat_notify_error" />
 
         <TextView
             android:id="@+id/textViewError"
@@ -101,7 +101,7 @@
             android:layout_height="88dp"
             android:visibility="invisible"
             app:tint="#4CAF50"
-            tools:srcCompat="@drawable/done_24px" />
+            android:src="@drawable/done" />
 
         <TextView
             android:id="@+id/textViewSuccess"

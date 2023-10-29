@@ -8,11 +8,11 @@
 
     <Button
         android:id="@+id/loginButton"
-        android:tag="login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="168dp"
         android:width="300dp"
+        android:tag="login"
         android:text="@string/loginButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
@@ -21,11 +21,11 @@
 
     <Button
         android:id="@+id/registerButton"
-        android:tag="register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:width="300dp"
+        android:tag="register"
         android:text="@string/registerButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
