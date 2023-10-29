@@ -1,11 +1,14 @@
 package com.example.classroomattendancetracker;
 
+import static java.security.AccessController.getContext;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     Button loginButton, registerButton, scanButton, editButton;
     TextView app_title;
 
+
     PreferencesController preferencesController;
 
     @Override
@@ -25,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         preferencesController = new PreferencesController(getApplicationContext());
+        String android_id = Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID);
+        Log.d("Android ID", android_id);
+        preferencesController.setPreference("AndroidID", android_id);
 
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 

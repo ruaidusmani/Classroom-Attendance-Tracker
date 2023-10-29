@@ -51,11 +51,9 @@ public class EditNFCPayloadActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try{
-//
                     preferencesController.setPreference("NFCString",dataSnapshot.getValue(String.class).toString());
                     Log.d("message is : ", dataSnapshot.getValue(String.class).toString());
-                    Log.d("Shared preference: ", dataSnapshot.getValue(String.class).toString());
-
+                    Log.d("Shared preference: ", preferencesController.getString("NFCString"));
                 }
                 catch (Exception e){
                     Log.d("ERROR", e.toString());
