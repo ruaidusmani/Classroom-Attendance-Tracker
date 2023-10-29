@@ -38,6 +38,7 @@ public class NFCHost extends HostApduService {
         NFCString = preferencesController.getString("NFCString");
         preferencesController.setPreference("NFCString", "null");
 
+
         if ("null".equals(NFCString)){
             Intent intent = new Intent(this, MainActivity.class);
             //pass extra to main activity
