@@ -1,7 +1,5 @@
 package com.example.classroomattendancetracker;
 
-import static java.security.AccessController.getContext;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -21,7 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainActivity extends AppCompatActivity {
 
     Vibrator vibrator;
-    Button loginButton, registerButton, scanButton, editButton, logoutButton;
+    Button loginButton, registerButton, buttonCheckIn, editButton, logoutButton, buttonCheckOut;
     TextView app_title;
 
 
@@ -47,13 +45,15 @@ public class MainActivity extends AppCompatActivity {
         loginButton = (Button) findViewById(R.id.loginButton);
         registerButton = (Button) findViewById(R.id.registerButton);
         app_title = (TextView) findViewById(R.id.app_title);
-        scanButton = (Button) findViewById(R.id.scanNFCButton);
+        buttonCheckIn = (Button) findViewById(R.id.buttonCheckIn);
+        buttonCheckOut = (Button) findViewById(R.id.buttonCheckOut);
         editButton = (Button) findViewById(R.id.editPayloadButton);
         logoutButton = (Button) findViewById(R.id.logoutButtonMain);
 
         loginButton.setOnClickListener(Activity_Click_Listener);
         registerButton.setOnClickListener(Activity_Click_Listener);
-        scanButton.setOnClickListener(Activity_Click_Listener);
+        buttonCheckIn.setOnClickListener(Activity_Click_Listener);
+        buttonCheckOut.setOnClickListener(Activity_Click_Listener);
         editButton.setOnClickListener(Activity_Click_Listener);
         logoutButton.setOnClickListener(Activity_Click_Listener);
         user = mAuth.getCurrentUser();
@@ -63,15 +63,17 @@ public class MainActivity extends AppCompatActivity {
             registerButton.setVisibility(View.GONE);
             logoutButton.setVisibility(View.VISIBLE);
             editButton.setVisibility(View.VISIBLE);
-            scanButton.setVisibility(View.VISIBLE);
+            buttonCheckIn.setVisibility(View.VISIBLE);
+            buttonCheckOut.setVisibility(View.VISIBLE);
             Toast.makeText(getApplicationContext(), "ALREADY LOGGED IN :)", Toast.LENGTH_LONG).show();
         }else{
 
             loginButton.setVisibility(View.VISIBLE);
             registerButton.setVisibility(View.VISIBLE);
             logoutButton.setVisibility(View.GONE);
-            editButton.setVisibility(View.VISIBLE);
-            scanButton.setVisibility(View.VISIBLE);
+            editButton.setVisibility(View.GONE);
+            buttonCheckIn.setVisibility(View.GONE);
+            buttonCheckOut.setVisibility(View.GONE);
             Toast.makeText(getApplicationContext(), "NOT LOGGED IN :(", Toast.LENGTH_LONG).show();
         }
 
@@ -102,8 +104,11 @@ public class MainActivity extends AppCompatActivity {
                 case "register":
                     openNewActivity(RegisterActivity.class);
                     break;
-                case "scanNFC":
-                    openNewActivity(ScanNFCActivitySignIn.class);
+                case "checkIn":
+                    openNewActivity(ScanNFCActivityCheckIn.class);
+                    break;
+                case "checkOut":
+                    openNewActivity(ScanNFCActivityCheckOut.class);
                     break;
                 case "editPayload":
                     Log.d("editPayload", "HERE");
@@ -114,7 +119,8 @@ public class MainActivity extends AppCompatActivity {
                     registerButton.setVisibility(View.VISIBLE);
                     logoutButton.setVisibility(View.GONE);
                     editButton.setVisibility(View.GONE);
-                    scanButton.setVisibility(View.GONE);
+                    buttonCheckIn.setVisibility(View.GONE);
+                    buttonCheckOut.setVisibility(View.GONE);
                     FirebaseAuth.getInstance().signOut();
             }
         }
