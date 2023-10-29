@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,16 +21,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-// ...
-// Initialize Firebase Auth
-
-
+    private FirebaseFirestore db;
+    private FirebaseUser user;
 
     Vibrator vibrator;
 
@@ -37,14 +37,17 @@ public class LoginActivity extends AppCompatActivity {
     TextView student_ID_TextView, password_TextView, register_prompt_TextView;
     EditText student_ID_EditText, password_EditText;
 
-    FirebaseUser user;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        // Firebase variablbe init
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         // Vibration object to give vibrate effect to buttons
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
@@ -82,14 +85,9 @@ public class LoginActivity extends AppCompatActivity {
             String tag = (String) v.getTag(); // tags for buttons are in their .xml
             switch(tag){
                 case "login":
-
                     String password = ((EditText) findViewById(R.id.password_EditText)).getText().toString();
                     String email = ((EditText)findViewById(R.id.student_email_EditText)).getText().toString();
-
-                    Log.d("PASSING EMAIL ", email);
-                    Log.d("PASSING password", password);
                     loginService(email, password);
-
                     break;
                 case "register":
                     openNewActivity(RegisterActivity.class);
@@ -108,9 +106,10 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d("FIREBASE_AUTH_LOGIN", "signInWithEmail:success");
                             Toast.makeText(LoginActivity.this, "Login Success",
                                     Toast.LENGTH_SHORT).show();
-                            user = mAuth.getCurrentUser();
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
 
+                            user = mAuth.getCurrentUser();
+                            hardwareSecurityService(user);
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("FIREBASE_AUTH_LOGIN", "signInWithEmail:failure", task.getException());
@@ -122,6 +121,13 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+
+    public void hardwareSecurityService(FirebaseUser user){
+
+        String android_id = Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID);
+
+
+    }
     public void openNewActivity(Class activity){
         Intent intent = new Intent(getApplicationContext(), activity);
         startActivity(intent);
