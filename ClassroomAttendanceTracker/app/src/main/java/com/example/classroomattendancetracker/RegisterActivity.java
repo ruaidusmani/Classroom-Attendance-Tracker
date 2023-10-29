@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,14 +16,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
     Vibrator vibrator;
@@ -33,11 +41,13 @@ public class RegisterActivity extends AppCompatActivity {
     FirebaseUser user;
     FirebaseAuth mAuth;
 
+    FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
 
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
@@ -60,8 +70,10 @@ public class RegisterActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        mAuth = FirebaseAuth.getInstance();
 
+        // Firebase variable init
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
 
         registerButton.setOnClickListener(new View.OnClickListener() {
@@ -91,8 +103,7 @@ public class RegisterActivity extends AppCompatActivity {
                          // Sign in success, update UI with the signed-in user's information
                          Log.d("FIREBASE_AUTH_REGISTER", "createUserWithEmail:success");
                          user = mAuth.getCurrentUser();
-                         Toast.makeText(RegisterActivity.this, "Registration Succcess",
-                                 Toast.LENGTH_SHORT).show();
+                         initialiseFirestoreDocument(user);
                          startActivity(new Intent(getApplicationContext(), MainActivity.class));
                      } else {
                          // If sign in fails, display a message to the user.
@@ -106,6 +117,29 @@ public class RegisterActivity extends AppCompatActivity {
              });
  }
 
+
+ public void initialiseFirestoreDocument(FirebaseUser user){
+        Map<String, Object> profile = new HashMap<>();
+        String email = user.getEmail();
+        String android_id = Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID);
+        profile.put("android_id", android_id);
+        db.collection("STUDENTS")
+                .document(email)
+                .set(profile)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(getApplicationContext(), "Registration & Profile created", Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@androidx.annotation.NonNull Exception e) {
+
+                        Toast.makeText(getApplicationContext(), "Profile creation fail", Toast.LENGTH_LONG).show();
+                    }
+                });
+ }
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
