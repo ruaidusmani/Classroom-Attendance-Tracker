@@ -43,6 +43,8 @@ public class EditNFCPayloadActivity extends AppCompatActivity {
                 String a = textViewEnterString.getText().toString();
                 myRef.setValue(a);
 
+                preferencesController.setPreference("NFCString", stringToSend);
+
             }
         });
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
