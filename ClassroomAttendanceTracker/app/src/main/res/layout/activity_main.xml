@@ -46,17 +46,30 @@
         app:layout_constraintTop_toBottomOf="@+id/registerButton" />
 
     <Button
-        android:id="@+id/scanNFCButton"
+        android:id="@+id/buttonCheckIn"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:width="300dp"
-        android:tag="scanNFC"
-        android:text="@string/scanNFCButton"
+        android:tag="checkIn"
+        android:text="@string/checkIn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.486"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editPayloadButton" />
+
+    <Button
+        android:id="@+id/buttonCheckOut"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:width="300dp"
+        android:tag="checkOut"
+        android:text="@string/checkOut"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.486"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonCheckIn" />
 
     <TextView
         android:id="@+id/app_title"

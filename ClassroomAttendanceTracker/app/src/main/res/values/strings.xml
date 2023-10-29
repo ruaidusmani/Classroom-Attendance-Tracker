@@ -9,5 +9,6 @@
     <string name="registerButton">Register</string>
     <string name="password_hint">Password</string>
     <string name="editPayloadButton">Edit Payload</string>
-    <string name="scanNFCButton">Scan NFC</string>
+    <string name="checkIn">Check-In</string>
+    <string name="checkOut">Check-Out</string>
 </resources>

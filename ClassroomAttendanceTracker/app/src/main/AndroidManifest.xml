@@ -20,7 +20,10 @@
         android:theme="@style/Theme.ClassroomAttendanceTracker"
         tools:targetApi="31">
         <activity
-            android:name=".ScanNFCActivitySignIn"
+            android:name=".ScanNFCActivityCheckIn"
+            android:exported="false" />
+        <activity
+            android:name=".ScanNFCActivityCheckOut"
             android:exported="false" />
         <activity android:name=".EditNFCPayloadActivity"
             android:exported="false"/>
