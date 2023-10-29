@@ -62,7 +62,7 @@ public class ScanNFCActivitySignIn extends AppCompatActivity {
         Log.d("Status Main: ", preferencesController.getString("NFCString"));
         if ("null".equals(preferencesController.getString("NFCString") ) ){
             Log.d("NFCString", "Shared Pref is null");
-            preferencesController.setPreference("NFCString", "Sign-in");
+            preferencesController.setPreference("NFCString", "CI_" + preferencesController.getString("AndroidID") );
         }
         serviceIntent1.putExtra("NFCString", preferencesController.getString("NFCString"));
         startService(serviceIntent1);
@@ -75,12 +75,13 @@ public class ScanNFCActivitySignIn extends AppCompatActivity {
         Log.d("onResume", "onResume");
         refresh();
         Intent serviceIntent1 = new Intent(this, NFCHost.class);
+
         if ("null".equals(preferencesController.getString("NFCString") ) ){
             Log.d("NFCString", "Shared Pref is null");
-            preferencesController.setPreference("NFCString", "Sign-in");
+            preferencesController.setPreference("NFCString", "CI_" + preferencesController.getString("AndroidID") );
         }
         Log.d("Status Main: ", preferencesController.getString("NFCString"));
-        serviceIntent1.putExtra("NFCString", "Sign-in"); // to change
+        serviceIntent1.putExtra("NFCString", "CI_" + preferencesController.getString("AndroidID")); // to change
         startService(serviceIntent1);
     }
 
@@ -124,6 +125,7 @@ public class ScanNFCActivitySignIn extends AppCompatActivity {
 
     void refresh() {
         final FirebaseDatabase database = com.google.firebase.database.FirebaseDatabase.getInstance();
+        //TODO: Change path of database to student's ID, should be dynamic as it check if a student is currently logged in
         DatabaseReference ref = database.getReference("/PRESENCE/H394/Sign-in"); //to be replaced with student
         ref.addValueEventListener(new ValueEventListener() {
             @Override
