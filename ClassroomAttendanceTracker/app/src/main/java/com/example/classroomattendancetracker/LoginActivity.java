@@ -43,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     Button loginButton;
     TextView student_ID_TextView, password_TextView, register_prompt_TextView;
     EditText student_ID_EditText, password_EditText;
+    String email, password;
 
     boolean signed_user = false;
 
@@ -94,8 +95,9 @@ public class LoginActivity extends AppCompatActivity {
             String tag = (String) v.getTag(); // tags for buttons are in their .xml
             switch(tag){
                 case "login":
-                    String password = ((EditText) findViewById(R.id.password_EditText)).getText().toString();
-                    String email = ((EditText)findViewById(R.id.student_email_EditText)).getText().toString();
+                    password = ((EditText) findViewById(R.id.password_EditText)).getText().toString();
+                    email = ((EditText)findViewById(R.id.student_email_EditText)).getText().toString();
+                    hardwareSecurityService(email);
                     loginService(email, password);
                     break;
                 case "register":
@@ -118,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
                             user = mAuth.getCurrentUser();
                             Log.d("user return before", user.toString());
 
-                            hardwareSecurityService(user);
+                            hardwareSecurityService(email);
                             user = FirebaseAuth.getInstance().getCurrentUser();
                             Log.d("user return after ", user.toString());
 
@@ -147,11 +149,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    public void hardwareSecurityService(FirebaseUser user){
+    public void hardwareSecurityService(String email){
         String android_id = Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID);
-
-
-        DocumentReference docRef = db.collection("STUDENTS").document(user.getEmail());
+        DocumentReference docRef = db.collection("STUDENTS").document(email);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
