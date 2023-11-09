@@ -37,9 +37,12 @@ public class RegisterActivity extends AppCompatActivity {
     Button registerButton;
     TextView student_ID_TextView, password_TextView;
     EditText student_ID_EditText, password_EditText, confirm_password_EditText;
-
+    Button user_type;
     FirebaseUser user;
     FirebaseAuth mAuth;
+
+
+    boolean user_type_toggle = true;
 
     FirebaseFirestore db;
 
@@ -57,6 +60,7 @@ public class RegisterActivity extends AppCompatActivity {
         student_ID_EditText = (EditText) findViewById(R.id.student_email_EditText);
         password_EditText = (EditText) findViewById(R.id.password_EditText);
         confirm_password_EditText = (EditText) findViewById(R.id.confirm_password_EditText);
+        user_type= (Button) findViewById(R.id.user_type_switch);
 
 
         //Toolbar
@@ -86,10 +90,21 @@ public class RegisterActivity extends AppCompatActivity {
 
                 Log.d("EMAIL PASSING", email);
                 Log.d("PASSWORD PASSING", password);
-
-
-
                 registerService(email, password);
+
+            }
+        });
+
+        user_type.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(user_type_toggle) {
+                    user_type.setText("Teacher");
+                }else {
+                    user_type.setText("Student");
+                }
+                user_type_toggle = !user_type_toggle;
 
             }
         });
@@ -103,11 +118,11 @@ public class RegisterActivity extends AppCompatActivity {
                          // Sign in success, update UI with the signed-in user's information
                          Log.d("FIREBASE_AUTH_REGISTER", "createUserWithEmail:success");
                          user = mAuth.getCurrentUser();
-                         initialiseFirestoreDocument(user);
+                         initialiseFirestoreDocument(user, user_type.getText().toString());
                          startActivity(new Intent(getApplicationContext(), MainActivity.class));
                      } else {
                          // If sign in fails, display a message to the user.
-                         Log.w("FIREBASE_ATUH_REGISTER", "createUserWithEmail:failure", task.getException());
+                         Log.w("FIREBASE_AUTH_REGISTER", "createUserWithEmail:failure", task.getException());
 
                          //TODO : ADD REASON FOR FAILURE
                          Toast.makeText(RegisterActivity.this, "Registration Failed",
@@ -118,12 +133,14 @@ public class RegisterActivity extends AppCompatActivity {
  }
 
 
- public void initialiseFirestoreDocument(FirebaseUser user){
+ public void initialiseFirestoreDocument(FirebaseUser user, String type){
         Map<String, Object> profile = new HashMap<>();
+        assert(user.getEmail() != null);
         String email = user.getEmail();
-        String android_id = Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID);
+        String android_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         profile.put("android_id", android_id);
-        db.collection("STUDENTS")
+        profile.put("user_type", type);
+        db.collection("USERS")
                 .document(email)
                 .set(profile)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
