@@ -47,7 +47,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.284"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/student_ID_EditText" />
+        app:layout_constraintTop_toBottomOf="@+id/student_email_EditText" />
 
     <Button
         android:id="@+id/registerButton"
@@ -60,28 +60,28 @@
         app:layout_constraintTop_toBottomOf="@+id/confirm_password_EditText" />
 
     <TextView
-        android:id="@+id/student_ID_TextView"
+        android:id="@+id/student_email_TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="168dp"
-        android:text="@string/student_ID_TextView"
+        android:text="Email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.285"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/student_ID_EditText"
+        android:id="@+id/student_email_EditText"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginTop="16dp"
         android:ems="10"
+        android:hint="Email"
         android:inputType="text"
-        android:hint="@string/student_ID_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/student_ID_TextView" />
+        app:layout_constraintTop_toBottomOf="@+id/student_email_TextView" />
 
     <EditText
         android:id="@+id/password_EditText"

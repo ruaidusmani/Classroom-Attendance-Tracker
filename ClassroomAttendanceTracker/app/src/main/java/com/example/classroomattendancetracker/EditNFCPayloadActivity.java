@@ -43,6 +43,8 @@ public class EditNFCPayloadActivity extends AppCompatActivity {
                 String a = textViewEnterString.getText().toString();
                 myRef.setValue(a);
 
+                preferencesController.setPreference("NFCString", stringToSend);
+
             }
         });
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -51,11 +53,9 @@ public class EditNFCPayloadActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try{
-//
                     preferencesController.setPreference("NFCString",dataSnapshot.getValue(String.class).toString());
                     Log.d("message is : ", dataSnapshot.getValue(String.class).toString());
-                    Log.d("Shared preference: ", dataSnapshot.getValue(String.class).toString());
-
+                    Log.d("Shared preference: ", preferencesController.getString("NFCString"));
                 }
                 catch (Exception e){
                     Log.d("ERROR", e.toString());
