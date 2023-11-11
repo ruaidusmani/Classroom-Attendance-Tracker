@@ -103,7 +103,6 @@ def authenticate_class(dictionary):
   #get current timetamp for EST timezone
   tz = timezone('EST')
   CURRENT_TIMESTAMP = datetime.now(tz) 
-
   if action == "CI":
       print("CI")
     
