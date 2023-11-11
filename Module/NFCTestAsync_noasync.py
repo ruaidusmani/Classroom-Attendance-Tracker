@@ -10,6 +10,8 @@ from pn532pi import Pn532
 from pn532pi import Pn532Hsu
 from pn532pi import Pn532I2c
 from pn532pi import Pn532Spi
+from datetime import datetime
+from pytz import timezone
 import asyncio
 import firebase_admin
 from firebase_admin import db
@@ -19,6 +21,7 @@ default_app = firebase_admin.initialize_app(credentials,{'databaseURL': 'https:/
 
 ROOM = ""
 SERIAL = ""
+CURRENT_TIMESTAMP = 0
 
 # Set the desired interface to True
 SPI = False
@@ -96,18 +99,23 @@ def authenticate_class(dictionary):
   except:
       extra = None
   global ROOM
+  global CURRENT_TIMESTAMP
+  #get current timetamp for EST timezone
+  tz = timezone('EST')
+  CURRENT_TIMESTAMP = datetime.now(tz) 
   if action == "CI":
       print("CI")
     
       path = '/PRESENCE/%s/%s' %(ROOM, uid)
       present_status = database_present_state(path)
-      database_push_data(path, {'present': True})
+      #covert timestamp to string containing day, month, year, hour, minute, second, in 24 hour format
+      database_push_data(path, {'present': True, 'time_in' :  CURRENT_TIMESTAMP.strftime("%b,%d,%Y,%I:%M:%S") })
       return
   elif action == "CO":
       print("CO")
       path = '/PRESENCE/%s/%s' %(ROOM, uid)
       present_status = database_present_state(path)
-      database_push_data(path, {'present': False})
+      database_push_data(path, {'present': False, 'time_out' : CURRENT_TIMESTAMP.strftime("%b,%d,%Y,%I:%M:%S")})
       return
   elif action == "UR":
       print("UR")

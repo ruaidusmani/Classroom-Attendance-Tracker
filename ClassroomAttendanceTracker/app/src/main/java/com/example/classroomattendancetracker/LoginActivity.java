@@ -119,7 +119,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
 
                             user = mAuth.getCurrentUser();
-                                hardwareSecurityService(user);
+                            hardwareSecurityService(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("FIREBASE_AUTH_LOGIN", "signInWithEmail:failure", task.getException());
@@ -181,7 +181,7 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d("FIREBASE_AUTH_LOGIN", "signInWithEmail:success");
 
 
-                                 //TODO: ADD LOGIN FAIL REASON
+                        //TODO: ADD LOGIN FAIL REASON
 
                         Log.d("login-security", "DocumentSnapshot data: " + document.getData());
                     } else {
