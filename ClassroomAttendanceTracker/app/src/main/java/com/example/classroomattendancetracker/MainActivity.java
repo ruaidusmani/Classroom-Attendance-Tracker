@@ -33,11 +33,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        //start LiveStatsActivity just for testing
-        //Intent a = new Intent(getApplicationContext(), LiveStatsActivity.class);
-        //startActivity(a);
-
         mAuth = FirebaseAuth.getInstance();
 
         preferencesController = new PreferencesController(getApplicationContext());
