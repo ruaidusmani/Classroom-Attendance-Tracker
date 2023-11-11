@@ -3,6 +3,7 @@ package com.example.classroomattendancetracker;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -40,6 +41,7 @@ public class TeacherAddClass extends AppCompatActivity {
     TimePicker time_picker_end;
 
     EditText class_title;
+    EditText room_number;
 
     Button submit_class;
 
@@ -70,6 +72,8 @@ public class TeacherAddClass extends AppCompatActivity {
         submit_class = findViewById(R.id.submit_class_teacher);
         class_title = findViewById(R.id.class_name_add_teacher);
         chipGroup = findViewById(R.id.chip_days_group);
+        room_number = findViewById(R.id.room_number);
+
 
         //Adding Listeners
         submit_class.setOnClickListener(ActivityClickListener);
@@ -115,6 +119,7 @@ public class TeacherAddClass extends AppCompatActivity {
         class_information.put("END_HOUR", hour_end);
         class_information.put("END_MIN", min_end);
 
+        class_information.put("ROOM_NUMBER", room_number.getText().toString());
 
 
         db.collection("COURSES")
@@ -124,6 +129,7 @@ public class TeacherAddClass extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         Toast.makeText(getApplicationContext(), "Class Added :) " , Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(), TeacherHomepage.class));
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
