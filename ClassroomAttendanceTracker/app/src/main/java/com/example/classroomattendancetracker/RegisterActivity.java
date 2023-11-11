@@ -35,8 +35,7 @@ import java.util.Objects;
 public class RegisterActivity extends AppCompatActivity {
     Vibrator vibrator;
     Button registerButton;
-    TextView student_ID_TextView, password_TextView;
-    EditText student_ID_EditText, password_EditText, confirm_password_EditText;
+    EditText email_EditText, student_ID_EditText, password_EditText, confirm_password_EditText, last_name_EditText, first_name_EditText;
     Button user_type;
     FirebaseUser user;
     FirebaseAuth mAuth;
@@ -58,13 +57,13 @@ public class RegisterActivity extends AppCompatActivity {
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
         registerButton = (Button) findViewById(R.id.registerButton);
-        student_ID_TextView = (TextView) findViewById(R.id.student_email_TextView);
-        password_TextView = (TextView) findViewById(R.id.password_TextView);
-        student_ID_EditText = (EditText) findViewById(R.id.student_email_EditText);
+        email_EditText= (EditText) findViewById(R.id.student_email_EditText);
         password_EditText = (EditText) findViewById(R.id.password_EditText);
         confirm_password_EditText = (EditText) findViewById(R.id.confirm_password_EditText);
         user_type= (Button) findViewById(R.id.user_type_switch);
-
+        last_name_EditText= (EditText) findViewById(R.id.editTextLastName);
+        first_name_EditText= (EditText) findViewById(R.id.editTextFirstName);
+        student_ID_EditText = findViewById(R.id.editTextStudentID);
 
         //Toolbar
         Toolbar register_toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -104,8 +103,10 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if(user_type_toggle) {
                     user_type.setText("Teacher");
+                    student_ID_EditText.setVisibility(View.GONE);
                 }else {
                     user_type.setText("Student");
+                    student_ID_EditText.setVisibility(View.VISIBLE);
                 }
                 user_type_toggle = !user_type_toggle;
 
@@ -142,6 +143,11 @@ public class RegisterActivity extends AppCompatActivity {
         String android_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         profile.put("android_id", android_id);
         profile.put("user_type", type);
+        profile.put("last name" , last_name_EditText.getText().toString());
+     profile.put("first name" , first_name_EditText.getText().toString());
+     if(type.equals("Student")) {
+         profile.put("Student ID", student_ID_EditText.getText().toString());
+     }
         db.collection("USERS")
                 .document(email)
                 .set(profile)
