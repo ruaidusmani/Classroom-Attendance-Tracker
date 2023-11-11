@@ -21,6 +21,7 @@ public class TeacherHomepage extends AppCompatActivity {
 
     Button add_class;
     Button logout;
+    Button buttonViewDashboard;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +31,9 @@ public class TeacherHomepage extends AppCompatActivity {
         user = mAuth.getCurrentUser();
 
         add_class = findViewById(R.id.add_class_teacher_button);
+        buttonViewDashboard = findViewById(R.id.buttonViewDashboard);
         add_class.setOnClickListener(Activity_Click_Listener);
+        buttonViewDashboard.setOnClickListener(Activity_Click_Listener);
         logout = findViewById(R.id.logout_teacher_button);
         logout.setOnClickListener(Activity_Click_Listener);
     }
@@ -43,6 +46,9 @@ public class TeacherHomepage extends AppCompatActivity {
             }else if(v.getId() == R.id.logout_teacher_button){
                 mAuth.signOut();
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            }
+            else if (v.getId() == R.id.buttonViewDashboard){
+                startActivity(new Intent(getApplicationContext(), LiveStatsActivity.class));
             }
 
 
