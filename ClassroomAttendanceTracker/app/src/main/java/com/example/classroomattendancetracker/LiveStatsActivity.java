@@ -2,17 +2,24 @@ package com.example.classroomattendancetracker;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -43,8 +50,12 @@ public class LiveStatsActivity extends AppCompatActivity {
     TextView textViewLiveCountCurrentTimeNum;
     TextView textViewCourseName;
     TextView textViewRoomNumber;
+    TextView textViewLiveCountClassStart;
+    TextView textViewLiveCountClassEnd;
+    CardView cardViewLastStudent;
 
     Thread timeThread;
+    String MostRecentStudentID;
 
     String Room = "H907";
     PreferencesController preferencesController;
@@ -54,6 +65,13 @@ public class LiveStatsActivity extends AppCompatActivity {
     FirebaseFirestore db;
     FirebaseUser user;
     String courseName;
+    int classStartHour;
+    int classStartMinute = 0;
+    int classStartSecond;
+    int classEndHour;
+    int classEndMinute;
+    int classEndSecond = 0;
+
 
     int currentCountStudents = 0;
     Map<Integer, String> dayOfWeekMap;
@@ -72,6 +90,10 @@ public class LiveStatsActivity extends AppCompatActivity {
         textViewLiveCountCurrentTimeNum = findViewById(R.id.textViewLiveCountCurrentTimeNum);
         textViewCourseName = findViewById(R.id.textViewCourseName);
         textViewRoomNumber = findViewById(R.id.textViewRoomNumber);
+        textViewLiveCountClassStart = findViewById(R.id.textViewLiveCountClassStart);
+        textViewLiveCountClassEnd = findViewById(R.id.textViewLiveCountClassEnd);
+        cardViewLastStudent = findViewById(R.id.cardViewLastStudent);
+
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -92,10 +114,6 @@ public class LiveStatsActivity extends AppCompatActivity {
         dayOfWeekMap.put(7, "Saturday");
 
 
-
-
-        //set class end time
-        cardViewTimeRemainingNum.setText("9:10");
 
         //set class end hour minute and second
 
@@ -136,7 +154,47 @@ public class LiveStatsActivity extends AppCompatActivity {
                                     secondString = "0" + secondString;
                                 }
 
+
+
                                 String currentTimeString = hourString + ":" + minuteString + ":" + secondString;
+                                String countDownEndClass;
+
+                                if (hour*60*60 + minute*60 + second < classEndHour*60*60 + classEndMinute*60 + classEndSecond*60){
+                                    int hourDiff = classEndHour - hour;
+                                    int minuteDiff = classEndMinute - minute;
+                                    int secondDiff = classEndSecond - second;
+                                    if (secondDiff < 0){
+                                        secondDiff = 60 + secondDiff;
+                                        minuteDiff--;
+                                    }
+                                    if (minuteDiff < 0){
+                                        minuteDiff = 60 + minuteDiff;
+                                        hourDiff--;
+                                    }
+                                    if (hourDiff < 0){
+                                        hourDiff = 24 + hourDiff;
+                                    }
+                                    String hourDiffString = Integer.toString(hourDiff);
+                                    String minuteDiffString = Integer.toString(minuteDiff);
+                                    String secondDiffString = Integer.toString(secondDiff);
+
+                                    if (hourDiff < 10){
+                                        hourDiffString = "0" + hourDiffString;
+                                    }
+                                    if (minuteDiff < 10){
+                                        minuteDiffString = "0" + minuteDiffString;
+                                    }
+                                    if (secondDiff < 10){
+                                        secondDiffString = "0" + secondDiffString;
+                                    }
+                                    countDownEndClass = hourDiffString + ":" + minuteDiffString + ":" + secondDiffString;
+                                }
+                                else{
+                                    countDownEndClass = "00:00:00";
+                                }
+
+
+                                cardViewTimeRemainingNum.setText(countDownEndClass);
                                 textViewLiveCountCurrentTimeNum.setText(currentTimeString);
 
                             }
@@ -150,8 +208,41 @@ public class LiveStatsActivity extends AppCompatActivity {
         timeThread.start();
         refreshRoom();
         refreshMostRecentStudent();
+        refreshNameMostRecentStudent();
+    }
+
+    void refreshNameMostRecentStudent(){
+        CollectionReference docRef = db.collection("USERS");
+        docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                String mostRecentStudentID = textViewLastStudentJoinedID.getText().toString();
+
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot document : task.getResult()) {
+                        // Access the document data
+                        String documentId = document.getId();
+                        String android_id = document.getString("android_id");
+                        String first_name = document.getString("first name");
+                        String last_name = document.getString("last name");
 
 
+                        if (mostRecentStudentID.equals(android_id)){
+                            //change color of card view to warn professor
+                            //send notification
+                            //create snackbar
+                            View view = findViewById(android.R.id.content).getRootView();
+
+                            Snackbar a = Snackbar.make(findViewById(android.R.id.content).getRootView(), "New student joined the class ", Snackbar.LENGTH_SHORT);
+
+                            textViewLastStudentJoinedName.setText(first_name + " " + last_name);
+                        }
+                    }
+                } else {
+                    Log.e("ERROR", "Error getting documents: ", task.getException());
+                }
+            }
+        });
     }
 
     void refreshMostRecentStudent(){
@@ -164,9 +255,9 @@ public class LiveStatsActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 currentCountStudents = 0;
                 boolean foundOneStudent = false;
-                int mostRecentHour = 23;
-                int mostRecentMinute = 59;
-                int mostRecentSecond = 59;
+                int mostRecentHour = 0;
+                int mostRecentMinute = 0;
+                int mostRecentSecond = 0;
                 String mostRecentStudentName = "";
                 String mostRecentStudentID = "";
                 //declare appendable list
@@ -186,21 +277,21 @@ public class LiveStatsActivity extends AppCompatActivity {
                                     int minute = getMinute(presentSnapshot.getValue().toString());
                                     int second = getSecond(presentSnapshot.getValue().toString());
                                     //check for most recent time
-                                    if (hour < mostRecentHour) {
+                                    if (hour > mostRecentHour) {
                                         mostRecentHour = hour;
                                         mostRecentMinute = minute;
                                         mostRecentSecond = second;
                                         mostRecentStudentName = idSnapshot.getKey();
                                         mostRecentStudentID = idSnapshot.getKey();
                                         foundOneStudent = true;
-                                    } else if (hour == mostRecentHour && minute < mostRecentMinute) {
+                                    } else if (hour == mostRecentHour && minute > mostRecentMinute) {
                                         mostRecentHour = hour;
                                         mostRecentMinute = minute;
                                         mostRecentSecond = second;
                                         mostRecentStudentName = idSnapshot.getKey();
                                         mostRecentStudentID = idSnapshot.getKey();
                                         foundOneStudent = true;
-                                    } else if (hour == mostRecentHour && minute == mostRecentMinute && second < mostRecentSecond) {
+                                    } else if (hour == mostRecentHour && minute == mostRecentMinute && second > mostRecentSecond) {
                                         mostRecentHour = hour;
                                         mostRecentMinute = minute;
                                         mostRecentSecond = second;
@@ -214,9 +305,21 @@ public class LiveStatsActivity extends AppCompatActivity {
                             }
                         }
                         if (foundOneStudent) {
-                            textViewLastStudentJoinedName.setText(mostRecentStudentName);
                             textViewLastStudentJoinedID.setText(mostRecentStudentID);
-                            textViewLastStudentJoinedTime.setText(mostRecentHour + ":" + mostRecentMinute + ":" + mostRecentSecond);
+                            textViewLastStudentJoinedName.setText(mostRecentStudentName);
+                            String mostRecentHourString = String.valueOf(mostRecentHour);
+                            String mostRecentMinuteString = String.valueOf(mostRecentMinute);
+                            String mostRecentSecondString = String.valueOf(mostRecentSecond);
+                            if(mostRecentHour < 10){
+                                mostRecentHourString = "0" + mostRecentHour;
+                            }
+                            if(mostRecentMinute < 10){
+                                mostRecentMinuteString = "0" + mostRecentMinute;
+                            }
+                            if(mostRecentSecond < 10){
+                                mostRecentSecondString = "0" + mostRecentSecond;
+                            }
+                            textViewLastStudentJoinedTime.setText(mostRecentHourString + ":" + mostRecentMinuteString + ":" + mostRecentSecondString);
                         }
                         else{
                             textViewLastStudentJoinedName.setText("No Student has joined yet");
@@ -224,6 +327,7 @@ public class LiveStatsActivity extends AppCompatActivity {
                             textViewLastStudentJoinedTime.setText("");
                         }
                         textViewLiveCountNum.setText(String.valueOf(currentCountStudents));
+                         refreshNameMostRecentStudent();
 
                 } catch (Exception e) {
                     Log.d("ERROR", e.toString());
@@ -249,6 +353,7 @@ public class LiveStatsActivity extends AppCompatActivity {
                 int current_minute = (currentTime.get(Calendar.MINUTE));
                 int current_day_of_week = currentTime.get(Calendar.DAY_OF_WEEK);
                 String current_day_of_week_string = dayOfWeekMap.get(current_day_of_week);
+                Boolean classFound = false;
 
 
                 if (task.isSuccessful()) {
@@ -263,22 +368,36 @@ public class LiveStatsActivity extends AppCompatActivity {
                         int endHour = document.getLong("END_HOUR").intValue();
                         int endMinute = document.getLong("END_MIN").intValue();
 
-                        //check if current time is within the class time
-                        if (owner == email){
+                        if (owner.equals(email)){
                             if (daysOfWeek.contains(current_day_of_week_string)){
+
                                 if (current_hour >= startHour && current_hour <= endHour){
-                                    if (current_minute >= startMinute && current_minute <= endMinute){
+                                    if (current_minute <= endMinute){
+                                        Log.d("Found minute", String.valueOf(current_minute));
+                                        classFound = true;
                                         Room = roomNumber;
                                         courseName = documentId;
+                                        textViewLiveCountClassEnd.setText("Class End: " + endHour + ":" + endMinute);
+                                        textViewLiveCountClassStart.setText("Class Start: " + startHour + ":" + startMinute);
                                         Log.d("Found class and room: ",   Room + " " + courseName);
-                                        textViewCourseName.setText(courseName);
-                                        textViewRoomNumber.setText(Room);
+                                        textViewCourseName.setText("Course: " + courseName);
+                                        textViewRoomNumber.setText("Room: " + Room);
+                                        classEndHour = endHour;
+                                        classEndMinute = endMinute;
+                                        classStartHour = startHour;
+                                        classStartMinute = startMinute;
+                                        classStartSecond = 0;
+                                        classEndSecond = 0;
                                     }
                                 }
                             }
                         }
 
                         Log.d("Info", "Document ID: " + documentId + "Owner " + owner + "Days of week " + daysOfWeek);
+                    }
+                    if (!classFound){
+                        textViewCourseName.setText("No class Yet");
+                        textViewRoomNumber.setText("");
                     }
                 } else {
                     Log.e("ERROR", "Error getting documents: ", task.getException());
