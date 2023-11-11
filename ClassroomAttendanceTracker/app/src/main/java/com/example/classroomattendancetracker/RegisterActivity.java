@@ -46,11 +46,14 @@ public class RegisterActivity extends AppCompatActivity {
 
     FirebaseFirestore db;
 
+    PreferencesController preferencesController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        preferencesController = new PreferencesController(getApplicationContext());
 
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
@@ -119,7 +122,6 @@ public class RegisterActivity extends AppCompatActivity {
                          Log.d("FIREBASE_AUTH_REGISTER", "createUserWithEmail:success");
                          user = mAuth.getCurrentUser();
                          initialiseFirestoreDocument(user, user_type.getText().toString());
-                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
                      } else {
                          // If sign in fails, display a message to the user.
                          Log.w("FIREBASE_AUTH_REGISTER", "createUserWithEmail:failure", task.getException());
@@ -147,6 +149,13 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void unused) {
                         Toast.makeText(getApplicationContext(), "Registration & Profile created", Toast.LENGTH_LONG).show();
+                        preferencesController.setPreference("USER_TYPE", type);
+                        if(user.equals("Teacher")){
+                            startActivity(new Intent(getApplicationContext(), TeacherHomepage.class));
+                        }else {
+
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
