@@ -58,8 +58,14 @@ public class MainActivity extends AppCompatActivity {
         editButton.setOnClickListener(Activity_Click_Listener);
         logoutButton.setOnClickListener(Activity_Click_Listener);
         user = mAuth.getCurrentUser();
+        String USER_TYPE = preferencesController.getString("USER_TYPE");
+
         if(user != null)
         {
+            if(USER_TYPE.equals("Teacher")){
+
+                openNewActivity(TeacherHomepage.class);
+            }
             loginButton.setVisibility(View.GONE);
             registerButton.setVisibility(View.GONE);
             logoutButton.setVisibility(View.VISIBLE);
