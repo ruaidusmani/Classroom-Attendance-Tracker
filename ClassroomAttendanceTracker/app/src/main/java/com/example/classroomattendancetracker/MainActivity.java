@@ -35,8 +35,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         //start LiveStatsActivity just for testing
-        Intent a = new Intent(getApplicationContext(), LiveStatsActivity.class);
-        startActivity(a);
+        //Intent a = new Intent(getApplicationContext(), LiveStatsActivity.class);
+        //startActivity(a);
 
         mAuth = FirebaseAuth.getInstance();
 

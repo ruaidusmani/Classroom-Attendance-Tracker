@@ -15,12 +15,14 @@ import org.checkerframework.checker.units.qual.A;
 
 public class TeacherHomepage extends AppCompatActivity {
 
+
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private FirebaseUser user;
 
     Button add_class;
     Button logout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
