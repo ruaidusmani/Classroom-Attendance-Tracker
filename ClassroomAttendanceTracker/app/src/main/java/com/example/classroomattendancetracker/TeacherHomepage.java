@@ -23,6 +23,7 @@ public class TeacherHomepage extends AppCompatActivity {
     Button add_class;
     Button logout;
     Button buttonViewDashboard;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,10 +52,11 @@ public class TeacherHomepage extends AppCompatActivity {
             else if (v.getId() == R.id.buttonViewDashboard){
                 startActivity(new Intent(getApplicationContext(), LiveStatsActivity.class));
             }
-
-
-
         }
     };
+
+
+
+
 
 }
