@@ -46,12 +46,16 @@ public class LoginActivity extends AppCompatActivity {
 
     boolean signed_user = false;
 
+    PreferencesController preferenceController;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // Preference Controller
+        preferenceController = new PreferencesController(getApplicationContext());
 
         // Firebase variable init
         mAuth = FirebaseAuth.getInstance();
@@ -151,10 +155,16 @@ public class LoginActivity extends AppCompatActivity {
 
                             Log.d("login-security", "Android ID matches");
                             Toast.makeText(LoginActivity.this, "Login Success " + stored_user_type,Toast.LENGTH_SHORT).show();
+
+
                             if(stored_user_type.equals("Teacher")){
+
+                                preferenceController.setPreference("USER_TYPE", "Teacher");
                                 Log.d("login-security", "Is this true ?");
                                 openNewActivity(TeacherHomepage.class);
                             }else {
+
+                                preferenceController.setPreference("USER_TYPE", "Student");
                                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                             }
 // If sign in fails, display a message to the user.

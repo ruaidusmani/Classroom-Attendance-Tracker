@@ -20,6 +20,9 @@
         android:theme="@style/Theme.ClassroomAttendanceTracker"
         tools:targetApi="31">
         <activity
+            TeacherAddClass
+            android:name=".TeacherAddClass"/>
+        <activity   
             android:name=".LiveStatsActivity"
             android:exported="false" />
         <activity
