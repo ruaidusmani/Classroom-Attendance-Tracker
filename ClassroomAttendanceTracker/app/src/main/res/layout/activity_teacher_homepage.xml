@@ -15,7 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.934"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView_ClassItems" />
 
     <Button
         android:id="@+id/logout_teacher_button"
@@ -26,7 +26,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.065"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView_ClassItems" />
 
     <Button
         android:id="@+id/buttonViewDashboard"
@@ -36,7 +36,7 @@
         android:text="View Dashboard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView_ClassItems" />
 
     <TextView
         android:id="@+id/teacher_homepage_title"
@@ -60,7 +60,7 @@
         app:layout_constraintTop_toBottomOf="@+id/teacher_homepage_title" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/recyclerView_ClassItems"
         android:layout_width="411dp"
         android:layout_height="438dp"
         android:layout_marginTop="20dp"
