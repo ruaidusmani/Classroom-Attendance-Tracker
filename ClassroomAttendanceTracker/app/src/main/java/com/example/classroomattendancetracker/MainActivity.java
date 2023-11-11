@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.provider.Settings;
@@ -22,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
     Button loginButton, registerButton, buttonCheckIn, editButton, logoutButton, buttonCheckOut;
     TextView app_title;
 
-
     PreferencesController preferencesController;
 
     FirebaseUser user;
@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         //start LiveStatsActivity just for testing
         Intent a = new Intent(getApplicationContext(), LiveStatsActivity.class);
@@ -61,8 +62,14 @@ public class MainActivity extends AppCompatActivity {
         editButton.setOnClickListener(Activity_Click_Listener);
         logoutButton.setOnClickListener(Activity_Click_Listener);
         user = mAuth.getCurrentUser();
+        String USER_TYPE = preferencesController.getString("USER_TYPE");
+
         if(user != null)
         {
+            if(USER_TYPE.equals("Teacher")){
+
+                openNewActivity(TeacherHomepage.class);
+            }
             loginButton.setVisibility(View.GONE);
             registerButton.setVisibility(View.GONE);
             logoutButton.setVisibility(View.VISIBLE);
