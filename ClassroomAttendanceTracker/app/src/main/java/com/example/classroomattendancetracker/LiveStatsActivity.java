@@ -235,7 +235,7 @@ public class LiveStatsActivity extends AppCompatActivity {
     }
 
     void removeRecentlyJoinedStudentRealtime(){
-
+        Log.d("Calling remove", "removeRecentlyJoinedStudentRealtime");
         DatabaseReference ref = database.getReference("/PRESENCE/"+ Room + "/" + MostRecentStudentID + "/present");
         ref.setValue(false);
     }
@@ -261,7 +261,7 @@ public class LiveStatsActivity extends AppCompatActivity {
                         if (yourArray.get(i).equals(emailMostRecentlyJoinedStudent)) {
                             Log.d("Found", String.valueOf(i));
                             yourArray.remove(i);
-                            removeRecentlyJoinedStudentRealtime();
+
                         }
                     }
 
@@ -272,6 +272,7 @@ public class LiveStatsActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     // Update successful
+                                    removeRecentlyJoinedStudentRealtime();
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
