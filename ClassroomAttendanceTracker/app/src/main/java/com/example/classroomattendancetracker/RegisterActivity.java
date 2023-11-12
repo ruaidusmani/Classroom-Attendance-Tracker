@@ -144,10 +144,14 @@ public class RegisterActivity extends AppCompatActivity {
         profile.put("android_id", android_id);
         profile.put("user_type", type);
         profile.put("last name" , last_name_EditText.getText().toString());
-     profile.put("first name" , first_name_EditText.getText().toString());
+
+
+        profile.put("first name" , first_name_EditText.getText().toString());
      if(type.equals("Student")) {
          profile.put("Student ID", student_ID_EditText.getText().toString());
      }
+
+
         db.collection("USERS")
                 .document(email)
                 .set(profile)

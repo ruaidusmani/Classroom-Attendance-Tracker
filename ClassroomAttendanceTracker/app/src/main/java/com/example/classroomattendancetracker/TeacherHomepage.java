@@ -99,6 +99,10 @@ public class TeacherHomepage extends AppCompatActivity implements ClassItemAdapt
 
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d("FIREQUERY ", document.getId() + " => " + document.getData());
+
+                                String class_name = document.getId();
+                                String sub_class_name = class_name.substring(class_name.indexOf('-'));
+
                                 ClassItem_Array.add(new ClassItem(document.getId(), (String) document.get("ROOM_NUMBER")));
 //                                class_names.add(document.getId());
 //                                class_room_numbers.add((String) document.get("ROOM_NUMBER"));

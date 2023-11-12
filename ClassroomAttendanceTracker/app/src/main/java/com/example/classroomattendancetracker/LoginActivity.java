@@ -191,8 +191,6 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d("login-security", "get failed with ", task.getException());
                 }
             }
-
-
         });
     }
 

@@ -122,8 +122,10 @@ public class TeacherAddClass extends AppCompatActivity {
         class_information.put("ROOM_NUMBER", room_number.getText().toString());
 
 
+
+
         db.collection("COURSES")
-                .document(class_title.getText().toString())
+                .document(class_title.getText().toString() + "-"+user.getUid())
                 .set(class_information)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
