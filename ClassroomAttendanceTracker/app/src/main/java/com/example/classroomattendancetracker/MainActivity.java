@@ -1,5 +1,6 @@
 package com.example.classroomattendancetracker;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -14,8 +15,18 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,13 +38,15 @@ public class MainActivity extends AppCompatActivity {
 
     FirebaseUser user;
     FirebaseAuth mAuth;
+    FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
+
 
         preferencesController = new PreferencesController(getApplicationContext());
         String android_id = Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID);
@@ -58,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         logoutButton.setOnClickListener(Activity_Click_Listener);
         user = mAuth.getCurrentUser();
         String USER_TYPE = preferencesController.getString("USER_TYPE");
-
+     
         if(user != null)
         {
             if(USER_TYPE.equals("Teacher")){
@@ -133,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
     };
     //on resume
 
-
+    
     public void openNewActivity(Class activity){
         Intent intent = new Intent(getApplicationContext(), activity);
         startActivity(intent);
