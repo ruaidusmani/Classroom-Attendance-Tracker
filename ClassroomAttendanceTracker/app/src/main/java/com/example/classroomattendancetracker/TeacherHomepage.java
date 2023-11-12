@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
@@ -73,6 +74,8 @@ public class TeacherHomepage extends AppCompatActivity implements ClassItemAdapt
                 startActivity(new Intent(getApplicationContext(), TeacherAddClass.class));
             }else if(v.getId() == R.id.logout_teacher_button){
                 mAuth.signOut();
+                PreferencesController preferencesController = new PreferencesController(getApplicationContext());
+                preferencesController.setPreference("USER_TYPE", "");
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
             else if (v.getId() == R.id.buttonViewDashboard){

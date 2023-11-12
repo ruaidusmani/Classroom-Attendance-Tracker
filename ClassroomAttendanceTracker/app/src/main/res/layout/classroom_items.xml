@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/border"
+    android:orientation="horizontal"
     android:paddingTop="10dp"
     android:paddingBottom="10dp">
 
@@ -11,12 +10,11 @@
         android:id="@+id/textView_date_placeholder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:paddingStart="16dp"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:gravity="center_vertical"
-        android:textSize="16sp"
-        android:textColor="@color/black" />
+        android:textSize="16sp" />
 
 
 </LinearLayout>

@@ -178,7 +178,7 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
         int day = (currentTime.get(Calendar.DAY_OF_MONTH));
         int month = (currentTime.get(Calendar.MONTH)) + 1;
         int year = (currentTime.get(Calendar.YEAR));
-        day = 30;
+
         String dayMonthYear = day + "_" + month + "_" + year;
 
 //        String stringToPush = "PRESENT" + "." + dayMonthYear + "." + email + "." + "present";
@@ -276,6 +276,7 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
                             imageViewSuccess.setVisibility(View.VISIBLE);
                             textViewError.setVisibility(View.INVISIBLE);
                             imageViewError.setVisibility(View.INVISIBLE);
+                            findFirestoreDocument();
 
                         } else {
                             textViewSuccess.setVisibility(View.INVISIBLE);
@@ -292,6 +293,7 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
                             imageViewSuccess.setVisibility(View.VISIBLE);
                             textViewError.setVisibility(View.INVISIBLE);
                             imageViewError.setVisibility(View.INVISIBLE);
+                            findFirestoreDocument();
                         } else {
                             textViewSuccess.setVisibility(View.INVISIBLE);
                             imageViewSuccess.setVisibility(View.INVISIBLE);
@@ -304,7 +306,7 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
                 } catch (Exception e) {
                     Log.d("ERROR", e.toString());
                 }
-                findFirestoreDocument();
+
 
             }
 

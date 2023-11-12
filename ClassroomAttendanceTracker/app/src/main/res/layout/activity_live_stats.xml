@@ -116,6 +116,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="336dp"
         android:layout_height="134dp"
         android:layout_marginStart="4dp"
@@ -231,5 +232,16 @@
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewLiveStatsHeader" />
+
+    <Button
+        android:id="@+id/buttonRemoveRecentlyJoinedStudent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="92dp"
+        android:backgroundTint="@android:color/holo_red_light"
+        android:text="Remove Most Recently Joined Student"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
