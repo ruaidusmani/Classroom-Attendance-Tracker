@@ -88,15 +88,7 @@ public class TeacherClassroomList extends AppCompatActivity implements ClassRoom
                                     Log.d("Classroom ", "onComplete: " + ClassRoomItem_Array.get(i).getDay_date());
                                 }
 
-
                                 Log.d("Map ", "onComplete: " + PRESENT_MAP.size() + " " + PRESENT_MAP.get("11_11_2023"));
-//
-//                                if (documentData != null && documentData.containsKey("11_11_2023")){
-//                                    Log.d("Test", "Passes second if");
-//                                    List<Object> arrayData = (List<Object>) documentData.get("11_11_2023");
-//                                    Log.d("Map ", "onComplete: " + arrayData.size() + " " + arrayData.get(0));
-//                                }
-
                             }
 
 //
@@ -116,13 +108,14 @@ public class TeacherClassroomList extends AppCompatActivity implements ClassRoom
 //                        Log.d("FIREQUERY ", "onComplete: " + ClassRoomItem_Array.size());
 
 
+                        Log.d("Classroom date: ", ClassRoomItem_Array.get(0).getDay_date());
                         Toast.makeText(getApplicationContext(), "Fetching Classes", Toast.LENGTH_SHORT).show();
 
-//                        ClassRoom_List = findViewById(R.id.recyclerView_ClassItems);
-//                        ClassRoomItemAdapter adapter = new ClassRoomItemAdapter(ClassRoomItem_Array, TeacherClassroomList.this);
-//                        adapter.notifyDataSetChanged(); // if toggle is set
-//                        ClassRoom_List.setAdapter(adapter);
-//                        ClassRoom_List.setLayoutManager(new LinearLayoutManager(TeacherClassroomList.this));
+                        ClassRoom_List = findViewById(R.id.recyclerView_ClassRoomItems);
+                        ClassRoomItemAdapter adapter = new ClassRoomItemAdapter(ClassRoomItem_Array, TeacherClassroomList.this);
+                        adapter.notifyDataSetChanged(); // if toggle is set
+                        ClassRoom_List.setAdapter(adapter);
+                        ClassRoom_List.setLayoutManager(new LinearLayoutManager(TeacherClassroomList.this));
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

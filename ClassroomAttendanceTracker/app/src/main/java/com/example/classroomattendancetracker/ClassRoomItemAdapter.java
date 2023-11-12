@@ -1,6 +1,7 @@
 package com.example.classroomattendancetracker;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +56,7 @@ public class ClassRoomItemAdapter extends RecyclerView.Adapter<ClassRoomItemAdap
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View classView = inflater.inflate(R.layout.class_items, parent, false);
+        View classView = inflater.inflate(R.layout.classroom_items, parent, false);
         ViewHolder viewHolder = new ViewHolder(classView);
 
         return viewHolder;
@@ -64,9 +65,11 @@ public class ClassRoomItemAdapter extends RecyclerView.Adapter<ClassRoomItemAdap
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ClassRoomItem classroomitem = ClassRoomItem_List.get(position);
-        TextView class_name = holder.day_date;
+        Log.d("Adapter classroom date: " , classroomitem.getDay_date());
+        String date_class = classroomitem.getDay_date();
+        TextView date = holder.day_date;
 
-        class_name.setText(classroomitem.getDay_date());
+        date.setText(date_class);
     }
 
     public interface OnItemClickListener {
