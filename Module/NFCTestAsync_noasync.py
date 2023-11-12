@@ -145,7 +145,8 @@ def authenticate_class(dictionary):
 
   date_string = current_day_of_month + "_" + current_month + "_" + current_year
 
-  course = getCurrentClass(day_of_week, int(current_hour), int(current_minute))
+  # course = getCurrentClass(day_of_week, int(current_hour), int(current_minute))
+
 
   if action == "CI":
       print("CI")
