@@ -105,7 +105,7 @@ public class ClassAttendanceList extends AppCompatActivity {
                                                                     Log.d("Listing USERS documents here", "onComplete: " + document.getId() + " " + document.getData());
                                                                     if (document.getId().equals("test@student30.com") && document != null ){
                                                                         attendedStudentItem_Array.add(new AttendedStudentItem
-                                                                                (document.getString("first name") + document.getString("last name"),
+                                                                                (document.getString("first name") + " " + document.getString("last name"),
                                                                                         document.getString("Student ID"),
                                                                                         true));
                                                                     }
@@ -139,11 +139,6 @@ public class ClassAttendanceList extends AppCompatActivity {
                                 }
                             }
                         }
-
-
-
-
-
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

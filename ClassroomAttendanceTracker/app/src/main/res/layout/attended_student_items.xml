@@ -1,45 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp">
+    android:id="@+id/mainContainer">
 
-    <TextView
-        android:id="@+id/textView_student_name"
-        android:layout_width="32dp"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:paddingStart="16dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:textSize="16sp" />
+        android:layout_margin = "8dp"
+        android:orientation="horizontal">
+<!--        android:orientation="horizontal"-->
+<!--        android:paddingTop="10dp"-->
+<!--        android:paddingBottom="50dp">-->
 
-    <TextView
-        android:id="@+id/textView_student_id"
-        android:layout_width="66dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="140dp"
-        android:layout_marginRight="10dp"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:paddingStart="16dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:textSize="16sp" />
+        <TextView
+            android:id="@+id/textView_student_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text ="Student Name"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:textSize="16sp" />
 
-    <TextView
-        android:id="@+id/textView_presence"
-        android:layout_width="47dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="130dp"
-        android:layout_marginRight="20dp"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:paddingTop="8dp"
-        android:paddingRight="16dp"
-        android:paddingBottom="8dp"
-        android:textSize="16sp" />
+        <TextView
+            android:id="@+id/textView_student_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:textSize="16sp" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/textView_presence"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="textEnd"
+            android:text ="Presence"
+            android:paddingTop="8dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="8dp"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
+
