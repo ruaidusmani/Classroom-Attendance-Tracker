@@ -1,7 +1,5 @@
 package com.example.classroomattendancetracker;
 
-import java.text.DecimalFormat;
-
 public class ClassItem {
     private String class_name, room_number;
 

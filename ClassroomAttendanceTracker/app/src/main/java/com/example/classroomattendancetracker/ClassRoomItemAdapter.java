@@ -9,21 +9,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.classroomattendancetracker.ClassItem;
-import com.example.classroomattendancetracker.Student;
+import com.example.classroomattendancetracker.ClassRoomItem;
 import com.example.classroomattendancetracker.R;
+
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClassItemAdapter extends RecyclerView.Adapter<ClassItemAdapter.ViewHolder>  {
+public class ClassRoomItemAdapter extends RecyclerView.Adapter<ClassRoomItemAdapter.ViewHolder>  {
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView class_name; // holds class name
-        public TextView room_number; // holds the room number
+        public TextView day_date; // holds day and date
+
         public ViewHolder(View itemView) {
             super(itemView);
-            class_name = (TextView) itemView.findViewById(R.id.class_name);
-            room_number = (TextView) itemView.findViewById(R.id.room_number);
+            day_date = (TextView) itemView.findViewById(R.id.textView_day_date_placeholder);
+
 
             //initialize click listener
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -37,15 +38,15 @@ public class ClassItemAdapter extends RecyclerView.Adapter<ClassItemAdapter.View
         }
     }
 
-    List<ClassItem> ClassItem_List = new ArrayList<ClassItem>();
+    List<ClassRoomItem> ClassRoomItem_List = new ArrayList<ClassRoomItem>();
     private OnItemClickListener clickListener;
 
 //    public ClassItemAdapter(List<ClassItem> class_item_list) {
 //        ClassItem_List.addAll(class_item_list); //copy items to class_item-specific array
 //    }
 
-    public ClassItemAdapter(List<ClassItem> class_item_list, OnItemClickListener clickListener) {
-        ClassItem_List.addAll(class_item_list); //copy items to class_item-specific array
+    public ClassRoomItemAdapter(List<ClassRoomItem> classroom_item_list, OnItemClickListener clickListener) {
+        ClassRoomItem_List.addAll(classroom_item_list); //copy items to class_item-specific array
         this.clickListener = clickListener;
     }
 
@@ -62,12 +63,10 @@ public class ClassItemAdapter extends RecyclerView.Adapter<ClassItemAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ClassItem classitem = ClassItem_List.get(position);
-        TextView class_name = holder.class_name;
-        TextView room_number = holder.room_number;
+        ClassRoomItem classroomitem = ClassRoomItem_List.get(position);
+        TextView class_name = holder.day_date;
 
-        class_name.setText(classitem.getClass_name());
-        room_number.setText(classitem.getRoom_number());
+        class_name.setText(classroomitem.getDay_date());
     }
 
     public interface OnItemClickListener {
@@ -75,7 +74,7 @@ public class ClassItemAdapter extends RecyclerView.Adapter<ClassItemAdapter.View
     }
     @Override
     public int getItemCount() {
-        return ClassItem_List.size();
+        return ClassRoomItem_List.size();
     }
 }
 

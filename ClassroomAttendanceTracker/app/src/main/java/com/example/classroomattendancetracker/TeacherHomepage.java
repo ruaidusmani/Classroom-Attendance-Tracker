@@ -43,7 +43,7 @@ public class TeacherHomepage extends AppCompatActivity implements ClassItemAdapt
     Button buttonViewDashboard;
     Vibrator vibrator;
 
-    Map<Integer, String> dayOfWeekMap;
+
     RecyclerView ClassItemList;
     ArrayList<ClassItem> ClassItem_Array = new ArrayList<ClassItem>(); // holds student profiles to list
 
@@ -113,26 +113,26 @@ public class TeacherHomepage extends AppCompatActivity implements ClassItemAdapt
 
                         Toast.makeText(getApplicationContext(), "Fetching Classes", Toast.LENGTH_SHORT).show();
 
-                        dayOfWeekMap = new HashMap<>();
-
-                        // Add key-value pairs to the dictionary
-                        dayOfWeekMap.put(1, "Sunday");
-                        dayOfWeekMap.put(2, "Monday");
-                        dayOfWeekMap.put(3, "Tuesday");
-                        dayOfWeekMap.put(4, "Wednesday");
-                        dayOfWeekMap.put(5, "Thursday");
-                        dayOfWeekMap.put(6, "Friday");
-                        dayOfWeekMap.put(7, "Saturday");
-
-
-                        Calendar currentTime = Calendar.getInstance();
-                        int current_hour = (currentTime.get(Calendar.HOUR_OF_DAY));
-                        int current_minute = (currentTime.get(Calendar.MINUTE));
-                        int current_day_of_week = currentTime.get(Calendar.DAY_OF_WEEK);
-                        String current_day_of_week_string = dayOfWeekMap.get(current_day_of_week);
-
-                        current_day_of_week = 2;
-                        current_day_of_week_string = dayOfWeekMap.get(current_day_of_week);
+//                        dayOfWeekMap = new HashMap<>();
+//
+//                        // Add key-value pairs to the dictionary
+//                        dayOfWeekMap.put(1, "Sunday");
+//                        dayOfWeekMap.put(2, "Monday");
+//                        dayOfWeekMap.put(3, "Tuesday");
+//                        dayOfWeekMap.put(4, "Wednesday");
+//                        dayOfWeekMap.put(5, "Thursday");
+//                        dayOfWeekMap.put(6, "Friday");
+//                        dayOfWeekMap.put(7, "Saturday");
+//
+//
+//                        Calendar currentTime = Calendar.getInstance();
+//                        int current_hour = (currentTime.get(Calendar.HOUR_OF_DAY));
+//                        int current_minute = (currentTime.get(Calendar.MINUTE));
+//                        int current_day_of_week = currentTime.get(Calendar.DAY_OF_WEEK);
+//                        String current_day_of_week_string = dayOfWeekMap.get(current_day_of_week);
+//
+//                        current_day_of_week = 2;
+//                        current_day_of_week_string = dayOfWeekMap.get(current_day_of_week);
 
 
                         Log.d("FIREQUERY ", "display_items: " + ClassItem_Array.size());
@@ -142,7 +142,6 @@ public class TeacherHomepage extends AppCompatActivity implements ClassItemAdapt
                         // populate the list
                         ClassItemList = findViewById(R.id.recyclerView_ClassItems);
                         ClassItemAdapter adapter = new ClassItemAdapter(ClassItem_Array, TeacherHomepage.this);
-                        //ClassItemAdapter adapter = new ClassItemAdapter(ClassItem_Array, this);
                         adapter.notifyDataSetChanged(); // if toggle is set
                         ClassItemList.setAdapter(adapter);
                         ClassItemList.setLayoutManager(new LinearLayoutManager(TeacherHomepage.this));
@@ -169,5 +168,8 @@ public class TeacherHomepage extends AppCompatActivity implements ClassItemAdapt
     public void onItemClick(int position) {
         vibrator.vibrate(50);
         Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getApplicationContext(), TeacherClassroomList.class);
+        intent.putExtra("CLASS_NAME", ClassItem_Array.get(position).getClass_name());
+        startActivity(intent);
     }
 }
