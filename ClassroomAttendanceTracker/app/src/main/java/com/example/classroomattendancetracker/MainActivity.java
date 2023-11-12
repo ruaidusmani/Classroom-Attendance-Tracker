@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         logoutButton.setOnClickListener(Activity_Click_Listener);
         user = mAuth.getCurrentUser();
         String USER_TYPE = preferencesController.getString("USER_TYPE");
-        initialiseFirestoreDocument();
+     
         if(user != null)
         {
             if(USER_TYPE.equals("Teacher")){
@@ -146,39 +146,7 @@ public class MainActivity extends AppCompatActivity {
     };
     //on resume
 
-    public void initialiseFirestoreDocument() {
-        //get android id
-        String android_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-        Map<String, Object> profile = new HashMap<>();
-        assert (user.getEmail() != null);
-        String email = "xiehoapieao@gmail.com";
-        String collectionName = "COURSES";
-        String documentName = "test2";
-        DocumentReference docRef = db.collection(collectionName).document(documentName);
-        Calendar currentTime = Calendar.getInstance();
-
-        int day = (currentTime.get(Calendar.DAY_OF_MONTH));
-        int month = (currentTime.get(Calendar.MONTH)) + 1;
-        int year = (currentTime.get(Calendar.YEAR));
-        String dayMonthYear = day + "_" + month + "_" + year;
-
-//        String stringToPush = "PRESENT" + "." + dayMonthYear + "." + email + "." + "present";
-        String stringToPush = "PRESENT" + "." + dayMonthYear;
-
-
-        docRef.update(stringToPush, FieldValue.arrayUnion(email)).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("A", "DocumentSnapshot successfully updated!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("A", "Error updating document", e);
-                    }
-                });
-    }
+    
     public void openNewActivity(Class activity){
         Intent intent = new Intent(getApplicationContext(), activity);
         startActivity(intent);
