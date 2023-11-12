@@ -235,6 +235,7 @@ public class LiveStatsActivity extends AppCompatActivity {
     }
 
     void removeRecentlyJoinedStudentRealtime(){
+
         DatabaseReference ref = database.getReference("/PRESENCE/"+ Room + "/" + MostRecentStudentID + "/present");
         ref.setValue(false);
     }
@@ -507,6 +508,7 @@ public class LiveStatsActivity extends AppCompatActivity {
 
                                 }
 //                            Log.d("Info", "Document ID: " + documentId + "Owner " + owner + "Days of week " + daysOfWeek);
+                                refreshMostRecentStudent();
                             }
 
                         }
