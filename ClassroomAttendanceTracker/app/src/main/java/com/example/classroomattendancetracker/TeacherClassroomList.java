@@ -8,8 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -17,29 +15,23 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class TeacherClassroomList extends AppCompatActivity implements ClassRoomItemAdapter.OnItemClickListener{
+public class TeacherClassroomList extends AppCompatActivity implements ClassDateItemAdapter.OnItemClickListener{
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private FirebaseUser user;
 
     Vibrator vibrator;
-
-
-    RecyclerView ClassRoom_List;
-    ArrayList<ClassRoomItem> ClassRoomItem_Array = new ArrayList<ClassRoomItem>(); // holds student profiles to list
+    RecyclerView ClassDate_List;
+    ArrayList<ClassDateItem> classDateItem_Array = new ArrayList<ClassDateItem>(); // holds class date to list
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +50,6 @@ public class TeacherClassroomList extends AppCompatActivity implements ClassRoom
 
         getClassRoomService(class_name);
     }
-
 
     public void getClassRoomService(String class_name){
 
@@ -82,40 +73,25 @@ public class TeacherClassroomList extends AppCompatActivity implements ClassRoom
                                 Set<String> keys = PRESENT_MAP.keySet();
                                 for (String key : keys){
                                     String date = key.replace('_', '/');
-                                    ClassRoomItem_Array.add(new ClassRoomItem(date));
+                                    classDateItem_Array.add(new ClassDateItem(date));
                                 }
-                                for (int i = 0; i < ClassRoomItem_Array.size(); i++){
-                                    Log.d("Classroom ", "onComplete: " + ClassRoomItem_Array.get(i).getDay_date());
+                                for (int i = 0; i < classDateItem_Array.size(); i++){
+                                    Log.d("Classroom ", "onComplete: " + classDateItem_Array.get(i).getDate());
                                 }
 
                                 Log.d("Map ", "onComplete: " + PRESENT_MAP.size() + " " + PRESENT_MAP.get("11_11_2023"));
                             }
 
-//
-//                            String result_classname = (String) document.getId();
-//                            if (result_classname.equals(class_name)) {
-//
-//                                HashMap<String, ArrayList<String>> gypsy = new HashMap<String, ArrayList<String>>();
-//                                gypsy = document.get("PRESENT", gypsy.getClass());
-//                                gypsy.get("DATE");
-//
-//
-//                                // ClassRoomItem
-//                                ClassRoomItem_Array.add(new ClassRoomItem(document.getId(), (String) document.get("ROOM_NUMBER")));
-//                            }
-
                         }
-//                        Log.d("FIREQUERY ", "onComplete: " + ClassRoomItem_Array.size());
 
-
-                        Log.d("Classroom date: ", ClassRoomItem_Array.get(0).getDay_date());
+                        Log.d("Classroom date: ", classDateItem_Array.get(0).getDate());
                         Toast.makeText(getApplicationContext(), "Fetching Classes", Toast.LENGTH_SHORT).show();
 
-                        ClassRoom_List = findViewById(R.id.recyclerView_ClassRoomItems);
-                        ClassRoomItemAdapter adapter = new ClassRoomItemAdapter(ClassRoomItem_Array, TeacherClassroomList.this);
-                        adapter.notifyDataSetChanged(); // if toggle is set
-                        ClassRoom_List.setAdapter(adapter);
-                        ClassRoom_List.setLayoutManager(new LinearLayoutManager(TeacherClassroomList.this));
+                        ClassDate_List = findViewById(R.id.recyclerView_ClassRoomItems);
+                        ClassDateItemAdapter adapter = new ClassDateItemAdapter(classDateItem_Array, TeacherClassroomList.this);
+                        adapter.notifyDataSetChanged();
+                        ClassDate_List.setAdapter(adapter);
+                        ClassDate_List.setLayoutManager(new LinearLayoutManager(TeacherClassroomList.this));
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

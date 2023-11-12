@@ -42,10 +42,8 @@ public class TeacherHomepage extends AppCompatActivity implements ClassItemAdapt
     Button logout;
     Button buttonViewDashboard;
     Vibrator vibrator;
-
-
     RecyclerView ClassItemList;
-    ArrayList<ClassItem> ClassItem_Array = new ArrayList<ClassItem>(); // holds student profiles to list
+    ArrayList<ClassItem> ClassItem_Array = new ArrayList<ClassItem>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +64,6 @@ public class TeacherHomepage extends AppCompatActivity implements ClassItemAdapt
         logout.setOnClickListener(Activity_Click_Listener);
 
         getClassesService();
-//        display_items();
     }
 
     View.OnClickListener Activity_Click_Listener = new View.OnClickListener(){
@@ -85,7 +82,6 @@ public class TeacherHomepage extends AppCompatActivity implements ClassItemAdapt
     };
 
     public void getClassesService(){
-
         db.collection("COURSES")
                 .whereEqualTo("OWNER", user.getEmail())
                 .whereArrayContains("DAYS", "Monday")
@@ -94,62 +90,20 @@ public class TeacherHomepage extends AppCompatActivity implements ClassItemAdapt
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
-                        ArrayList<String > class_names = new ArrayList<>();
-                        ArrayList<String > class_room_numbers = new ArrayList<>();
-
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("FIREQUERY ", document.getId() + " => " + document.getData());
                                 ClassItem_Array.add(new ClassItem(document.getId(), (String) document.get("ROOM_NUMBER")));
-//                                class_names.add(document.getId());
-//                                class_room_numbers.add((String) document.get("ROOM_NUMBER"));
                             }
-                            Log.d("FIREQUERY ", "onComplete: " + ClassItem_Array.size());
-
-                            for (int i = 0; i < ClassItem_Array.size(); i++) {
-                                Log.d("FIREQUERY ", "oldonComplete: " + ClassItem_Array.get(i).getClass_name());
-                            }
-
 
 
                         Toast.makeText(getApplicationContext(), "Fetching Classes", Toast.LENGTH_SHORT).show();
 
-//                        dayOfWeekMap = new HashMap<>();
-//
-//                        // Add key-value pairs to the dictionary
-//                        dayOfWeekMap.put(1, "Sunday");
-//                        dayOfWeekMap.put(2, "Monday");
-//                        dayOfWeekMap.put(3, "Tuesday");
-//                        dayOfWeekMap.put(4, "Wednesday");
-//                        dayOfWeekMap.put(5, "Thursday");
-//                        dayOfWeekMap.put(6, "Friday");
-//                        dayOfWeekMap.put(7, "Saturday");
-//
-//
-//                        Calendar currentTime = Calendar.getInstance();
-//                        int current_hour = (currentTime.get(Calendar.HOUR_OF_DAY));
-//                        int current_minute = (currentTime.get(Calendar.MINUTE));
-//                        int current_day_of_week = currentTime.get(Calendar.DAY_OF_WEEK);
-//                        String current_day_of_week_string = dayOfWeekMap.get(current_day_of_week);
-//
-//                        current_day_of_week = 2;
-//                        current_day_of_week_string = dayOfWeekMap.get(current_day_of_week);
-
-
-                        Log.d("FIREQUERY ", "display_items: " + ClassItem_Array.size());
-                        for (int i = 0; i < ClassItem_Array.size(); i++) {
-                            Log.d("FIREQUERY ", "onComplete: " + ClassItem_Array.get(i).getClass_name());
-                        }
                         // populate the list
                         ClassItemList = findViewById(R.id.recyclerView_ClassItems);
                         ClassItemAdapter adapter = new ClassItemAdapter(ClassItem_Array, TeacherHomepage.this);
-                        adapter.notifyDataSetChanged(); // if toggle is set
+                        adapter.notifyDataSetChanged();
                         ClassItemList.setAdapter(adapter);
                         ClassItemList.setLayoutManager(new LinearLayoutManager(TeacherHomepage.this));
 
-
-
-                            //From here we can access the room names and ids. Only inside this bloc of code.
-                        // SO i think we have to update the views from here.
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -160,9 +114,6 @@ public class TeacherHomepage extends AppCompatActivity implements ClassItemAdapt
                 });
 
     }
-
-    // displays the list of profiles
-   // public void display_items(){}
 
     @Override
     public void onItemClick(int position) {

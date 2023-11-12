@@ -40,10 +40,6 @@ public class ClassItemAdapter extends RecyclerView.Adapter<ClassItemAdapter.View
     List<ClassItem> ClassItem_List = new ArrayList<ClassItem>();
     private OnItemClickListener clickListener;
 
-//    public ClassItemAdapter(List<ClassItem> class_item_list) {
-//        ClassItem_List.addAll(class_item_list); //copy items to class_item-specific array
-//    }
-
     public ClassItemAdapter(List<ClassItem> class_item_list, OnItemClickListener clickListener) {
         ClassItem_List.addAll(class_item_list); //copy items to class_item-specific array
         this.clickListener = clickListener;
