@@ -31,7 +31,7 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     Vibrator vibrator;
-    Button loginButton, registerButton, buttonCheckIn, editButton, logoutButton, buttonCheckOut;
+    Button loginButton, registerButton, buttonCheckIn, editButton, logoutButton, buttonCheckOut, buttonEnroll;
     TextView app_title;
 
     PreferencesController preferencesController;
@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseFirestore db;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
+//        Intent a = new Intent(getApplicationContext(), EnrollClassActivity.class);
+//        startActivity(a);
 
         preferencesController = new PreferencesController(getApplicationContext());
         String android_id = Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID);
@@ -62,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
         buttonCheckOut = (Button) findViewById(R.id.buttonCheckOut);
         editButton = (Button) findViewById(R.id.editPayloadButton);
         logoutButton = (Button) findViewById(R.id.logoutButtonMain);
+        buttonEnroll = (Button) findViewById(R.id.buttonEnroll);
+
 
         loginButton.setOnClickListener(Activity_Click_Listener);
         registerButton.setOnClickListener(Activity_Click_Listener);
@@ -69,32 +75,12 @@ public class MainActivity extends AppCompatActivity {
         buttonCheckOut.setOnClickListener(Activity_Click_Listener);
         editButton.setOnClickListener(Activity_Click_Listener);
         logoutButton.setOnClickListener(Activity_Click_Listener);
+        buttonEnroll.setOnClickListener(Activity_Click_Listener);
         user = mAuth.getCurrentUser();
-        String USER_TYPE = preferencesController.getString("USER_TYPE");
-     
-        if(user != null)
-        {
-            if(USER_TYPE.equals("Teacher")){
 
-                openNewActivity(TeacherHomepage.class);
-            }
-            loginButton.setVisibility(View.GONE);
-            registerButton.setVisibility(View.GONE);
-            logoutButton.setVisibility(View.VISIBLE);
-            editButton.setVisibility(View.VISIBLE);
-            buttonCheckIn.setVisibility(View.VISIBLE);
-            buttonCheckOut.setVisibility(View.VISIBLE);
-            Toast.makeText(getApplicationContext(), "ALREADY LOGGED IN :)", Toast.LENGTH_LONG).show();
-        }else{
 
-            loginButton.setVisibility(View.VISIBLE);
-            registerButton.setVisibility(View.VISIBLE);
-            logoutButton.setVisibility(View.GONE);
-            editButton.setVisibility(View.GONE);
-            buttonCheckIn.setVisibility(View.GONE);
-            buttonCheckOut.setVisibility(View.GONE);
-            Toast.makeText(getApplicationContext(), "NOT LOGGED IN :(", Toast.LENGTH_LONG).show();
-        }
+        handleUserType();
+
 
 
 
@@ -107,6 +93,35 @@ public class MainActivity extends AppCompatActivity {
             builder.setMessage("You cannot scan your Phone right now, You must select a login option first!").setTitle("Cannot Scan NFC");
             AlertDialog dialog = builder.create();
             dialog.show();
+        }
+    }
+
+    void handleUserType(){
+        String USER_TYPE = preferencesController.getString("USER_TYPE");
+        if(user != null)
+        {
+            if(USER_TYPE.equals("Teacher")){
+
+                openNewActivity(TeacherHomepage.class);
+            }
+            loginButton.setVisibility(View.GONE);
+            registerButton.setVisibility(View.GONE);
+            logoutButton.setVisibility(View.VISIBLE);
+            editButton.setVisibility(View.VISIBLE);
+            buttonCheckIn.setVisibility(View.VISIBLE);
+            buttonCheckOut.setVisibility(View.VISIBLE);
+            buttonEnroll.setVisibility(View.VISIBLE);
+//            Toast.makeText(getApplicationContext(), "ALREADY LOGGED IN :)", Toast.LENGTH_LONG).show();
+        }else{
+
+            loginButton.setVisibility(View.VISIBLE);
+            registerButton.setVisibility(View.VISIBLE);
+            logoutButton.setVisibility(View.GONE);
+            editButton.setVisibility(View.GONE);
+            buttonCheckIn.setVisibility(View.GONE);
+            buttonCheckOut.setVisibility(View.GONE);
+            buttonEnroll.setVisibility(View.GONE);
+//            Toast.makeText(getApplicationContext(), "NOT LOGGED IN :(", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -140,7 +155,12 @@ public class MainActivity extends AppCompatActivity {
                     editButton.setVisibility(View.GONE);
                     buttonCheckIn.setVisibility(View.GONE);
                     buttonCheckOut.setVisibility(View.GONE);
+                    buttonEnroll.setVisibility(View.GONE);
                     FirebaseAuth.getInstance().signOut();
+                    preferencesController.setPreference("USER_TYPE", "");
+                case "enroll":
+                    openNewActivity(EnrollClassActivity.class);
+                    break;
             }
         }
     };
@@ -150,6 +170,12 @@ public class MainActivity extends AppCompatActivity {
     public void openNewActivity(Class activity){
         Intent intent = new Intent(getApplicationContext(), activity);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        handleUserType();
     }
 
 }

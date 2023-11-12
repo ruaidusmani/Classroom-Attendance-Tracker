@@ -10,37 +10,37 @@
         android:id="@+id/add_class_teacher_button"
         android:layout_width="165dp"
         android:layout_height="57dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="492dp"
         android:text="Add Course"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.934"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView_ClassItems" />
+        app:layout_constraintTop_toBottomOf="@+id/teacher_homepage_title" />
 
     <Button
         android:id="@+id/logout_teacher_button"
         android:layout_width="165dp"
         android:layout_height="57dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="492dp"
         android:text="Logout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.065"
+        app:layout_constraintHorizontal_bias="0.109"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView_ClassItems" />
+        app:layout_constraintTop_toBottomOf="@+id/teacher_homepage_title" />
 
     <Button
         android:id="@+id/buttonViewDashboard"
         android:layout_width="165dp"
         android:layout_height="57dp"
-        android:layout_marginTop="128dp"
+        android:layout_marginTop="572dp"
         android:text="View Dashboard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView_ClassItems" />
+        app:layout_constraintTop_toBottomOf="@+id/teacher_homepage_title" />
 
     <TextView
         android:id="@+id/teacher_homepage_title"
-        android:layout_width="203dp"
+        android:layout_width="wrap_content"
         android:layout_height="54dp"
         android:layout_marginTop="16dp"
         android:text="My Courses"
@@ -62,10 +62,12 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_ClassItems"
         android:layout_width="411dp"
-        android:layout_height="438dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:paddingStart="5dp"
+        android:paddingLeft="5dp"
         android:paddingTop="5dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
