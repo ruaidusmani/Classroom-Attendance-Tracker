@@ -15,9 +15,12 @@ from pytz import timezone
 import asyncio
 import firebase_admin
 from firebase_admin import db
+from firebase_admin import firestore 
 
 credentials = firebase_admin.credentials.Certificate('ledcontrol-7c9d9-firebase-adminsdk-om517-3f07b22872.json')
 default_app = firebase_admin.initialize_app(credentials,{'databaseURL': 'https://ledcontrol-7c9d9-default-rtdb.firebaseio.com'})
+firestore_db = firestore.client()
+
 
 ROOM = ""
 SERIAL = ""
@@ -79,8 +82,37 @@ def setClassroomNumber(roomNumber):
   global ROOM
   ROOM = roomNumber
  
-
+def getEmail(android_ID):
+  global SERIAL
+  users = firestore_db.collection("USERS")
+  query = users.where("android_id", "==", android_ID).stream()
+  for a in query:
+    # print(a.to_dict())
+    print(a.id)
+    return a.id
   
+def getCurrentClass(current_day_of_week, current_hour, current_minute):
+  global ROOM
+  courses = firestore_db.collection("COURSES")
+  query = courses.where("ROOM_NUMBER", "==", ROOM).stream()
+  for a in query:
+    dicto = a.to_dict()
+    END_HOUR = dicto["END_HOUR"]
+    END_MINUTE = dicto["END_MIN"]
+    START_HOUR = dicto["START_HOUR"]
+    START_MINUTE = dicto["START_MIN"]
+    start_sec = (START_HOUR * 60 * 60) + (START_MINUTE * 60)- 60*15
+    end_sec = (END_HOUR * 60 * 60) + (END_MINUTE * 60)
+    current_sec = (current_hour * 60 * 60) + (current_minute * 60) 
+    if current_day_of_week in dicto["DAYS"]:
+      if (current_sec >= start_sec and current_sec <= end_sec):
+        return a.id
+    return "null"
+
+def pushFireStoreData(course, date_string, email):
+  ref = firestore_db.collection("COURSES").document(course)
+  path = "PRESENCE" + "." + date_string 
+  ref.update({path: email})
 
 def authenticate_class(dictionary):
   if (dictionary['id']== "null"):
@@ -103,20 +135,33 @@ def authenticate_class(dictionary):
   #get current timetamp for EST timezone
   tz = timezone('EST')
   CURRENT_TIMESTAMP = datetime.now(tz) 
+  #get current day of week
+  day_of_week = CURRENT_TIMESTAMP.strftime("%A")
+  current_hour = CURRENT_TIMESTAMP.strftime("%H")
+  current_minute = CURRENT_TIMESTAMP.strftime("%M")
+  current_day_of_month = CURRENT_TIMESTAMP.strftime("%d")
+  current_month = CURRENT_TIMESTAMP.strftime("%m")
+  current_year = CURRENT_TIMESTAMP.strftime("%Y")
+
+  date_string = current_day_of_month + "_" + current_month + "_" + current_year
+
+  course = getCurrentClass(day_of_week, int(current_hour), int(current_minute))
 
   if action == "CI":
       print("CI")
-    
+      email = getEmail(uid)
       path = '/PRESENCE/%s/%s' %(ROOM, uid)
       present_status = database_present_state(path)
       #covert timestamp to string containing day, month, year, hour, minute, second, in 24 hour format
-      database_push_data(path, {'present': True, 'time_in' :  CURRENT_TIMESTAMP.strftime("%b,%d,%Y,%I:%M:%S") })
+      database_push_data(path, {'present': True, 'time_in' :  CURRENT_TIMESTAMP.strftime("%b,%d,%Y,%H:%M:%S") })
       return
   elif action == "CO":
       print("CO")
+      email = getEmail(uid)
       path = '/PRESENCE/%s/%s' %(ROOM, uid)
       present_status = database_present_state(path)
-      database_push_data(path, {'present': False, 'time_out' : CURRENT_TIMESTAMP.strftime("%b,%d,%Y,%I:%M:%S")})
+      database_push_data(path, {'present': False, 'time_out' : CURRENT_TIMESTAMP.strftime("%b,%d,%Y,%H:%M:%S")})
+      #getCurrentClass(current_day_of_week, current_hour, current_minute)
       return
   elif action == "UR":
       print("UR")
@@ -240,3 +285,8 @@ def main():
       authenticate_class(dictionary)
 
 main()
+
+# SERIAL = getSerial()
+# getClassroomNumber()
+# getEmail("12345")
+# getCurrentClass("Monday", 16, 50)
