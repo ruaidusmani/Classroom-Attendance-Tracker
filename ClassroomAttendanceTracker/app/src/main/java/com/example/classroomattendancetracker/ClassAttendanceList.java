@@ -2,6 +2,7 @@ package com.example.classroomattendancetracker;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -48,6 +49,8 @@ public class ClassAttendanceList extends AppCompatActivity {
 
         String class_date = getIntent().getStringExtra("CLASS_DATE");
         Log.d("Classroom List 22", "onCreate: " + class_date);
+        class_date = class_date.replace('/', '_');
+
 
         getAttendedStudentsService(class_date);
 
@@ -80,62 +83,20 @@ public class ClassAttendanceList extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(), "No dates exist for this section yet", Toast.LENGTH_SHORT).show();
                                 }
                                 else{
+                                    ArrayList<String> students =  (ArrayList<String>) PRESENT_MAP.get(class_date);
+                                    Log.d("Date Request", class_date);
+                                    Log.d("students before UserService", "onComplete: " + students);
+                                    Log.d("userService", "we here");
+                                    userService(students);
 
-                                    Set<String> keys = PRESENT_MAP.keySet();
-                                    for (String key : keys){
-                                        String date = key.replace('_', '/');
-                                        Log.d("Classroom Dates:", "String key: key " + date);
-                                        if (date.equals(class_date)) {
-                                            Log.d("date.equals()", "pass");
-                                            ArrayList<String> students = (ArrayList<String>) documentData.get("students");
-                                            Log.d("students", "onComplete: " + students);
-
-
-                                            for (String student : students) {
-
-                                                Log.d("current student", "onComplete: " + student);
-
-                                                db.collection("USERS")
-                                                        .get()
-                                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                            @Override
-                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                //String date = "";
-                                                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                                                    Log.d("Listing USERS documents here", "onComplete: " + document.getId() + " " + document.getData());
-                                                                    if (document.getId().equals("test@student30.com") && document != null ){
-                                                                        attendedStudentItem_Array.add(new AttendedStudentItem
-                                                                                (document.getString("first name") + " " + document.getString("last name"),
-                                                                                        document.getString("Student ID"),
-                                                                                        true));
-                                                                    }
-                                                                }
-                                                                try{
-//                            Log.d("Classroom date: ", attendedStudentItem_Array.get(0).getDate());
-                                                                    Toast.makeText(getApplicationContext(), "Fetching Classes", Toast.LENGTH_SHORT).show();
-                                                                    ClassAttendance_List = findViewById(R.id.recyclerView_AttendedStudentList);
-                                                                    AttendedStudentItemAdapter adapter = new AttendedStudentItemAdapter(attendedStudentItem_Array);
-                                                                    adapter.notifyDataSetChanged();
-                                                                    ClassAttendance_List.setAdapter(adapter);
-                                                                    ClassAttendance_List.setLayoutManager(new LinearLayoutManager(ClassAttendanceList.this));
-                                                                }
-                                                                catch (Exception e){
-                                                                    Log.e("Classroom ", "onComplete: " + e.getMessage());
-                                                                    Toast.makeText(getApplicationContext(), "No dates exist for this section yet", Toast.LENGTH_SHORT).show();
-                                                                }
-
-                                                            }
-                                                        })
-                                                        .addOnFailureListener(new OnFailureListener() {
-                                                            @Override
-                                                            public void onFailure(@NonNull Exception e) {
-                                                                Toast.makeText(getApplicationContext(), "Could not fetch classes", Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        });
-
-                                            }
-                                        }
-                                    }
+//                                    Set<String> keys = PRESENT_MAP.keySet();
+//                                    for (String key : keys){
+//                                        String date = key.replace('_', '/');
+//                                        Log.d("Classroom Dates:", "String key: key " + date);
+//                                        if (date.equals(class_date)) {
+//                                            Log.d("date.equals()", "pass");
+//                                            (ArrayList<String>) documentData.get("students");
+//                                            Log.d("students", "onComplete: " + students);
                                 }
                             }
                         }
@@ -149,6 +110,65 @@ public class ClassAttendanceList extends AppCompatActivity {
                 });
     }
 
+
+    public void userService(ArrayList<String> student_emails){
+        db.collection("USERS")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Log.d("UserService docs", document.getId() + " " + document.getData());
+
+                            for (String emails: student_emails){
+                                Log.d("Users", "onComplete: " + emails);
+                            }
+
+                            boolean found;
+                            Object doc = document.getId();
+                            Log.d("doc", (String) doc);
+                            if(student_emails.contains(document.getId())){
+                            //if (document.getId().equals(student_emails)){
+                                for (String key : document.getData().keySet()){
+                                    Log.d("Grabbing docs with students ", "onComplete: " + key + " " + document.getData().get(key));
+                                }
+                                attendedStudentItem_Array.add(new AttendedStudentItem
+                                        (document.getString("first name") + " " + document.getString("last name"),
+                                                document.getString("Student ID"),
+                                                true));
+                                Log.d("student added", "onComplete: " + document.getString("first name") + " " + document.getString("last name"));
+                            }
+                        }
+
+
+
+                        try{
+                            for (int i = 0; i < attendedStudentItem_Array.size(); i++){
+                                Log.d("Who is in class ", attendedStudentItem_Array.get(i).getStudentName());}
+//                            Log.d("Classroom date: ", attendedStudentItem_Array.get(0).getDate());
+                            Toast.makeText(getApplicationContext(), "Fetching Classes", Toast.LENGTH_SHORT).show();
+                            ClassAttendance_List = findViewById(R.id.recyclerView_AttendedStudentList);
+                            AttendedStudentItemAdapter adapter = new AttendedStudentItemAdapter(attendedStudentItem_Array);
+                            adapter.notifyDataSetChanged();
+                            ClassAttendance_List.setAdapter(adapter);
+                            ClassAttendance_List.setLayoutManager(new GridLayoutManager(ClassAttendanceList.this, 1));
+                        }
+                        catch (Exception e){
+                            Log.e("Classroom ", "onComplete: " + e.getMessage());
+                            Toast.makeText(getApplicationContext(), "No dates exist for this section yet", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(), "Could not fetch classes", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+    }
 
 
 
