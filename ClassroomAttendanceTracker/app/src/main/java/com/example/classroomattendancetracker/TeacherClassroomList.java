@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
@@ -46,7 +47,7 @@ public class TeacherClassroomList extends AppCompatActivity implements ClassDate
 
         // get Intent
         String class_name = getIntent().getStringExtra("CLASS_NAME");
-        Log.d("Classroom ", "onCreate: " + class_name);
+        Log.d("Classroom List", "onCreate: " + class_name);
 
         getClassRoomService(class_name);
     }
@@ -54,7 +55,8 @@ public class TeacherClassroomList extends AppCompatActivity implements ClassDate
     public void getClassRoomService(String class_name){
 
         db.collection("COURSES")
-                .whereEqualTo("OWNER", user.getEmail())
+//                .whereEqualTo("OWNER", user.getEmail())
+                .whereEqualTo("OWNER", "teacher@test6.com")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -62,7 +64,7 @@ public class TeacherClassroomList extends AppCompatActivity implements ClassDate
                         //String date = "";
                         for (QueryDocumentSnapshot document : task.getResult()) {
 
-                            if (document.getId().equals(class_name) && document != null ){
+                            if (document.getId().equals("COEN 212") && document != null ){
                                 for (String key : document.getData().keySet()){
                                     Log.d("for 2 ", "onComplete: " + key + " " + document.getData().get(key));
                                 }
@@ -121,5 +123,8 @@ public class TeacherClassroomList extends AppCompatActivity implements ClassDate
     public void onItemClick(int position) {
         vibrator.vibrate(50);
         Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getApplicationContext(), ClassAttendanceList.class);
+        intent.putExtra("CLASS_DATE", classDateItem_Array.get(position).getDate());
+        startActivity(intent);
     }
 }
