@@ -360,40 +360,49 @@ public class LiveStatsActivity extends AppCompatActivity {
                     for (DocumentSnapshot document : task.getResult()) {
                         // Access the document data
                         String documentId = document.getId();
+                        Log.d("CLass name: " , documentId);
                         String owner = document.getString("OWNER");
-                        List<String> daysOfWeek = (List<String>) document.get("DAYS");
-                        String roomNumber = document.getString("ROOM_NUMBER");
-                        int startHour = document.getLong("START_HOUR").intValue();
-                        int startMinute = document.getLong("START_MIN").intValue();
-                        int endHour = document.getLong("END_HOUR").intValue();
-                        int endMinute = document.getLong("END_MIN").intValue();
+
 
                         if (owner.equals(email)){
+                            Log.d("Found class", documentId);
+                            List<String> daysOfWeek = (List<String>) document.get("DAYS");
+                            String roomNumber = document.getString("ROOM_NUMBER");
+                            int startHour = document.getLong("START_HOUR").intValue();
+                            int startMinute = document.getLong("START_MIN").intValue();
+                            int endHour = document.getLong("END_HOUR").intValue();
+                            int endMinute = document.getLong("END_MIN").intValue();
+                            int startSeconds = startHour*60*60 + startMinute*60;
+                            int endSeconds = endHour*60*60 + endMinute*60;
+                            int currentSeconds = current_hour*60*60 + current_minute*60;
+
                             if (daysOfWeek.contains(current_day_of_week_string)){
 
-                                if (current_hour >= startHour && current_hour <= endHour){
-                                    if (current_minute <= endMinute){
-                                        Log.d("Found minute", String.valueOf(current_minute));
-                                        classFound = true;
-                                        Room = roomNumber;
-                                        courseName = documentId;
-                                        textViewLiveCountClassEnd.setText("Class End: " + endHour + ":" + endMinute);
-                                        textViewLiveCountClassStart.setText("Class Start: " + startHour + ":" + startMinute);
-                                        Log.d("Found class and room: ",   Room + " " + courseName);
-                                        textViewCourseName.setText("Course: " + courseName);
-                                        textViewRoomNumber.setText("Room: " + Room);
-                                        classEndHour = endHour;
-                                        classEndMinute = endMinute;
-                                        classStartHour = startHour;
-                                        classStartMinute = startMinute;
-                                        classStartSecond = 0;
-                                        classEndSecond = 0;
-                                    }
+                                if (currentSeconds >= startSeconds && currentSeconds <= endSeconds) {
+//                                    if (current_minute <= endMinute){
+                                    Log.d("Found minute", String.valueOf(current_minute));
+                                    classFound = true;
+                                    Room = roomNumber;
+                                    courseName = documentId;
+                                    textViewLiveCountClassEnd.setText("Class End: " + endHour + ":" + endMinute);
+                                    textViewLiveCountClassStart.setText("Class Start: " + startHour + ":" + startMinute);
+                                    Log.d("Found class and room: ", Room + " " + courseName);
+                                    textViewCourseName.setText("Course: " + courseName);
+                                    textViewRoomNumber.setText("Room: " + Room);
+                                    classEndHour = endHour;
+                                    classEndMinute = endMinute;
+                                    classStartHour = startHour;
+                                    classStartMinute = startMinute;
+                                    classStartSecond = 0;
+                                    classEndSecond = 0;
+
                                 }
+//                            Log.d("Info", "Document ID: " + documentId + "Owner " + owner + "Days of week " + daysOfWeek);
                             }
+
                         }
 
-                        Log.d("Info", "Document ID: " + documentId + "Owner " + owner + "Days of week " + daysOfWeek);
+
                     }
                     if (!classFound){
                         textViewCourseName.setText("No class Yet");

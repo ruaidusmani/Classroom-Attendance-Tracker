@@ -165,14 +165,20 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
 
     public void updateFirestoreDocument(){
 
+        if (classNameSignIn.equals("null") || classNameSignIn == null) {
+            return;
+        }
         String collectionName = "COURSES";
         String documentName = classNameSignIn;
         DocumentReference docRef = db.collection(collectionName).document(documentName);
         Calendar currentTime = Calendar.getInstance();
 
+
+
         int day = (currentTime.get(Calendar.DAY_OF_MONTH));
         int month = (currentTime.get(Calendar.MONTH)) + 1;
         int year = (currentTime.get(Calendar.YEAR));
+        day = 30;
         String dayMonthYear = day + "_" + month + "_" + year;
 
 //        String stringToPush = "PRESENT" + "." + dayMonthYear + "." + email + "." + "present";
@@ -183,6 +189,7 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d("A", "DocumentSnapshot successfully updated!");
+                        textViewSuccess.setText("You have successfully signed into " + classNameSignIn + ", Room " + roomNumber);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -195,12 +202,17 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
     public void findFirestoreDocument() {
         //get android id
         String android_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-        Map<String, Object> profile = new HashMap<>();
-        assert (user.getEmail() != null);
-        db.collection("CLASSES").whereEqualTo("ROOM_NUMBER", roomNumber).get().addOnCompleteListener(
+
+        if (roomNumber.equals("null") || roomNumber == null) {
+            Log.d("Room Number null", "null");
+           return;
+        }
+
+        db.collection("COURSES").whereEqualTo("ROOM_NUMBER", roomNumber).get().addOnCompleteListener(
                 new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        Log.d("Entered query", roomNumber);
                         for (QueryDocumentSnapshot query : task.getResult()) {
                             int startMin = query.getLong("START_MIN").intValue();
                             int startHour = query.getLong("START_HOUR").intValue();
@@ -264,12 +276,14 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
                             imageViewSuccess.setVisibility(View.VISIBLE);
                             textViewError.setVisibility(View.INVISIBLE);
                             imageViewError.setVisibility(View.INVISIBLE);
+
                         } else {
                             textViewSuccess.setVisibility(View.INVISIBLE);
                             imageViewSuccess.setVisibility(View.INVISIBLE);
                             textViewError.setVisibility(View.VISIBLE);
                             textViewError.setText("Something Came Up! Login Failed!");
                             imageViewError.setVisibility(View.VISIBLE);
+                            roomNumber = "null";
                         }
                     } else {
                         if (present) {
@@ -283,6 +297,7 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
                             imageViewSuccess.setVisibility(View.INVISIBLE);
                             textViewError.setVisibility(View.INVISIBLE);
                             imageViewError.setVisibility(View.INVISIBLE);
+                            roomNumber = "null";
                         }
                     }
 
