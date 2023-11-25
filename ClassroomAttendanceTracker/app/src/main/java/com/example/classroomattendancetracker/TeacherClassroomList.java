@@ -64,7 +64,7 @@ public class TeacherClassroomList extends AppCompatActivity implements ClassDate
                         //String date = "";
                         for (QueryDocumentSnapshot document : task.getResult()) {
 
-                            if (document.getId().equals("COEN 212") && document != null ){
+                            if (document.getId().equals("Kdhwjbsx") && document != null ){
                                 for (String key : document.getData().keySet()){
                                     Log.d("for 2 ", "onComplete: " + key + " " + document.getData().get(key));
                                 }

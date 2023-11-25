@@ -68,7 +68,7 @@ public class ClassAttendanceList extends AppCompatActivity {
                         //String date = "";
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Log.d("Listing documents here", "onComplete: " + document.getId() + " " + document.getData());
-                            if (document.getId().equals("COEN 212") && document != null ){
+                            if (document.getId().equals("Kdhwjbsx") && document != null ){
                                 for (String key : document.getData().keySet()){
                                     Log.d("for 2 ", "onComplete: " + key + " " + document.getData().get(key));
                                 }
@@ -83,7 +83,10 @@ public class ClassAttendanceList extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(), "No dates exist for this section yet", Toast.LENGTH_SHORT).show();
                                 }
                                 else{
-                                    ArrayList<String> students =  (ArrayList<String>) PRESENT_MAP.get(class_date);
+                                    Log.d("Point", "ERROR HERE");
+                                    Map <String, Object> students = (Map<String, Object>) PRESENT_MAP.get(class_date);
+
+                                    //ArrayList<String> students = (ArrayList<String>) PRESENT_MAP.get(class_date);
                                     Log.d("Date Request", class_date);
                                     Log.d("students before UserService", "onComplete: " + students);
                                     Log.d("userService", "we here");
@@ -111,7 +114,7 @@ public class ClassAttendanceList extends AppCompatActivity {
     }
 
 
-    public void userService(ArrayList<String> student_emails){
+    public void userService(Map<String, Object> student_emails){
         db.collection("USERS")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -120,14 +123,23 @@ public class ClassAttendanceList extends AppCompatActivity {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Log.d("UserService docs", document.getId() + " " + document.getData());
 
-                            for (String emails: student_emails){
+                            Set<String> keys = student_emails.keySet();
+                            ArrayList<String> modified_emails = new ArrayList<String>();
+                            // loop through a set
+                            for (String emails: keys){
+                                String modified_email = emails.replace('!', '.');
+                                modified_emails.add(modified_email);
                                 Log.d("Users", "onComplete: " + emails);
                             }
+
+                            Log.d("char replaced student_emails", "onComplete: " + modified_emails);
 
                             boolean found;
                             Object doc = document.getId();
                             Log.d("doc", (String) doc);
-                            if(student_emails.contains(document.getId())){
+
+
+                            if(modified_emails.contains(document.getId())){
                             //if (document.getId().equals(student_emails)){
                                 for (String key : document.getData().keySet()){
                                     Log.d("Grabbing docs with students ", "onComplete: " + key + " " + document.getData().get(key));

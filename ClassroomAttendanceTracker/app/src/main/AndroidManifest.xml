@@ -22,6 +22,9 @@
         android:theme="@style/Theme.ClassroomAttendanceTracker"
         tools:targetApi="31">
         <activity
+            android:name=".ClassAttendanceList"
+            android:exported="false" />
+        <activity
             android:name=".EnrollClassActivity"
             android:exported="false" />
         <activity
