@@ -33,6 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -184,8 +185,13 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
 //        String stringToPush = "PRESENT" + "." + dayMonthYear + "." + email + "." + "present";
         String stringToPush = "PRESENT" + "." + dayMonthYear;
 
+        stringToPush  = stringToPush + "." + email.replace(".", "!") + ".";
+        int currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
+        int currentMinute = currentTime.get(Calendar.MINUTE);
 
-        docRef.update(stringToPush, FieldValue.arrayUnion(email)).addOnSuccessListener(new OnSuccessListener<Void>() {
+
+//        docRef.update(stringToPush, FieldValue.arrayUnion(email)).addOnSuccessListener(new OnSuccessListener<Void>() {
+        docRef.update(stringToPush+"arrival_hour", currentHour, stringToPush+"arrival_minute", currentMinute).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d("A", "DocumentSnapshot successfully updated!");
@@ -293,7 +299,7 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
                             imageViewSuccess.setVisibility(View.VISIBLE);
                             textViewError.setVisibility(View.INVISIBLE);
                             imageViewError.setVisibility(View.INVISIBLE);
-                            findFirestoreDocument();
+//                            findFirestoreDocument();
                         } else {
                             textViewSuccess.setVisibility(View.INVISIBLE);
                             imageViewSuccess.setVisibility(View.INVISIBLE);
