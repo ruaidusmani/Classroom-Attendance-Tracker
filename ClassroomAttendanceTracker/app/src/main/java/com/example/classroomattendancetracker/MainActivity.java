@@ -158,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
                     buttonEnroll.setVisibility(View.GONE);
                     FirebaseAuth.getInstance().signOut();
                     preferencesController.setPreference("USER_TYPE", "");
+                    break;
                 case "enroll":
                     openNewActivity(EnrollClassActivity.class);
                     break;
