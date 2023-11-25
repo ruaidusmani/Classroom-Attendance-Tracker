@@ -235,11 +235,16 @@ public class LiveStatsActivity extends AppCompatActivity {
     }
 
     void removeRecentlyJoinedStudentRealtime(){
+        Log.d("Calling remove", "removeRecentlyJoinedStudentRealtime");
         DatabaseReference ref = database.getReference("/PRESENCE/"+ Room + "/" + MostRecentStudentID + "/present");
         ref.setValue(false);
     }
     void removeRecentlyJoinedStudentFirestore(){
         String mostRecentStudentID = textViewLastStudentJoinedID.getText().toString();
+        if (courseName == null || courseName == null) {
+            Toast.makeText(getApplicationContext(), "There is no most recently Joined student", Toast.LENGTH_SHORT).show();
+            return;
+        }
         DocumentReference docRef = db.collection("COURSES").document(courseName);
         Log.d("courseName", courseName);
         Calendar currentTime = Calendar.getInstance();
@@ -260,7 +265,7 @@ public class LiveStatsActivity extends AppCompatActivity {
                         if (yourArray.get(i).equals(emailMostRecentlyJoinedStudent)) {
                             Log.d("Found", String.valueOf(i));
                             yourArray.remove(i);
-                            removeRecentlyJoinedStudentRealtime();
+
                         }
                     }
 
@@ -271,6 +276,7 @@ public class LiveStatsActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     // Update successful
+                                    removeRecentlyJoinedStudentRealtime();
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
@@ -507,6 +513,7 @@ public class LiveStatsActivity extends AppCompatActivity {
 
                                 }
 //                            Log.d("Info", "Document ID: " + documentId + "Owner " + owner + "Days of week " + daysOfWeek);
+                                refreshMostRecentStudent();
                             }
 
                         }
