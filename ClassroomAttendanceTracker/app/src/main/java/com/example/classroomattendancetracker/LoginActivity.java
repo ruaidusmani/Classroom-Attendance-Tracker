@@ -124,7 +124,8 @@ public class LoginActivity extends AppCompatActivity {
                             // If sign in fails, display a message to the user.
                             Log.w("FIREBASE_AUTH_LOGIN", "signInWithEmail:failure", task.getException());
                             //TODO: ADD LOGIN FAIL REASON
-                            Toast.makeText(LoginActivity.this, "Login Failed.",
+
+                            Toast.makeText(LoginActivity.this, "Login Failed : Invalid Credentials" ,
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
