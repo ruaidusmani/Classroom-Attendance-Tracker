@@ -241,6 +241,10 @@ public class LiveStatsActivity extends AppCompatActivity {
     }
     void removeRecentlyJoinedStudentFirestore(){
         String mostRecentStudentID = textViewLastStudentJoinedID.getText().toString();
+        if (courseName == null || courseName == null) {
+            Toast.makeText(getApplicationContext(), "There is no most recently Joined student", Toast.LENGTH_SHORT).show();
+            return;
+        }
         DocumentReference docRef = db.collection("COURSES").document(courseName);
         Log.d("courseName", courseName);
         Calendar currentTime = Calendar.getInstance();
