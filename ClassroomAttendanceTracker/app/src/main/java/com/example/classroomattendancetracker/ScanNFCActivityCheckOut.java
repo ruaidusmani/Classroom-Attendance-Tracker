@@ -121,7 +121,17 @@ public class ScanNFCActivityCheckOut extends AppCompatActivity {
         int month = (currentTime.get(Calendar.MONTH)) + 1;
         int year = (currentTime.get(Calendar.YEAR));
 
-        String dayMonthYear = day + "_" + month + "_" + year;
+        String monthString = String.valueOf(month);
+        if (monthString.length() == 1) {
+            monthString = "0" + monthString;
+        }
+        String dayString = String.valueOf(day);
+        if (dayString.length() == 1){
+            dayString = "0" + dayString;
+        }
+
+
+        String dayMonthYear = dayString + "_" + monthString + "_" + year;
 
 //        String stringToPush = "PRESENT" + "." + dayMonthYear + "." + email + "." + "present";
         String stringToPush = "PRESENT" + "." + dayMonthYear;
@@ -137,7 +147,7 @@ public class ScanNFCActivityCheckOut extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d("A", "DocumentSnapshot successfully updated!");
-                        textViewSuccess.setText("You have successfully signed into " + classNameSignIn + ", Room " + roomNumber);
+                        textViewSuccess.setText("You have successfully signed out of " + classNameSignIn + ", Room " + roomNumber);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -296,10 +306,11 @@ public class ScanNFCActivityCheckOut extends AppCompatActivity {
                     else{
                         if (!present){
                             textViewSuccess.setVisibility(View.VISIBLE);
-                            textViewSuccess.setText("You have already checked out of this class!");
-                            imageViewSuccess.setVisibility(View.VISIBLE);
+                            textViewSuccess.setText("You are not checked in into any class!");
+//                            imageViewSuccess.setVisibility(View.VISIBLE);
+
                             textViewError.setVisibility(View.INVISIBLE);
-                            imageViewError.setVisibility(View.INVISIBLE);
+                            imageViewError.setVisibility(View.VISIBLE);
 //                            findFirestoreDocument();
                         }
                         else{
