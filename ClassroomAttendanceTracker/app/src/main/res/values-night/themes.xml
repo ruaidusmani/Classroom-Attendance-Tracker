@@ -16,6 +16,7 @@
         <item name="colorSecondary">@color/Navy</item>
         <item name="android:textColorPrimary">@color/Cream</item>
         <item name="android:textColorSecondary">@color/Navy</item>
+        <item name="colorAccent">@color/Cream</item>
 
     </style>
 
