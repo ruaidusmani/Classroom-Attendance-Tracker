@@ -33,8 +33,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.checkerframework.checker.index.qual.LengthOf;
+
+import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ScanNFCActivityCheckIn extends AppCompatActivity {
@@ -48,13 +52,18 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
     String roomNumber;
     String classNameSignIn;
 
+
+
     FirebaseUser user;
     FirebaseAuth mAuth;
     String email;
     TextView textViewPersonInfo;
     FirebaseFirestore db;
+    boolean enrolledIntoClass = false;
 
     boolean tried_to_sign_in;
+
+    HashMap<Integer, String> daysTranslate= new HashMap<Integer, String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +90,18 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
         textViewPersonInfo.setText("You are currently logged in as: " + email + " | ID: " + preferencesController.getString("AndroidID"));
         Log.d("SCAN_NFC_EMAIL", email);
 
+        daysTranslate.put(1, "Sunday");
+        daysTranslate.put(2, "Monday");
+        daysTranslate.put(3, "Tuesday");
+        daysTranslate.put(4, "Wednesday");
+        daysTranslate.put(5, "Thursday");
+        daysTranslate.put(6, "Friday");
+        daysTranslate.put(7, "Saturday");
+
+
+
+
+
         tried_to_sign_in = false;
         refresh();
 
@@ -103,7 +124,7 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
             Log.d("NFCString", "Shared Pref is null");
             preferencesController.setPreference("NFCString", "CI_" + preferencesController.getString("AndroidID"));
         }
-        serviceIntent1.putExtra("NFCString", preferencesController.getString("NFCString"));
+//        serviceIntent1.putExtra("NFCString", preferencesController.getString("NFCString"));
         startService(serviceIntent1);
     }
 
@@ -163,6 +184,41 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void checkIfEnrolled() {
+        String collectionName = "USERS";
+        String documentName = email;
+        DocumentReference docRef = db.collection(collectionName).document(documentName);
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                String[] enrolled = documentSnapshot.get("classes").toString().replace("[", "").replace("]", "").replace(", ", ",").split(",");
+//                Log.d("GJHSDG", enrolled.toString());
+                //check if in enrolled array the class is present
+                enrolledIntoClass = false;
+                for (int i = 0; i < enrolled.length; i++) {
+                    Log.d("GJHSDG", enrolled[i]);
+                    if (enrolled[i].equals(classNameSignIn)) {
+                        enrolledIntoClass = true;
+                    }
+                }
+
+                if (!enrolledIntoClass) {
+//                    textViewSuccess.setText("The class that is ongoing right now is not in your enrolled classes.");
+                    textViewSuccess.setVisibility(View.INVISIBLE);
+                    imageViewSuccess.setVisibility(View.INVISIBLE);
+                    textViewError.setVisibility(View.VISIBLE);
+                    textViewError.setText("You are not enrolled in the current Class (" + classNameSignIn + "), or you are too early to class - You must sign-in 15 minutes before class starts or later");
+                    imageViewError.setVisibility(View.VISIBLE);
+                    Log.d("Calling setPresence", "setPresence");
+                    setPresence(false);
+                }
+                else{
+                    updateFirestoreDocument();
+
+                }
+            }
+        });
+    }
     public void updateFirestoreDocument(){
 
         if (classNameSignIn.equals("null") || classNameSignIn == null) {
@@ -179,25 +235,44 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
         int month = (currentTime.get(Calendar.MONTH)) + 1;
         int year = (currentTime.get(Calendar.YEAR));
 
-        String dayMonthYear = day + "_" + month + "_" + year;
+        String monthString = String.valueOf(month);
+        if (monthString.length() == 1) {
+            monthString = "0" + monthString;
+        }
+        String dayString = String.valueOf(day);
+        if (dayString.length() == 1){
+            dayString = "0" + dayString;
+        }
+
+        String dayMonthYear = dayString + "_" + monthString + "_" + year;
 
 //        String stringToPush = "PRESENT" + "." + dayMonthYear + "." + email + "." + "present";
         String stringToPush = "PRESENT" + "." + dayMonthYear;
 
+//        stringToPush  = stringToPush + "." + email.replace(".", "!") + ".";
+        stringToPush  = stringToPush + "." + EncoderHelper.encode(email) + ".";
+        int currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
+        int currentMinute = currentTime.get(Calendar.MINUTE);
 
-        docRef.update(stringToPush, FieldValue.arrayUnion(email)).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("A", "DocumentSnapshot successfully updated!");
-                        textViewSuccess.setText("You have successfully signed into " + classNameSignIn + ", Room " + roomNumber);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("A", "Error updating document", e);
-                    }
-                });
+        Log.d("ENROLLED INTO CLASS IS: ", String.valueOf(enrolledIntoClass))   ;
+
+        if (enrolledIntoClass) {
+
+//        docRef.update(stringToPush, FieldValue.arrayUnion(email)).addOnSuccessListener(new OnSuccessListener<Void>() {
+            docRef.update(stringToPush + "arrival_hour", currentHour, stringToPush + "arrival_minute", currentMinute).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("A", "DocumentSnapshot successfully updated!");
+                            textViewSuccess.setText("You have successfully signed into " + classNameSignIn + ", Room " + roomNumber);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w("A", "Error updating document", e);
+                        }
+                    });
+        }
     }
     public void findFirestoreDocument() {
         //get android id
@@ -218,27 +293,84 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
                             int startHour = query.getLong("START_HOUR").intValue();
                             int endMin = query.getLong("END_MIN").intValue();
                             int endHour = query.getLong("END_HOUR").intValue();
+                            String [] days = query.get("DAYS").toString().replace("[", "").replace("]", "").replace(" ", "").split(",");
+//                            Log.d("Days", days.toString());
+                            int currentDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+                            Log.d("Current day", String.valueOf(currentDay));
                             Calendar currentTime = Calendar.getInstance();
                             int currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
                             int currentMinute = currentTime.get(Calendar.MINUTE);
 
-                            int startTimeSecs = startHour * 3600 + startMin * 60 - 15*60;
+                            int startTimeSecs = startHour * 3600 + startMin * 60;
                             int endTimeSecs = endHour * 3600 + endMin * 60;
                             int currentTimeSecs = currentHour * 3600 + currentMinute * 60 ;
 
-                            Log.d("Start time", String.valueOf(startTimeSecs));
-                            Log.d("End time", String.valueOf(endTimeSecs));
-                            Log.d("Current time", String.valueOf(currentTimeSecs));
+//                            Log.d("Start time", String.valueOf(startTimeSecs));
+//                            Log.d("End time", String.valueOf(endTimeSecs));
+//                            Log.d("Current time", String.valueOf(currentTimeSecs));
 
-                            if (currentTimeSecs > startTimeSecs && currentTimeSecs < endTimeSecs) { // if current time is between start and end time
-                                classNameSignIn = query.getId();
-                                updateFirestoreDocument();
+                            boolean isDay = false;
+
+                            for (int i = 0; i < days.length; i++) {
+                                Log.d("Days", days[i]);
+                                Log.d("days translate", daysTranslate.get(currentDay));
+                                if (daysTranslate.get(currentDay).equals(days[i])) {
+                                    isDay = true;
+                                }
                             }
+
+                            Log.d("isDay" + query.getId(), String.valueOf(isDay));
+                            Log.d("Current time" + query.getId(), String.valueOf(currentTimeSecs));
+                            Log.d("Start time"+ query.getId(), String.valueOf(startTimeSecs));
+                            Log.d("End time"+ query.getId(), String.valueOf(endTimeSecs));
+
+
+                            if (isDay && (currentTimeSecs > (startTimeSecs-(15*60)))  && currentTimeSecs < endTimeSecs) { // if current time is between start and end time
+                                classNameSignIn = query.getId();
+                                Log.d("FOUND CLASS", classNameSignIn);
+                                Log.d("isDay" + query.getId(), String.valueOf(isDay));
+                                Log.d("Current time" + query.getId(), String.valueOf(currentTimeSecs));
+                                Log.d("Start time"+ query.getId(), String.valueOf(startTimeSecs));
+                                Log.d("End time"+ query.getId(), String.valueOf(endTimeSecs));
+                                Log.d("Class name", classNameSignIn);
+                                checkIfEnrolled();
+
+                            }
+
+                        }
+                        if (classNameSignIn == null || classNameSignIn.equals("null")){
+                            textViewSuccess.setVisibility(View.INVISIBLE);
+                            imageViewSuccess.setVisibility(View.INVISIBLE);
+                            textViewError.setVisibility(View.VISIBLE);
+                            textViewError.setText("There is no class happening right now or in the next 15 minutes");
+                            imageViewError.setVisibility(View.VISIBLE);
+                            setPresence(false);
                         }
                     }
                 }
         );
     }
+
+    void setPresence(Boolean userin){
+        String android_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("/PRESENCE/" + roomNumber + "/" + android_id);
+        Log.d("Setting presence", "Setting presence");
+        ref.child("present").setValue(userin).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d("Setting presence", "Success");
+                refresh();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("Setting presence", "Failure");
+            }
+        });
+
+    }
+
     void refresh() {
         final FirebaseDatabase database = com.google.firebase.database.FirebaseDatabase.getInstance();
         //TODO: Change path of database to student's ID, should be dynamic as it check if a student is currently logged in
@@ -282,7 +414,11 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
                             textViewSuccess.setVisibility(View.INVISIBLE);
                             imageViewSuccess.setVisibility(View.INVISIBLE);
                             textViewError.setVisibility(View.VISIBLE);
-                            textViewError.setText("Something Came Up! Login Failed!");
+                            if (textViewError.getVisibility() != View.VISIBLE){
+                                textViewError.setText("Something Came Up! Login Failed!");
+                                textViewError.setVisibility(View.VISIBLE);
+                            }
+//
                             imageViewError.setVisibility(View.VISIBLE);
                             roomNumber = "null";
                         }
@@ -293,11 +429,12 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
                             imageViewSuccess.setVisibility(View.VISIBLE);
                             textViewError.setVisibility(View.INVISIBLE);
                             imageViewError.setVisibility(View.INVISIBLE);
-                            findFirestoreDocument();
+//                            findFirestoreDocument();
                         } else {
                             textViewSuccess.setVisibility(View.INVISIBLE);
                             imageViewSuccess.setVisibility(View.INVISIBLE);
                             textViewError.setVisibility(View.INVISIBLE);
+                            textViewError.setText("Please approach the phone to the NFC Reader");
                             imageViewError.setVisibility(View.INVISIBLE);
                             roomNumber = "null";
                         }

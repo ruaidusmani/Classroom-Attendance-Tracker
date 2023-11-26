@@ -47,20 +47,21 @@ public class ClassAttendanceList extends AppCompatActivity {
         user = mAuth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
 
+        String class_name = getIntent().getStringExtra("CLASS_NAME");
         String class_date = getIntent().getStringExtra("CLASS_DATE");
         Log.d("Classroom List 22", "onCreate: " + class_date);
         class_date = class_date.replace('/', '_');
 
 
-        getAttendedStudentsService(class_date);
+        getAttendedStudentsService(class_name, class_date);
 
     }
 
-    public void getAttendedStudentsService(String class_date){
-
+    public void getAttendedStudentsService(String class_name, String class_date){
+            //.whereEqualTo("OWNER", "teacher@test6"
         db.collection("COURSES")
-                .whereEqualTo("OWNER", "teacher@test6.com")
-                //.whereEqualTo("OWNER", user.getEmail())
+                //.whereEqualTo("OWNER", "teacher@test6.com")
+                .whereEqualTo("OWNER", user.getEmail())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -68,7 +69,7 @@ public class ClassAttendanceList extends AppCompatActivity {
                         //String date = "";
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Log.d("Listing documents here", "onComplete: " + document.getId() + " " + document.getData());
-                            if (document.getId().equals("Kdhwjbsx") && document != null ){
+                            if (document.getId().equals(class_name) && document != null ){
                                 for (String key : document.getData().keySet()){
                                     Log.d("for 2 ", "onComplete: " + key + " " + document.getData().get(key));
                                 }
@@ -127,8 +128,7 @@ public class ClassAttendanceList extends AppCompatActivity {
                             ArrayList<String> modified_emails = new ArrayList<String>();
                             // loop through a set
                             for (String emails: keys){
-                                String modified_email = emails.replace('!', '.');
-                                modified_emails.add(modified_email);
+                                modified_emails.add(EncoderHelper.decode(emails));
                                 Log.d("Users", "onComplete: " + emails);
                             }
 

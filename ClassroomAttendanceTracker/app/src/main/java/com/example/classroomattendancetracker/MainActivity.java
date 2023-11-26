@@ -49,7 +49,16 @@ public class MainActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
-//        Intent a = new Intent(getApplicationContext(), EnrollClassActivity.class);
+
+
+//        Log.d("Decoded email", EncoderHelper.decode("116_101_97_99_104_101_114_64_116_101_115_116_54_46_99_111_109_"));
+//        String encoded = EncoderHelper.encode("asdlkjfasdg@gmail.com");
+//        Log.d("Encoded email", encoded);
+//        Log.d("Decoded email", EncoderHelper.decode(encoded));
+
+
+
+//        Intent a = new Intent(getApplicationContext(), DownloadCSVActivity.class);
 //        startActivity(a);
 
         preferencesController = new PreferencesController(getApplicationContext());
@@ -121,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
             buttonCheckIn.setVisibility(View.GONE);
             buttonCheckOut.setVisibility(View.GONE);
             buttonEnroll.setVisibility(View.GONE);
-//            Toast.makeText(getApplicationContext(), "NOT LOGGED IN :(", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "NOT LOGGED IN :(", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -158,6 +167,8 @@ public class MainActivity extends AppCompatActivity {
                     buttonEnroll.setVisibility(View.GONE);
                     FirebaseAuth.getInstance().signOut();
                     preferencesController.setPreference("USER_TYPE", "");
+                    openNewActivity(MainActivity.class);
+                    break;
                 case "enroll":
                     openNewActivity(EnrollClassActivity.class);
                     break;
