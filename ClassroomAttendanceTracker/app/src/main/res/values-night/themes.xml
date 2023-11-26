@@ -3,5 +3,19 @@
     <style name="Base.Theme.ClassroomAttendanceTracker" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+
+        <item name="colorPrimary">@color/Cream</item>
+        <item name="colorSecondary">@color/Navy</item>
+        <item name="android:background">@color/Navy</item>
+        <item name="android:textColorPrimary">@color/Cream</item>
+        <item name="android:textColorSecondary">@color/Navy</item>
+    </style>
+
+    <style name="Theme.ClassroomAttendanceTracker" parent="Base.Theme.ClassroomAttendanceTracker" >
+        <item name="colorPrimary">@color/Cream</item>
+        <item name="colorSecondary">@color/Navy</item>
+        <item name="android:textColorPrimary">@color/Cream</item>
+        <item name="android:textColorSecondary">@color/Navy</item>
+
     </style>
 </resources>
