@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
+
+
 //        Log.d("Decoded email", EncoderHelper.decode("116_101_97_99_104_101_114_64_116_101_115_116_54_46_99_111_109_"));
 //        String encoded = EncoderHelper.encode("asdlkjfasdg@gmail.com");
 //        Log.d("Encoded email", encoded);
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-//        Intent a = new Intent(getApplicationContext(), EnrollClassActivity.class);
+//        Intent a = new Intent(getApplicationContext(), DownloadCSVActivity.class);
 //        startActivity(a);
 
         preferencesController = new PreferencesController(getApplicationContext());
