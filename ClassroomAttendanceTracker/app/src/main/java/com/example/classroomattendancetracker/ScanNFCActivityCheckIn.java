@@ -185,7 +185,8 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
 //        String stringToPush = "PRESENT" + "." + dayMonthYear + "." + email + "." + "present";
         String stringToPush = "PRESENT" + "." + dayMonthYear;
 
-        stringToPush  = stringToPush + "." + email.replace(".", "!") + ".";
+//        stringToPush  = stringToPush + "." + email.replace(".", "!") + ".";
+        stringToPush  = stringToPush + "." + EncoderHelper.encode(email) + ".";
         int currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
         int currentMinute = currentTime.get(Calendar.MINUTE);
 
