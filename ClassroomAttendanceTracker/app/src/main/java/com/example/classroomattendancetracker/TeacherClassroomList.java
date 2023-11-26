@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
@@ -46,7 +47,7 @@ public class TeacherClassroomList extends AppCompatActivity implements ClassDate
 
         // get Intent
         String class_name = getIntent().getStringExtra("CLASS_NAME");
-        Log.d("Classroom ", "onCreate: " + class_name);
+        Log.d("Classroom List", "onCreate: " + class_name);
 
         getClassRoomService(class_name);
     }
@@ -55,40 +56,38 @@ public class TeacherClassroomList extends AppCompatActivity implements ClassDate
 
         db.collection("COURSES")
                 .whereEqualTo("OWNER", user.getEmail())
+                //.whereEqualTo("OWNER", "teacher@test6.com")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         //String date = "";
                         for (QueryDocumentSnapshot document : task.getResult()) {
-
-                            if (document.getId().equals(class_name) && document != null ){
-                                for (String key : document.getData().keySet()){
-                                    Log.d("for 2 ", "onComplete: " + key + " " + document.getData().get(key));
-                                }
-                                Log.d("Test", "Passes first if");
-
-                                Map<String, Object> documentData = document.getData();
-                                Map<String,Object> PRESENT_MAP = (Map<String, Object>) documentData.get("PRESENT");
-                                if (PRESENT_MAP == null){
-                                    Toast.makeText(getApplicationContext(), "No dates exist for this section yet", Toast.LENGTH_SHORT).show();
-                                }
-                                else{
-
-                                    Set<String> keys = PRESENT_MAP.keySet();
-                                    for (String key : keys){
-                                        String date = key.replace('_', '/');
-                                        classDateItem_Array.add(new ClassDateItem(date));
+                            if (document != null) {
+                                if (document.getId().equals(class_name)) {
+                                    for (String key : document.getData().keySet()) {
+                                        Log.d("for 2 ", "onComplete: " + key + " " + document.getData().get(key));
                                     }
-                                    for (int i = 0; i < classDateItem_Array.size(); i++){
-                                        Log.d("Classroom ", "onComplete: " + classDateItem_Array.get(i).getDate());
-//                                        Log.d("Map ", "onComplete: " + PRESENT_MAP.size() + " " + PRESENT_MAP.get("11_11_2023"));
+                                    Log.d("Test", "Passes first if");
+
+                                    Map<String, Object> documentData = document.getData();
+                                    Map<String, Object> PRESENT_MAP = (Map<String, Object>) documentData.get("PRESENT");
+                                    if (PRESENT_MAP == null) {
+                                        Toast.makeText(getApplicationContext(), "No dates exist for this section yet", Toast.LENGTH_SHORT).show();
+                                    } else {
+
+                                        Set<String> keys = PRESENT_MAP.keySet();
+                                        for (String key : keys) {
+                                            String date = key.replace('_', '/');
+                                            classDateItem_Array.add(new ClassDateItem(date));
+                                        }
+                                        for (int i = 0; i < classDateItem_Array.size(); i++) {
+                                            Log.d("Classroom ", "onComplete: " + classDateItem_Array.get(i).getDate());
+                                            //                                        Log.d("Map ", "onComplete: " + PRESENT_MAP.size() + " " + PRESENT_MAP.get("11_11_2023"));
+                                        }
                                     }
                                 }
-
-
                             }
-
                         }
                         try{
                             Log.d("Classroom date: ", classDateItem_Array.get(0).getDate());
@@ -103,10 +102,6 @@ public class TeacherClassroomList extends AppCompatActivity implements ClassDate
                             Log.e("Classroom ", "onComplete: " + e.getMessage());
                             Toast.makeText(getApplicationContext(), "No dates exist for this section yet", Toast.LENGTH_SHORT).show();
                         }
-
-
-
-
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -121,5 +116,9 @@ public class TeacherClassroomList extends AppCompatActivity implements ClassDate
     public void onItemClick(int position) {
         vibrator.vibrate(50);
         Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getApplicationContext(), ClassAttendanceList.class);
+        intent.putExtra("CLASS_NAME", getIntent().getStringExtra("CLASS_NAME"));
+        intent.putExtra("CLASS_DATE", classDateItem_Array.get(position).getDate());
+        startActivity(intent);
     }
 }
