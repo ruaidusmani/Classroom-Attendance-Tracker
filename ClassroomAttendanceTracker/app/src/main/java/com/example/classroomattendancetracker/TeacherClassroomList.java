@@ -65,7 +65,8 @@ public class TeacherClassroomList extends AppCompatActivity implements ClassDate
                 if(view.getId() == download_csv.getId())
                 {
                     Intent intent = new Intent(getApplicationContext(), DownloadCSVActivity.class);
-                    intent.putExtra("CLASS_NAME", getIntent().getStringExtra("CLASS_NAME"));
+                    String class_name = getIntent().getStringExtra("CLASS_NAME");
+                    intent.putExtra("CLASS_NAME", class_name);
                     startActivity(intent);
                 }
             }
