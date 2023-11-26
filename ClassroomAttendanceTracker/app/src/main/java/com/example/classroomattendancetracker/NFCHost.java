@@ -23,8 +23,10 @@ public class NFCHost extends HostApduService {
 
         Log.d("HCE", "NFC HCE Service Started");
 
-        NFCString = intent.getStringExtra("NFCString");
+//        NFCString = intent.getStringExtra("NFCString");
 
+        preferencesController = new PreferencesController(this.getApplicationContext());
+        NFCString = preferencesController.getString("NFCString");
         // If we get killed, after returning from here, restart
         return START_STICKY;
     }

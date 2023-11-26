@@ -1,9 +1,27 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.ClassroomAttendanceTracker" parent="Theme.Material3.DayNight.NoActionBar">
+
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:background">@color/Cream</item>
+         <item name="colorPrimary">@color/Navy</item>
+        <item name="colorSecondary">@color/Cream</item>
+        <item name="android:textColorPrimary">@color/Navy</item>
+        <item name="android:textColorSecondary">@color/Cream</item>
     </style>
 
-    <style name="Theme.ClassroomAttendanceTracker" parent="Base.Theme.ClassroomAttendanceTracker" />
+    <style name="Theme.ClassroomAttendanceTracker" parent="Base.Theme.ClassroomAttendanceTracker" >
+        <item name="colorPrimary">@color/Navy</item>
+        <item name="colorSecondary">@color/Cream</item>
+        <item name="android:textColorPrimary">@color/Navy</item>
+        <item name="android:textColorSecondary">@color/Cream</item>
+        <item name="android:background">@color/Cream</item>
+
+
+    </style>
+
+    <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <!-- Customize color of navigation drawer icon and back arrow -->
+        <item name="colorControlNormal">@color/Navy</item>
+    </style>
 </resources>

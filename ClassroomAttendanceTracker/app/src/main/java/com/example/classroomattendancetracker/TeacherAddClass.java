@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,8 +21,11 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.checkerframework.checker.units.qual.A;
 
@@ -50,6 +54,7 @@ public class TeacherAddClass extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private FirebaseUser user;
+    boolean classValid = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,10 +88,117 @@ public class TeacherAddClass extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             if(view.getId() == R.id.submit_class_teacher){
-                addClassService();
+
+                if(validateInputs()){
+                    validateClass();
+                }
             }
         }
     };
+
+    public boolean validateInputs(){
+        if (class_title.getText().toString().equals("")){
+            Toast.makeText(getApplicationContext(), "Please enter a class name" , Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (room_number.getText().toString().equals("")){
+            Toast.makeText(getApplicationContext(), "Please enter a room number" , Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (chipGroup.getCheckedChipIds().size() == 0){
+            Toast.makeText(getApplicationContext(), "Please select at least one day" , Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+    public void validateClass(){
+        //make sure that the class does not conflict with the time of another one
+        db = FirebaseFirestore.getInstance();
+
+        // Reference to your collection
+        CollectionReference collectionReference = db.collection("COURSES");
+
+
+        ArrayList<String> days_of_the_week_selected = new ArrayList<>();
+        for (Integer id : chipGroup.getCheckedChipIds()){
+            Chip chip = chipGroup.findViewById(id);
+            days_of_the_week_selected.add(chip.getText().toString());
+        }
+        String selectedRoom = room_number.getText().toString();
+
+        // Retrieve all documents in the collection
+        collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                classValid = true;
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot document : task.getResult()) {
+                        // Access each document here
+                        Log.d("Class", document.getId() + " => " + document.getData());
+                        Map<String, Object> documentDict = document.getData();
+                        if (selectedRoom != null && selectedRoom.equals(documentDict.get("ROOM_NUMBER"))){
+                            Log.d("Class", "Room Number is the same");
+                            //check if the days are the same
+                            ArrayList<String> days_of_the_week = (ArrayList<String>) documentDict.get("DAYS");
+                            for (String day : days_of_the_week_selected){
+                                if (days_of_the_week.contains(day)){
+//                                    Log.d("Class", "Looking at day: " + day);
+//                                    Log.d("Class", d)
+                                    Log.d("Class", "Days are the same");
+                                    //check if the time is the same
+                                    long start_hour_long = (long) documentDict.get("START_HOUR");
+                                    int start_hour = Long.valueOf(start_hour_long).intValue();
+
+                                    long start_min_long = (long) documentDict.get("START_MIN");
+                                    int start_min = Long.valueOf(start_min_long).intValue();
+
+
+                                    long end_hour_long = (long) documentDict.get("END_HOUR");
+                                    int end_hour = Long.valueOf(end_hour_long).intValue();
+
+                                    long end_min_long = (long) documentDict.get("END_MIN");
+                                    int end_min = Long.valueOf(end_min_long).intValue();
+
+
+                                    int start_hour_selected = time_picker_start.getHour();
+                                    int start_min_selected = time_picker_start.getMinute();
+
+                                    int end_hour_selected = time_picker_end.getHour();
+                                    int end_min_selected = time_picker_end.getMinute();
+
+                                    int start_sec = start_hour * 60 * 60 + start_min * 60;
+                                    int end_sec = end_hour * 60 * 60 + end_min * 60;
+                                    int start_sec_selected = start_hour_selected * 60 * 60 + start_min_selected * 60;
+                                    int end_sec_selected = end_hour_selected * 60 * 60 + end_min_selected * 60;
+
+                                    if (start_sec_selected >= start_sec && start_sec_selected <= end_sec){
+                                        Log.d("Class", "Start hour is the same");
+                                        Toast.makeText(getApplicationContext(), "Cannot add this class, as it conflicts with another class at the same time" , Toast.LENGTH_SHORT).show();
+                                        classValid = false;
+                                        return;
+                                    }
+                                    else if (end_sec_selected >= start_sec && end_sec_selected <= end_sec){
+                                        Log.d("Class", "End hour is the same");
+                                        Toast.makeText(getApplicationContext(), "Cannot add this class, as it conflicts with another class at the same time" , Toast.LENGTH_SHORT).show();
+                                        classValid = false;
+                                        return;
+                                    }
+
+                                }
+                            }
+                        }
+
+                    }
+                    if (classValid){
+                        addClassService();
+                    }
+                } else {
+                    Log.w("Class", "Error getting documents.", task.getException());
+                }
+            }
+        });
+    }
 
     public void addClassService(){
 
@@ -128,14 +240,14 @@ public class TeacherAddClass extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(getApplicationContext(), "Class Added :) " , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Class Sucessfully Added !" , Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(getApplicationContext(), TeacherHomepage.class));
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(), "Class Failed :( " , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Failed to add Class " , Toast.LENGTH_SHORT).show();
                     }
                 });
     }

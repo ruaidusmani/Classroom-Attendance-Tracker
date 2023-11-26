@@ -222,10 +222,10 @@ public class LiveStatsActivity extends AppCompatActivity {
         buttonRemoveRecentlyJoinedStudent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String mostRecentStudentID = textViewLastStudentJoinedID.getText().toString();
-                if (mostRecentStudentID != null){
+
+                if (MostRecentStudentID != null){
                     removeRecentlyJoinedStudentFirestore();
-                    Toast.makeText(getApplicationContext(), "Removed " + mostRecentStudentID, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Removed " + MostRecentStudentID, Toast.LENGTH_SHORT).show();
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "No student to remove", Toast.LENGTH_SHORT).show();
@@ -235,11 +235,16 @@ public class LiveStatsActivity extends AppCompatActivity {
     }
 
     void removeRecentlyJoinedStudentRealtime(){
+        Log.d("Calling remove", "removeRecentlyJoinedStudentRealtime");
         DatabaseReference ref = database.getReference("/PRESENCE/"+ Room + "/" + MostRecentStudentID + "/present");
         ref.setValue(false);
     }
     void removeRecentlyJoinedStudentFirestore(){
         String mostRecentStudentID = textViewLastStudentJoinedID.getText().toString();
+        if (courseName == null || courseName == null) {
+            Toast.makeText(getApplicationContext(), "There is no most recently Joined student", Toast.LENGTH_SHORT).show();
+            return;
+        }
         DocumentReference docRef = db.collection("COURSES").document(courseName);
         Log.d("courseName", courseName);
         Calendar currentTime = Calendar.getInstance();
@@ -260,9 +265,11 @@ public class LiveStatsActivity extends AppCompatActivity {
                         if (yourArray.get(i).equals(emailMostRecentlyJoinedStudent)) {
                             Log.d("Found", String.valueOf(i));
                             yourArray.remove(i);
-                            removeRecentlyJoinedStudentRealtime();
+
                         }
                     }
+                    MostRecentStudentID = null;
+                    refreshNameMostRecentStudent();
 
 
                     // Update the document with the modified array
@@ -271,6 +278,7 @@ public class LiveStatsActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     // Update successful
+                                    removeRecentlyJoinedStudentRealtime();
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
@@ -329,6 +337,7 @@ public class LiveStatsActivity extends AppCompatActivity {
                         }
                     }
                 } else {
+
                     Log.e("ERROR", "Error getting documents: ", task.getException());
                 }
             }
@@ -433,6 +442,7 @@ public class LiveStatsActivity extends AppCompatActivity {
         });
     }
 
+
     void refreshRoom(){
         CollectionReference docRef = db.collection("COURSES");
         docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -507,6 +517,7 @@ public class LiveStatsActivity extends AppCompatActivity {
 
                                 }
 //                            Log.d("Info", "Document ID: " + documentId + "Owner " + owner + "Days of week " + daysOfWeek);
+                                refreshMostRecentStudent();
                             }
 
                         }
