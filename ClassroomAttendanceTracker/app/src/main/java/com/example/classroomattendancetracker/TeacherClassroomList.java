@@ -57,6 +57,8 @@ public class TeacherClassroomList extends AppCompatActivity implements ClassDate
 
         getClassRoomService(class_name);
 
+        download_csv.setOnClickListener(button_listener);
+    }
         View.OnClickListener button_listener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,7 +70,6 @@ public class TeacherClassroomList extends AppCompatActivity implements ClassDate
                 }
             }
         };
-    }
 
 
     public void getClassRoomService(String class_name){
