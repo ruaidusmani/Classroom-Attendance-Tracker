@@ -5,9 +5,11 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PatternMatcher;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -31,6 +33,10 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import kotlin.text.Regex;
 
 public class RegisterActivity extends AppCompatActivity {
     Vibrator vibrator;
@@ -90,10 +96,30 @@ public class RegisterActivity extends AppCompatActivity {
                 String email =  ((EditText) findViewById(R.id.student_email_EditText)).getText().toString();
                 String password = ((EditText) findViewById(R.id.password_EditText)).getText().toString();
 
-                Log.d("EMAIL PASSING", email);
-                Log.d("PASSWORD PASSING", password);
+                if(!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches())
+                {
+                    Log.d("EMAIL PASSING", email);
+                }else{
+                    Log.d("EMAIL FAILED  : does not match email pattern", email);
+                    Toast.makeText(getApplicationContext(), "Email is not a valid format", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(!password.isEmpty() && password.length() >=6 )
+                {
+                    Log.d("PASSWORD PASSING", password);
+                    if(!passwordRegexValidation(password)){
+                        Log.d("PASSWORD REGEX FAILED " ,  " doesn't meet requirements");
+                        Toast.makeText(getApplicationContext(), "Password format invalid ", Toast.LENGTH_LONG).show();
+                        //Removed for testing purposes.
+                        //return;
+                    } else {
+                        Log.d("PASSWORD PASSING", password);
+                    }
+                }else{
+                    Toast.makeText(getApplicationContext(), "Password must be 6 characters long", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 registerService(email, password);
-
             }
         });
 
@@ -113,6 +139,20 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
+
+public boolean passwordRegexValidation(String password ){
+
+    Pattern pattern;
+    Matcher matcher;
+
+    final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$";
+
+    pattern = Pattern.compile(PASSWORD_PATTERN);
+    matcher = pattern.matcher(password);
+
+    return matcher.matches();
+}
+
  public void registerService(String email, String password){
      mAuth.createUserWithEmailAndPassword(email, password)
              .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
