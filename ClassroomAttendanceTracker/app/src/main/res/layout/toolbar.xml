@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:elevation="10dp"
+    android:theme="@style/ToolbarTheme"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
     <TextView

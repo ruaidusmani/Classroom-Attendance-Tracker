@@ -10,14 +10,14 @@
         android:id="@+id/loginButton"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="48dp"
         android:width="300dp"
         android:tag="login"
         android:text="@string/loginButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.486"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logoutButtonMain" />
+        app:layout_constraintTop_toBottomOf="@+id/app_title" />
 
     <Button
         android:id="@+id/registerButton"
@@ -36,7 +36,7 @@
         android:id="@+id/editPayloadButton"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="44dp"
         android:width="300dp"
         android:tag="editPayload"
         android:text="@string/editPayloadButton"
@@ -53,7 +53,6 @@
         android:width="300dp"
         android:tag="checkIn"
         android:text="@string/checkIn"
-        android:backgroundTint="@color/Cream"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.486"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,12 +62,12 @@
         android:id="@+id/buttonCheckOut"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="28dp"
         android:width="300dp"
         android:tag="checkOut"
         android:text="@string/checkOut"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.486"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonCheckIn" />
 
@@ -81,7 +80,7 @@
         android:tag="enroll"
         android:text="Enroll to Class"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.486"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonCheckOut" />
 
@@ -101,16 +100,16 @@
 
     <Button
         android:id="@+id/logoutButtonMain"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_width="296dp"
+        android:layout_height="43dp"
         android:tag="logout"
         android:text="Logout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.469"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_title"
-        app:layout_constraintVertical_bias="0.063" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonEnroll"
+        app:layout_constraintVertical_bias="1.0" />
 
     <ImageView
         android:id="@+id/imageView"
