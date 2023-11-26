@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +14,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -20,6 +25,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.Calendar;
 
 public class ScanNFCActivityCheckOut extends AppCompatActivity {
     PreferencesController preferencesController;
@@ -34,6 +45,9 @@ public class ScanNFCActivityCheckOut extends AppCompatActivity {
     FirebaseAuth mAuth;
     String email;
     TextView textViewPersonInfo;
+    FirebaseFirestore db;
+    String roomNumber;
+    String classNameSignIn;
 
     boolean tried_to_sign_in;
 
@@ -45,6 +59,7 @@ public class ScanNFCActivityCheckOut extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
 
         preferencesController = new PreferencesController(getApplicationContext());
         imageViewError = findViewById(R.id.imageViewError);
@@ -89,6 +104,91 @@ public class ScanNFCActivityCheckOut extends AppCompatActivity {
         startService(serviceIntent1);
     }
 
+    public void updateFirestoreDocument(){
+
+        if (classNameSignIn.equals("null") || classNameSignIn == null) {
+            return;
+        }
+        String collectionName = "COURSES";
+        String documentName = classNameSignIn;
+        Log.d("HERE", "HERE");
+        DocumentReference docRef = db.collection(collectionName).document(documentName);
+        Calendar currentTime = Calendar.getInstance();
+
+
+
+        int day = (currentTime.get(Calendar.DAY_OF_MONTH));
+        int month = (currentTime.get(Calendar.MONTH)) + 1;
+        int year = (currentTime.get(Calendar.YEAR));
+
+        String dayMonthYear = day + "_" + month + "_" + year;
+
+//        String stringToPush = "PRESENT" + "." + dayMonthYear + "." + email + "." + "present";
+        String stringToPush = "PRESENT" + "." + dayMonthYear;
+
+//        stringToPush  = stringToPush + "." + email.replace(".", "!") + ".";
+        stringToPush  = stringToPush + "." + EncoderHelper.encode(email) + ".";
+        int currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
+        int currentMinute = currentTime.get(Calendar.MINUTE);
+
+
+//        docRef.update(stringToPush, FieldValue.arrayUnion(email)).addOnSuccessListener(new OnSuccessListener<Void>() {
+        docRef.update(stringToPush+"exit_hour", currentHour, stringToPush+"exit_minute", currentMinute).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("A", "DocumentSnapshot successfully updated!");
+                        textViewSuccess.setText("You have successfully signed into " + classNameSignIn + ", Room " + roomNumber);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("A", "Error updating document", e);
+                    }
+                });
+    }
+    public void findFirestoreDocument() {
+        //get android id
+        String android_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+
+        if (roomNumber.equals("null") || roomNumber == null) {
+            Log.d("Room Number null", "null");
+            return;
+        }
+
+        Log.d("Room Number", roomNumber);
+        db.collection("COURSES").whereEqualTo("ROOM_NUMBER", roomNumber).get().addOnCompleteListener(
+                new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        Log.d("Entered query", roomNumber);
+                        for (QueryDocumentSnapshot query : task.getResult()) {
+                            int startMin = query.getLong("START_MIN").intValue();
+                            int startHour = query.getLong("START_HOUR").intValue();
+                            int endMin = query.getLong("END_MIN").intValue();
+                            int endHour = query.getLong("END_HOUR").intValue();
+                            Calendar currentTime = Calendar.getInstance();
+                            int currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
+                            int currentMinute = currentTime.get(Calendar.MINUTE);
+
+                            int startTimeSecs = startHour * 3600 + startMin * 60 - 15*60;
+                            int endTimeSecs = endHour * 3600 + endMin * 60;
+                            int currentTimeSecs = currentHour * 3600 + currentMinute * 60 ;
+
+                            Log.d("Start time", String.valueOf(startTimeSecs));
+                            Log.d("End time", String.valueOf(endTimeSecs));
+                            Log.d("Current time", String.valueOf(currentTimeSecs));
+
+                            if (currentTimeSecs > startTimeSecs && currentTimeSecs < endTimeSecs) { // if current time is between start and end time
+                                classNameSignIn = query.getId();
+                                updateFirestoreDocument();
+                            }
+                        }
+                    }
+                }
+        );
+    }
+
     //when the activity is resumed, start the NFC Reading service
     @Override
     protected void onResume(){
@@ -116,6 +216,8 @@ public class ScanNFCActivityCheckOut extends AppCompatActivity {
         Intent serviceIntent1 = new Intent(this, NFCHost.class);
         stopService(serviceIntent1);
     }
+
+
 
     @Override
     protected void onDestroy(){
@@ -161,9 +263,11 @@ public class ScanNFCActivityCheckOut extends AppCompatActivity {
                             //print all the values
                             Log.d("Room Number", roomNumberSnapshot.getKey());
                             Log.d("ID", idSnapshot.getKey());
+                            Log.d("ID2", id);
                             for (DataSnapshot presentSnapshot : idSnapshot.getChildren()) { // loop through each present status
                                 if (idSnapshot.getKey().equals(id) && presentSnapshot.getKey().equals("present") && presentSnapshot.getValue(Boolean.class) != null && presentSnapshot.getValue(Boolean.class)) {
                                     Log.d("Updating Present", presentSnapshot.getValue().toString());
+                                    roomNumber = roomNumberSnapshot.getKey();
                                     present = true;
                                 }
                                 Log.d("Present", presentSnapshot.getValue().toString());
@@ -186,6 +290,7 @@ public class ScanNFCActivityCheckOut extends AppCompatActivity {
                             textViewSuccess.setVisibility(View.VISIBLE);
                             textViewSuccess.setText("Successfully checked out!");
                             imageViewError.setVisibility(View.INVISIBLE);
+                            findFirestoreDocument();
                         }
                     }
                     else{
@@ -195,6 +300,7 @@ public class ScanNFCActivityCheckOut extends AppCompatActivity {
                             imageViewSuccess.setVisibility(View.VISIBLE);
                             textViewError.setVisibility(View.INVISIBLE);
                             imageViewError.setVisibility(View.INVISIBLE);
+//                            findFirestoreDocument();
                         }
                         else{
                             textViewSuccess.setVisibility(View.INVISIBLE);
@@ -206,6 +312,7 @@ public class ScanNFCActivityCheckOut extends AppCompatActivity {
 
                 } catch (Exception e) {
                     Log.d("ERROR", e.toString());
+                    e.printStackTrace();
                 }
 
 
