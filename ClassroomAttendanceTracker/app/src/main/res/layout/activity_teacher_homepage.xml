@@ -17,14 +17,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/teacher_homepage_title" />
 
+
     <Button
         android:id="@+id/logout_teacher_button"
         android:layout_width="165dp"
         android:layout_height="57dp"
-        android:layout_marginTop="492dp"
+        android:layout_marginTop="576dp"
         android:text="Logout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.109"
+        app:layout_constraintHorizontal_bias="0.569"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/teacher_homepage_title" />
 
@@ -32,11 +33,14 @@
         android:id="@+id/buttonViewDashboard"
         android:layout_width="165dp"
         android:layout_height="57dp"
-        android:layout_marginTop="572dp"
+        android:layout_marginTop="492dp"
         android:text="View Dashboard"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.134"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/teacher_homepage_title" />
+
+
 
     <TextView
         android:id="@+id/teacher_homepage_title"
@@ -44,7 +48,6 @@
         android:layout_height="54dp"
         android:layout_marginTop="16dp"
         android:text="My Courses"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

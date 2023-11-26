@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,6 +32,9 @@ public class TeacherClassroomList extends AppCompatActivity implements ClassDate
     private FirebaseFirestore db;
     private FirebaseUser user;
 
+
+
+    Button download_csv;
     Vibrator vibrator;
     RecyclerView ClassDate_List;
     ArrayList<ClassDateItem> classDateItem_Array = new ArrayList<ClassDateItem>(); // holds class date to list
@@ -40,6 +45,7 @@ public class TeacherClassroomList extends AppCompatActivity implements ClassDate
         setContentView(R.layout.activity_teacher_classroom);
 
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+        download_csv = (Button) findViewById(R.id.download_csv);
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
@@ -50,7 +56,20 @@ public class TeacherClassroomList extends AppCompatActivity implements ClassDate
         Log.d("Classroom List", "onCreate: " + class_name);
 
         getClassRoomService(class_name);
+
+        View.OnClickListener button_listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(view.getId() == download_csv.getId())
+                {
+                    Intent intent = new Intent(getApplicationContext(), DownloadCSVActivity.class);
+                    intent.putExtra("CLASS_NAME", getIntent().getStringExtra("CLASS_NAME"));
+                    startActivity(intent);
+                }
+            }
+        };
     }
+
 
     public void getClassRoomService(String class_name){
 
