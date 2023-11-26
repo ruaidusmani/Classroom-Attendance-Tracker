@@ -222,10 +222,10 @@ public class LiveStatsActivity extends AppCompatActivity {
         buttonRemoveRecentlyJoinedStudent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String mostRecentStudentID = textViewLastStudentJoinedID.getText().toString();
-                if (mostRecentStudentID != null){
+
+                if (MostRecentStudentID != null){
                     removeRecentlyJoinedStudentFirestore();
-                    Toast.makeText(getApplicationContext(), "Removed " + mostRecentStudentID, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Removed " + MostRecentStudentID, Toast.LENGTH_SHORT).show();
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "No student to remove", Toast.LENGTH_SHORT).show();
@@ -268,6 +268,8 @@ public class LiveStatsActivity extends AppCompatActivity {
 
                         }
                     }
+                    MostRecentStudentID = null;
+                    refreshNameMostRecentStudent();
 
 
                     // Update the document with the modified array
@@ -335,6 +337,7 @@ public class LiveStatsActivity extends AppCompatActivity {
                         }
                     }
                 } else {
+
                     Log.e("ERROR", "Error getting documents: ", task.getException());
                 }
             }
@@ -438,6 +441,7 @@ public class LiveStatsActivity extends AppCompatActivity {
             }
         });
     }
+
 
     void refreshRoom(){
         CollectionReference docRef = db.collection("COURSES");
