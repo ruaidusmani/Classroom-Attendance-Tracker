@@ -17,16 +17,15 @@
 
     <Button
         android:id="@+id/registerButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#00FFFFFF"
+        android:layout_width="230dp"
+        android:layout_height="42dp"
         android:text="Register"
-        android:textColor="#070707"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.976" />
+        app:layout_constraintVertical_bias="0.93" />
 
     <EditText
         android:id="@+id/student_email_EditText"
@@ -37,7 +36,7 @@
         android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.329" />
@@ -46,16 +45,15 @@
         android:id="@+id/password_EditText"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginTop="36dp"
         android:ems="10"
         android:hint="@string/password_hint"
         android:inputType="textPassword"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/student_email_EditText"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.373" />
 
     <androidx.constraintlayout.widget.Barrier
         android:layout_width="wrap_content"
@@ -65,15 +63,16 @@
 
     <Switch
         android:id="@+id/user_type_switch"
-        android:layout_width="109dp"
-        android:layout_height="49dp"
+        android:layout_width="151dp"
+        android:layout_height="48dp"
         android:text="Student"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.324"
+        app:layout_constraintHorizontal_bias="0.384"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.225"
+        app:layout_constraintVertical_bias="0.224"
         tools:checked="true" />
 
     <EditText
@@ -85,15 +84,15 @@
         android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintVertical_bias="0.53" />
+        app:layout_constraintVertical_bias="0.475" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="310dp"
-        android:layout_height="146dp"
+        android:layout_width="345dp"
+        android:layout_height="175dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -103,8 +102,8 @@
         app:layout_constraintVertical_bias="0.51">
 
         <LinearLayout
-            android:layout_width="153dp"
-            android:layout_height="match_parent"
+            android:layout_width="151dp"
+            android:layout_height="123dp"
             android:orientation="vertical">
 
             <TextView
@@ -129,8 +128,8 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="188dp"
+            android:layout_height="123dp"
             android:orientation="vertical">
 
             <TextView
@@ -155,17 +154,5 @@
         </LinearLayout>
 
     </LinearLayout>
-
-    <View
-        android:id="@+id/divider2"
-        android:layout_width="409dp"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.916" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
