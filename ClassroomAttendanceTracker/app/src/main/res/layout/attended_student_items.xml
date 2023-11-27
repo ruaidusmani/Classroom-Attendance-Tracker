@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:id="@+id/mainContainer">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainContainer"
+    app:cardBackgroundColor="@color/Cream">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -13,10 +14,10 @@
 
         <TextView
             android:id="@+id/textView_student_name"
-            android:layout_width="50dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text ="Student Name"
+            android:text="Student Name"
             android:paddingStart="16dp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
@@ -24,7 +25,7 @@
 
         <TextView
             android:id="@+id/textView_student_id"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:paddingStart="16dp"
@@ -34,7 +35,7 @@
 
         <TextView
             android:id="@+id/textView_presence"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textAlignment="textEnd"
