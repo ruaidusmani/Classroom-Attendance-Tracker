@@ -64,41 +64,12 @@
 
     <LinearLayout
         android:layout_width="358dp"
-        android:layout_height="91dp"
-        android:layout_marginTop="51dp"
-        android:orientation="horizontal"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewInstructions">
-
-        <ImageView
-            android:id="@+id/imageViewError"
-            android:layout_width="58dp"
-            android:layout_height="88dp"
-            android:src="@android:drawable/stat_notify_error"
-            android:visibility="invisible"
-            app:tint="#FFEB3B" />
-
-        <TextView
-            android:id="@+id/textViewError"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="(Placeholder for Errors)"
-            android:visibility="invisible" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="358dp"
         android:layout_height="81dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="60dp"
         android:orientation="horizontal"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewInstructions">
 
@@ -112,6 +83,35 @@
 
         <TextView
             android:id="@+id/textViewSuccess"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="(Placeholder for Errors)"
+            android:visibility="invisible" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="358dp"
+        android:layout_height="91dp"
+        android:layout_marginTop="120dp"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewInstructions">
+
+        <ImageView
+            android:id="@+id/imageViewError"
+            android:layout_width="58dp"
+            android:layout_height="88dp"
+            android:src="@android:drawable/stat_notify_error"
+            android:visibility="invisible"
+            app:tint="#FFEB3B" />
+
+        <TextView
+            android:id="@+id/textViewError"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
