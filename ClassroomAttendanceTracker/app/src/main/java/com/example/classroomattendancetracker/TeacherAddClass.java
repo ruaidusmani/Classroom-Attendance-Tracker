@@ -114,7 +114,7 @@ public class TeacherAddClass extends AppCompatActivity implements AdapterView.On
                 R.array.building_array, R.layout.building_spinner_text);
         building_adapter.setDropDownViewResource(R.layout.building_spinner_dropdown);
         building_spinner.setAdapter(building_adapter);
-        building_spinner.setSelection(0); // "Please Select" will be the default selection
+        building_spinner.setSelection(0); // "Select" will be the default selection
 
         building_spinner.setOnItemSelectedListener(this);
         class_spinner.setOnItemSelectedListener(this);
@@ -166,9 +166,9 @@ public class TeacherAddClass extends AppCompatActivity implements AdapterView.On
                 "C-070", "C-080"
         };
 
-        String[] please_select = {"Please Select"};
+        String[] please_select = {"--"};
 
-        Map_Building_Rooms.put("Please Select", Arrays.asList(please_select));
+        Map_Building_Rooms.put("--", Arrays.asList(please_select));
         Map_Building_Rooms.put("H", Arrays.asList(H_rooms));
         Map_Building_Rooms.put("MB", Arrays.asList(MB_rooms));
         Map_Building_Rooms.put("FB", Arrays.asList(FB_rooms));
@@ -181,7 +181,7 @@ public class TeacherAddClass extends AppCompatActivity implements AdapterView.On
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         if(adapterView.getId() == R.id.building_spinner)
         {
-            if (!adapterView.getItemAtPosition(i).toString().equals("Please Select")) {
+            if (!adapterView.getItemAtPosition(i).toString().equals("--")) {
                 selected_building = adapterView.getItemAtPosition(i).toString();
                 Toast.makeText(adapterView.getContext(), adapterView.getItemAtPosition(i).toString(), Toast.LENGTH_SHORT).show();
 
@@ -191,7 +191,7 @@ public class TeacherAddClass extends AppCompatActivity implements AdapterView.On
 
                 if (classes != null) {
                     List<String> modifiableClasses = new ArrayList<>(classes);
-                    modifiableClasses.add(0, "Please Select");
+                    modifiableClasses.add(0, "--");
                     ArrayAdapter<String> classAdapter = new ArrayAdapter<>(this,
                             R.layout.building_spinner_text, modifiableClasses);
                     classAdapter.setDropDownViewResource(R.layout.building_spinner_dropdown);
@@ -206,7 +206,7 @@ public class TeacherAddClass extends AppCompatActivity implements AdapterView.On
                     doSomethingWithSelectedBuilding(selected_building);
                 }
 
-                if (selected_class != null && !selected_class.equals("Please Select")) {
+                if (selected_class != null && !selected_class.equals("--")) {
                     room = selected_building + " " + selected_class;
                     Log.d("Room value 1", room); // Log the room value for verification
                     update_room(selected_building, selected_class);
@@ -217,12 +217,12 @@ public class TeacherAddClass extends AppCompatActivity implements AdapterView.On
         }
         else if(adapterView.getId() == R.id.class_spinner)
         {
-            if (!adapterView.getItemAtPosition(i).toString().equals("Please Select")){
+            if (!adapterView.getItemAtPosition(i).toString().equals("--")){
                 selected_class = adapterView.getItemAtPosition(i).toString();
                 Toast.makeText(adapterView.getContext(), selected_class, Toast.LENGTH_SHORT).show();
                 //room = selected_building + " " + selected_class;
 
-                if (selected_building != null && !selected_building.equals("Please Select")) {
+                if (selected_building != null && !selected_building.equals("--")) {
                     room = selected_building + " " + selected_class;
                     Log.d("Room value 2", room); // Log the room value for verification
                     update_room(selected_building, selected_class);

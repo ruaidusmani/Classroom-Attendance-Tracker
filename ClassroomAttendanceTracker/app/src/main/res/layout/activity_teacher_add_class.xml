@@ -148,6 +148,7 @@
         android:id="@+id/subject_title"
         android:layout_width="180dp"
         android:layout_height="71dp"
+        android:layout_marginStart="20dp"
         android:cursorVisible="false"
         android:gravity="center"
         android:hint="Subject"
@@ -158,8 +159,6 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textCursorDrawable="@null"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.103"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.128" />
@@ -168,6 +167,7 @@
         android:id="@+id/course_number"
         android:layout_width="180dp"
         android:layout_height="71dp"
+        android:layout_marginEnd="20dp"
         android:cursorVisible="false"
         android:hint="Number"
         android:inputType="text"
@@ -178,8 +178,6 @@
         android:textCursorDrawable="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.89"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.128" />
 
@@ -215,29 +213,26 @@
 
     <Spinner
         android:id="@+id/building_spinner"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="65dp"
-        android:dropDownVerticalOffset="0dp"
-        android:gravity="center"
-        android:overlapAnchor="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.139"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.268" />
-
-    <Spinner
-        android:id="@+id/class_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="65dp"
+        android:layout_marginStart="48dp"
         android:layout_marginTop="176dp"
         android:dropDownVerticalOffset="0dp"
         android:gravity="center"
         android:overlapAnchor="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.703"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/class_spinner"
+        android:layout_width="180dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="176dp"
+        android:layout_marginEnd="20dp"
+        android:dropDownVerticalOffset="0dp"
+        android:gravity="center"
+        android:overlapAnchor="false"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

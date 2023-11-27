@@ -13,7 +13,7 @@
     <string name="checkOut">Check-Out</string>
 
     <string-array name="building_array">
-        <item>Please select</item>
+        <item>--</item>
         <item>H</item>
         <item>MB</item>
         <item>LS</item>
