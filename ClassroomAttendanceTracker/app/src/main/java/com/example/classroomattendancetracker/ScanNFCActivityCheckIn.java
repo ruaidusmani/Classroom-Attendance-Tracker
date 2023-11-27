@@ -87,7 +87,7 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
         } else {
             email = "null";
         }
-        textViewPersonInfo.setText("You are currently logged in as: " + email + " | ID: " + preferencesController.getString("AndroidID"));
+        textViewPersonInfo.setText("\tEmail :\t\t" + email + " \n\tID :\t\t\t\t\t\t\t" + preferencesController.getString("AndroidID"));
         Log.d("SCAN_NFC_EMAIL", email);
 
         daysTranslate.put(1, "Sunday");
