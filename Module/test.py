@@ -17,6 +17,8 @@ import firebase_admin
 from firebase_admin import db
 from firebase_admin import firestore 
 
+
+
 credentials = firebase_admin.credentials.Certificate('ledcontrol-7c9d9-firebase-adminsdk-om517-3f07b22872.json')
 default_app = firebase_admin.initialize_app(credentials,{'databaseURL': 'https://ledcontrol-7c9d9-default-rtdb.firebaseio.com'})
 firestore_db = firestore.client()
@@ -420,7 +422,7 @@ def main():
     # print("Start time: ", start_time_sec)
     # time.sleep(1)
     # print(current_time_sec - start_time_sec)
-    if (current_time_sec - sec_ref >= 5):
+    if (current_time_sec - sec_ref >= 60):
       print("Calling force remove students")
       start_time_hour = int(datetime.now(timezone('EST')).strftime("%H"))
       start_time_minute = int(datetime.now(timezone('EST')).strftime("%M"))
@@ -429,8 +431,13 @@ def main():
       sec_ref = start_time_hour * 60 * 60 + start_time_minute * 60 + start_time_sec
       courses = checkIfNeedForceRemoveStudents(current_time_sec)
       if (courses != "null"):
-        print("Force removing students")
-        forceRemoveStudents(courses)
+        try:
+          print("Force removing students")
+          forceRemoveStudents(courses)
+        except (Exception) as error:
+          print("Error in force remove students")
+          # error.printStackTrace()
+
 
 
     if (dictionary != None):
