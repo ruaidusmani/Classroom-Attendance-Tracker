@@ -128,6 +128,52 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
         startService(serviceIntent1);
     }
 
+    void removeAttendance() {
+
+        DocumentReference docRef = db.collection("COURSES").document(classNameSignIn);
+        Log.d("courseName", classNameSignIn);
+        Calendar currentTime = Calendar.getInstance();
+        int day = (currentTime.get(Calendar.DAY_OF_MONTH));
+        int month = (currentTime.get(Calendar.MONTH)) + 1;
+        int year = (currentTime.get(Calendar.YEAR));
+
+
+
+        String encodedEmail = EncoderHelper.encode(email);
+
+        String stringref = "PRESENT." + day + "_" + month + "_" + year + "." + encodedEmail;
+        Log.d("stringref", stringref);
+
+
+        Map<String, Object> updates = new HashMap<>();
+
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+
+
+                    // Update the document with the modified array
+                    docRef.update(stringref, FieldValue.delete())
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    // Update successful
+                                    Log.d("Success", "DocumentSnapshot successfully updated!");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    // Handle errors
+                                    Log.d("Failure", "Error updating document", e);
+                                }
+                            });
+                }
+            }
+        });
+    }
+
     //when the activity is resumed, start the NFC Reading service
     @Override
     protected void onResume() {
@@ -212,6 +258,7 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
                     imageViewError.setVisibility(View.VISIBLE);
                     Log.d("Calling setPresence", "setPresence");
                     setPresence(false);
+                    removeAttendance();
                 }
                 else{
                     updateFirestoreDocument();
