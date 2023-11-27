@@ -49,6 +49,8 @@ public class DownloadCSVActivity extends AppCompatActivity {
     Boolean Done = false;
     Boolean Done2 = false;
 
+    String classToDownload;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +60,10 @@ public class DownloadCSVActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         userEmail = user.getEmail();
+
+        //MODIFY HERE
+//        classToDownload = getIntent().getStringExtra("CLASS_NAME");
+        classToDownload = "Kdhwjbsx";
 
         callCreateFile();
 
@@ -175,8 +181,8 @@ public class DownloadCSVActivity extends AppCompatActivity {
 //        createFile();
     }
     public void getDates(){
-        String className = "Kdhwjbsx";
-        DocumentReference docref = db.collection("COURSES").document(className);
+
+        DocumentReference docref = db.collection("COURSES").document(classToDownload);
 
         docref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -212,8 +218,8 @@ public class DownloadCSVActivity extends AppCompatActivity {
     }
 
     public void getEachStudent(String date){
-        String className = "Kdhwjbsx";
-        DocumentReference docref = db.collection("COURSES").document(className);
+
+        DocumentReference docref = db.collection("COURSES").document(classToDownload);
         Log.d("DATE", date);
         docref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -277,8 +283,7 @@ public class DownloadCSVActivity extends AppCompatActivity {
     }
 
     public void getAttendance(String date, String student){
-        String className = "Kdhwjbsx";
-        DocumentReference docref = db.collection("COURSES").document(className);
+        DocumentReference docref = db.collection("COURSES").document(classToDownload);
         Log.d("DATE", date);
         docref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
