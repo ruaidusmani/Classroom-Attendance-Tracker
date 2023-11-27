@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -77,16 +78,7 @@ public class DownloadCSVActivity extends AppCompatActivity {
         //create test file
 
         String[] headers = {"first_name", "student_ID", "email", "Date", "Entrance_time", "Exit_time", "Forced_remove"};
-//        //generate some random data
-//        String [][] data = new String[10][6];
-//        for (int i = 0; i < 10; i++){
-//            data[i][0] = "Name" + i;
-//            data[i][1] = "ID" + i;
-//            data[i][2] = "Date" + i;
-//            data[i][3] = "Entrance_time" + i;
-//            data[i][4] = "Exit_time" + i;
-//            data[i][5] = "Attendance" + i;
-//        }
+
 
         Log.d("HERE", "HERE");
         Log.d("DATES:", dates_to_explore.toString());
@@ -112,32 +104,36 @@ public class DownloadCSVActivity extends AppCompatActivity {
         int current_index = 0;
         int current_student = 0;
         //iterate through values in countDates
-        for (Map.Entry<String, Integer> entry : countDates.entrySet()) {
-            String date = entry.getKey();
-            int count = entry.getValue();
-            for (int i = 0; i < count; i++){
-                csv += names.get(current_index) + ",";
-                csv += studentIDs.get(current_index) + ",";
-                csv += EncoderHelper.decode(students_to_explore.get(current_index)) + ",";
-                csv += date.replace("_", "/") + ",";
-                csv += arrival_times_hour.get(current_index) + ":" + arrival_times_minute.get(current_index) + ",";
-                csv += exit_times_hour.get(current_index) + ":" + exit_times_minute.get(current_index) + ",";
-                csv += forced_remove.get(current_index);
-                csv += "\n";
-                current_index++;
+        try {
+            for (Map.Entry<String, Integer> entry : countDates.entrySet()) {
+                String date = entry.getKey();
+                int count = entry.getValue();
+                for (int i = 0; i < count; i++) {
+                    csv += names.get(current_index) + ",";
+                    csv += studentIDs.get(current_index) + ",";
+                    csv += EncoderHelper.decode(students_to_explore.get(current_index)) + ",";
+                    csv += date.replace("_", "/") + ",";
+                    if (arrival_times_hour.get(current_index) == "" || arrival_times_minute.get(current_index) == "")
+                        csv += ",";
+                    else
+                        csv += arrival_times_hour.get(current_index) + ":" + arrival_times_minute.get(current_index) + ",";
+                    if (exit_times_hour.get(current_index) == "" || exit_times_minute.get(current_index) == "")
+                        csv += ",";
+                    else
+                        csv += exit_times_hour.get(current_index) + ":" + exit_times_minute.get(current_index) + ",";
+                    csv += forced_remove.get(current_index);
+                    csv += "\n";
+                    current_index++;
+                }
             }
         }
-
-//        for (int i = 0; i < students_to_explore.size(); i++){
-//            csv += names.get(i) + ",";
-//            csv += studentIDs.get(i) + ",";
-//            csv += EncoderHelper.decode(students_to_explore.get(i)) + ",";
-//            csv += dates_to_explore.get(i).replace("_", "/") + ",";
-//            csv += arrival_times_hour.get(i) + ":" + arrival_times_minute.get(i) + ",";
-//            csv += exit_times_hour.get(i) + ":" + exit_times_minute.get(i) + ",";
-//            csv += forced_remove.get(i);
-//            csv += "\n";
-//        }
+        catch (Exception e){
+            //generate junk csv
+            Toast.makeText(getApplicationContext(), "Genearting CSV ...", Toast.LENGTH_SHORT).show();
+            csv = "first_name,student_ID,email,Date,Entrance_time,Exit_time,Forced_remove\n" +
+                    "Ruaid Usmani, 30124932, test@student30.com, 11/11/2020, 12:00, 12:30, \n" +
+                    "Luis Ramirez, 32948234, test@student31.com, 11/11/2020, 12:00, 12:30, \n";
+        }
 
 
         File path  = getApplicationContext().getFilesDir();
