@@ -13,13 +13,11 @@
     <string name="checkOut">Check-Out</string>
 
     <string-array name="building_array">
+        <item>Please select</item>
         <item>H</item>
         <item>MB</item>
-        <item>EV</item>
-        <item>Mars</item>
-        <item>Jupiter</item>
-        <item>Saturn</item>
-        <item>Uranus</item>
-        <item>Neptune</item>
+        <item>LS</item>
+        <item>FB</item>
+        <item>FG</item>
     </string-array>
 </resources>

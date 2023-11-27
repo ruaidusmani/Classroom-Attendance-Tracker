@@ -32,7 +32,7 @@
 
     <style name="spinnerDropDownItemStyle" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
         <item name="android:textColor">@color/Navy</item>
-        <item name="android:textSize">35sp</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
 </resources>
