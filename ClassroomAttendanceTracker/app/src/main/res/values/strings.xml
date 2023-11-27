@@ -11,4 +11,15 @@
     <string name="editPayloadButton">Edit Payload</string>
     <string name="checkIn">Check-In</string>
     <string name="checkOut">Check-Out</string>
+
+    <string-array name="building_array">
+        <item>H</item>
+        <item>MB</item>
+        <item>EV</item>
+        <item>Mars</item>
+        <item>Jupiter</item>
+        <item>Saturn</item>
+        <item>Uranus</item>
+        <item>Neptune</item>
+    </string-array>
 </resources>

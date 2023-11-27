@@ -4,12 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -18,23 +20,20 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.checkerframework.checker.units.qual.A;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TeacherAddClass extends AppCompatActivity {
+public class TeacherAddClass extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     Button monday_chip;
     Button tuesday_chip;
     Button wednesday_chip;
@@ -44,51 +43,129 @@ public class TeacherAddClass extends AppCompatActivity {
     TimePicker time_picker_start;
     TimePicker time_picker_end;
 
-    EditText class_title;
+    EditText subject_title;
     EditText room_number;
+    EditText course_number;
 
     Button submit_class;
 
     ChipGroup chipGroup;
+
+    Spinner building_spinner;
+    Spinner class_spinner;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private FirebaseUser user;
     boolean classValid = false;
 
+    //List of possible subjects
+    ArrayList<String> subjects = new ArrayList<> (Arrays.asList("COEN", "ELEC", "AERO", "MECH"));
+
+    //List of possible buildings
+
+    HashMap<String, List<String>> Map_Building_Rooms = new HashMap<String, List<String>>();
+    ArrayList<String> buildings = new ArrayList<>(Arrays.asList("H", "MB", "EV", "FB", "FG", "LS"));
+    String building;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher_add_class);
-
 
         //Firebase init variables
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
+        //Chips init
         monday_chip     = findViewById(R.id.monday_chip);
         tuesday_chip    = findViewById(R.id.tuesday_chip);
         wednesday_chip  = findViewById(R.id.wednesday_chip);
         thursday_chip= findViewById(R.id.thursday_chip);
         friday_chip     = findViewById(R.id.friday_chip);
+
+        //Time pickers init
         time_picker_start = findViewById(R.id.time_picker_start);
         time_picker_end= findViewById(R.id.time_picker_end);
+
+        //Buttons init
         submit_class = findViewById(R.id.submit_class_teacher);
-        class_title = findViewById(R.id.class_name_add_teacher);
-        chipGroup = findViewById(R.id.chip_days_group);
+
+        //EditTexts init
+        subject_title = findViewById(R.id.subject_title);
+        course_number = findViewById(R.id.course_number);
         room_number = findViewById(R.id.room_number);
 
+        chipGroup = findViewById(R.id.chip_days_group);
+
+
+        //Spinner init for selecting building
+        building_spinner = findViewById(R.id.building_spinner);
+        ArrayAdapter<CharSequence> building_adapter = ArrayAdapter.createFromResource(this,
+                R.array.building_array, R.layout.building_spinner_text);
+        building_adapter.setDropDownViewResource(R.layout.building_spinner_dropdown);
+        building_spinner.setAdapter(building_adapter);
+
+        //Spinner init for selecting rooms
+        class_spinner = findViewById(R.id.class_spinner);
+
+        Populate_Map_Building_Rooms();
+
+        building_spinner.setOnItemSelectedListener(this);
+
+        // Set up the classSpinner listener
+        class_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedClass = parent.getItemAtPosition(position).toString();
+                Toast.makeText(parent.getContext(), selectedClass, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Do nothing
+            }
+        });
 
         //Adding Listeners
         submit_class.setOnClickListener(ActivityClickListener);
     }
 
+    public void Populate_Map_Building_Rooms(){
+        Map_Building_Rooms.put("H", Arrays.asList("Class H1", "Class H2", "Class H3"));
+        Map_Building_Rooms.put("MB", Arrays.asList("Class MB1", "Class MB2", "Class MB3"));
+        Map_Building_Rooms.put("EV", Arrays.asList("Class EV1", "Class EV2", "Class EV3"));
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        building = adapterView.getItemAtPosition(i).toString();
+        Toast.makeText(adapterView.getContext(), adapterView.getItemAtPosition(i).toString(), Toast.LENGTH_SHORT).show();
+
+        // Get classes for the selected building from the HashMap
+        List<String> classes = Map_Building_Rooms.get(building);
+
+        // Create an ArrayAdapter for classes based on the selected building
+        ArrayAdapter<String> classAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, classes);
+
+        // Specify the layout to use when the list of choices appears
+        classAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Apply the adapter to the classSpinner
+        class_spinner.setAdapter(classAdapter);
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {}
+
+
     View.OnClickListener ActivityClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             if(view.getId() == R.id.submit_class_teacher){
-
                 if(validateInputs()){
                     validateClass();
                 }
@@ -97,8 +174,13 @@ public class TeacherAddClass extends AppCompatActivity {
     };
 
     public boolean validateInputs(){
-        if (class_title.getText().toString().equals("")){
+        if (subject_title.getText().toString().equals("")){
             Toast.makeText(getApplicationContext(), "Please enter a class name" , Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        // check if subject title is in list of possible subject titles array
+        if (!subjects.contains(subject_title.getText().toString())){
+            Toast.makeText(getApplicationContext(), "Please enter a valid subject title" , Toast.LENGTH_SHORT).show();
             return false;
         }
         if (room_number.getText().toString().equals("")){
@@ -233,9 +315,10 @@ public class TeacherAddClass extends AppCompatActivity {
 
         class_information.put("ROOM_NUMBER", room_number.getText().toString());
 
+        String full_class_name = subject_title.getText().toString() + " " + course_number.getText().toString();
 
         db.collection("COURSES")
-                .document(class_title.getText().toString())
+                .document(full_class_name)
                 .set(class_information)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -251,5 +334,6 @@ public class TeacherAddClass extends AppCompatActivity {
                     }
                 });
     }
+
 
 }
