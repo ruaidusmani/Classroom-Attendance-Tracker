@@ -146,13 +146,15 @@
 
     <EditText
         android:id="@+id/subject_title"
-        android:layout_width="180dp"
+        android:layout_width="170dp"
         android:layout_height="71dp"
         android:layout_marginStart="20dp"
         android:cursorVisible="false"
+        android:ems='10'
         android:gravity="center"
         android:hint="Subject"
         android:inputType="textCapCharacters"
+        android:imeOptions="actionNext"
         android:maxLength="4"
         android:selectAllOnFocus="true"
         android:singleLine="true"
@@ -171,33 +173,15 @@
         android:cursorVisible="false"
         android:hint="Number"
         android:inputType="text"
+        android:gravity="center"
         android:maxLength="4"
         android:selectAllOnFocus="true"
-        android:singleLine="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textCursorDrawable="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.128" />
-
-    <EditText
-        android:id="@+id/room_number"
-        android:layout_width="10dp"
-        android:layout_height="10dp"
-        android:cursorVisible="false"
-        android:hint="Room"
-        android:maxLength="10"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textCursorDrawable="@null"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.847"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.051" />
 
     <View
         android:id="@+id/divider2"

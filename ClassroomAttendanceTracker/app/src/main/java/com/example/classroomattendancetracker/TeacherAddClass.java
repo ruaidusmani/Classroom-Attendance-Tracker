@@ -96,7 +96,7 @@ public class TeacherAddClass extends AppCompatActivity implements AdapterView.On
         //EditTexts init
         subject_title = findViewById(R.id.subject_title);
         course_number = findViewById(R.id.course_number);
-        room_number = findViewById(R.id.room_number);
+        //room_number = findViewById(R.id.room_number);
 
         chipGroup = findViewById(R.id.chip_days_group);
 
