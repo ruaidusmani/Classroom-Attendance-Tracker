@@ -11,11 +11,14 @@
     </style>
 
     <style name="Theme.ClassroomAttendanceTracker" parent="Base.Theme.ClassroomAttendanceTracker" >
-<!--        <item name="colorPrimary">@color/Navy</item>-->
-<!--        <item name="colorSecondary">@color/Cream</item>-->
-<!--        <item name="android:textColorPrimary">@color/Navy</item>-->
-<!--        <item name="android:textColorSecondary">@color/Cream</item>-->
-<!--        <item name="android:background">@color/Cream</item>-->
+
+        <item name="colorPrimary">@color/Navy</item>
+        <item name="colorSecondary">@color/Cream</item>
+        <item name="android:textColorPrimary">@color/Navy</item>
+        <item name="android:textColorSecondary">@color/Cream</item>
+        <item name="android:background">@color/Cream</item>
+        <item name="colorAccent">@color/Navy</item>
+
 
 
     </style>
