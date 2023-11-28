@@ -31,6 +31,7 @@ import kotlinx.coroutines.internal.LockFreeLinkedListNode;
 public class DownloadCSVActivity extends AppCompatActivity {
 
     FirebaseFirestore db;
+
     FirebaseUser user;
     FirebaseAuth mAuth;
     String userEmail ;
@@ -231,6 +232,14 @@ public class DownloadCSVActivity extends AppCompatActivity {
 
                     getAttendance(date, students_to_explore.get(i));
 
+
+                }
+                for (int i = 0; i < students_to_explore.size(); i++){
+                    Log.d("STUDENTS TO EXPLORE", students_to_explore.toString());
+                    Log.d("calling getNames", Done.toString());
+                    String email = EncoderHelper.decode(students_to_explore.get(i));
+                    Log.d("calling getNames", email);
+                    getNames(email);
                 }
             }
         });
@@ -244,6 +253,7 @@ public class DownloadCSVActivity extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 Log.d("CALLING FUNCTION", "getNames()");
                 Map<String, Object> data = (Map<String, Object>) documentSnapshot.getData();
+                Log.d("Incoming data", data.get("first name").toString());
 
                 if (data != null) {
                     Log.d("STUDENT NAMES", data.toString());
@@ -327,10 +337,7 @@ public class DownloadCSVActivity extends AppCompatActivity {
                 Log.d("exit_times_hour:", exit_times_hour.toString());
                 Log.d("exit_times_minute:", exit_times_minute.toString());
 
-                for (int i = 0; i < students_to_explore.size(); i++){
-                    Log.d("calling getNames", Done.toString());
-                    getNames(EncoderHelper.decode(students_to_explore.get(i)));
-                }
+
 
 //                createFile();
             }

@@ -234,7 +234,8 @@ public class LiveStatsActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (MostRecentStudentID != null){
-                    removeRecentlyJoinedStudentFirestore();
+//                    removeRecentlyJoinedStudentFirestore();
+                    removeAttendance();
                     Toast.makeText(getApplicationContext(), "Removed " + MostRecentStudentID, Toast.LENGTH_SHORT).show();
                 }
                 else{
@@ -248,6 +249,57 @@ public class LiveStatsActivity extends AppCompatActivity {
         Log.d("Calling remove", "removeRecentlyJoinedStudentRealtime");
         DatabaseReference ref = database.getReference("/PRESENCE/"+ Room + "/" + MostRecentStudentID + "/present");
         ref.setValue(false);
+    }
+
+    void removeAttendance() {
+
+        DocumentReference docRef = db.collection("COURSES").document(courseName);
+        Log.d("courseName", courseName);
+        Calendar currentTime = Calendar.getInstance();
+        int day = (currentTime.get(Calendar.DAY_OF_MONTH));
+        int month = (currentTime.get(Calendar.MONTH)) + 1;
+        int year = (currentTime.get(Calendar.YEAR));
+
+
+
+        String encodedEmail = EncoderHelper.encode(emailMostRecentlyJoinedStudent);
+        Log.d("encodedEmail", encodedEmail);
+        Log.d("Decoded Email", EncoderHelper.decode(encodedEmail));
+
+        String stringref = "PRESENT." + day + "_" + month + "_" + year + "." + encodedEmail;
+        Log.d("stringref", stringref);
+
+
+        Map<String, Object> updates = new HashMap<>();
+
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+
+
+                    // Update the document with the modified array
+                    docRef.update(stringref, FieldValue.delete())
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    // Update successful
+                                    Log.d("Success", "DocumentSnapshot successfully updated!");
+                                    removeRecentlyJoinedStudentRealtime();
+                                    refreshMostRecentStudent();
+
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    // Handle errors
+                                    Log.d("Failure", "Error updating document", e);
+                                }
+                            });
+                }
+            }
+        });
     }
     void removeRecentlyJoinedStudentFirestore(){
         String mostRecentStudentID = textViewLastStudentJoinedID.getText().toString();
@@ -280,6 +332,7 @@ public class LiveStatsActivity extends AppCompatActivity {
                     }
                     MostRecentStudentID = null;
                     refreshNameMostRecentStudent();
+
 
 
                     // Update the document with the modified array

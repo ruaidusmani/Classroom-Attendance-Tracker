@@ -237,17 +237,22 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                String[] enrolled = documentSnapshot.get("classes").toString().replace("[", "").replace("]", "").replace(", ", ",").split(",");
-//                Log.d("GJHSDG", enrolled.toString());
-                //check if in enrolled array the class is present
-                enrolledIntoClass = false;
-                for (int i = 0; i < enrolled.length; i++) {
-                    Log.d("GJHSDG", enrolled[i]);
-                    if (enrolled[i].equals(classNameSignIn)) {
-                        enrolledIntoClass = true;
+                if (documentSnapshot.get("classes") == null) {
+                    Log.d("DocumentSnapshot", "null");
+                    enrolledIntoClass = false;
+                }
+                else {
+                    String[] enrolled = documentSnapshot.get("classes").toString().replace("[", "").replace("]", "").replace(", ", ",").split(",");
+                    //                Log.d("GJHSDG", enrolled.toString());
+                    //check if in enrolled array the class is present
+                    enrolledIntoClass = false;
+                    for (int i = 0; i < enrolled.length; i++) {
+                        Log.d("GJHSDG", enrolled[i]);
+                        if (enrolled[i].equals(classNameSignIn)) {
+                            enrolledIntoClass = true;
+                        }
                     }
                 }
-
                 if (!enrolledIntoClass) {
 //                    textViewSuccess.setText("The class that is ongoing right now is not in your enrolled classes.");
                     textViewSuccess.setVisibility(View.INVISIBLE);
@@ -486,13 +491,15 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
                         if (present) {
                             Log.d("THIRD IF", "THIRD IF");
                             textViewSuccess.setVisibility(View.VISIBLE);
-                            textViewSuccess.setText("You are already Signed into this class!");
+                            //textViewSuccess.setText("You are already Signed into this class!");
+                            textViewSuccess.setText("You have successfully signed in!");
                             Log.d("MESSAGE", "You are already Signed into this class!");
 
                             imageViewSuccess.setVisibility(View.VISIBLE);
                             textViewError.setVisibility(View.INVISIBLE);
                             Log.d("Setting invisible", "Setting invisible2");
                             imageViewError.setVisibility(View.INVISIBLE);
+//                            updateFirestoreDocument();
 //                            findFirestoreDocument();
                         } else {
                             Log.d("FOURTH IF", "FOURTH IF");
