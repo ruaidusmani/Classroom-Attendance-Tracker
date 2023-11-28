@@ -63,15 +63,11 @@ public class DownloadCSVActivity extends AppCompatActivity {
         userEmail = user.getEmail();
 
         //MODIFY HERE
-//        classToDownload = getIntent().getStringExtra("CLASS_NAME");
-        classToDownload = "Kdhwjbsx";
+        classToDownload = getIntent().getStringExtra("CLASS_NAME");
+        Toast.makeText(getApplicationContext(), " CLASS NAME :  " + classToDownload, Toast.LENGTH_SHORT).show();
+     //   classToDownload = "Kdhwjbsx";
 
         callCreateFile();
-
-
-
-
-
     }
 
     void createFile(){
@@ -135,16 +131,12 @@ public class DownloadCSVActivity extends AppCompatActivity {
                     "Luis Ramirez, 32948234, test@student31.com, 11/11/2020, 12:00, 12:30, \n";
         }
 
-
         File path  = getApplicationContext().getFilesDir();
 
         try {
-
-
-            FileOutputStream writer = new FileOutputStream(path + "/test.csv");
+            FileOutputStream writer = new FileOutputStream(path + "/"+classToDownload+".csv");
             writer.write(csv.getBytes());
             writer.close();
-
         } catch (Exception e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
@@ -153,7 +145,7 @@ public class DownloadCSVActivity extends AppCompatActivity {
         Log.d("Path", getApplicationInfo().dataDir);
 
 
-        File fileWithinMyDir = new File(path + "/test.csv");
+        File fileWithinMyDir = new File(path + "/"+classToDownload+".csv");
         if (fileWithinMyDir.exists()) {
             // Do
 //            requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 786);
@@ -206,7 +198,6 @@ public class DownloadCSVActivity extends AppCompatActivity {
                                 countDates.put(entry.getKey(), countDates.getOrDefault(entry.getKey(), 0) + 1);
                             }
                         }
-
                     }
                 }
                 Log.d("DATES:", dates_to_explore.toString());
@@ -215,11 +206,8 @@ public class DownloadCSVActivity extends AppCompatActivity {
                     getEachStudent(dates_to_explore.get(i));
 
                 }
-
-
             }
         });
-
     }
 
     public void getEachStudent(String date){
@@ -244,8 +232,6 @@ public class DownloadCSVActivity extends AppCompatActivity {
                     getAttendance(date, students_to_explore.get(i));
 
                 }
-
-
             }
         });
     }
@@ -274,16 +260,7 @@ public class DownloadCSVActivity extends AppCompatActivity {
 //
 //                Log.d("STUDENT NAMES", names.toString());
 //
-
-
-
-
-
-
-
             }
-
-
         });
     }
 
@@ -355,11 +332,8 @@ public class DownloadCSVActivity extends AppCompatActivity {
                     getNames(EncoderHelper.decode(students_to_explore.get(i)));
                 }
 
-
-
 //                createFile();
             }
         });
     }
-
 }

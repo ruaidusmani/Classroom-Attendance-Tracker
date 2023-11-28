@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,6 +32,9 @@ public class TeacherClassroomList extends AppCompatActivity implements ClassDate
     private FirebaseFirestore db;
     private FirebaseUser user;
 
+    Button downloadcsv_button;
+
+
     Vibrator vibrator;
     RecyclerView ClassDate_List;
     ArrayList<ClassDateItem> classDateItem_Array = new ArrayList<ClassDateItem>(); // holds class date to list
@@ -45,17 +50,31 @@ public class TeacherClassroomList extends AppCompatActivity implements ClassDate
         user = mAuth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
 
+        downloadcsv_button = (Button) findViewById(R.id.downloadcsv_button);
+
         // get Intent
         String class_name = getIntent().getStringExtra("CLASS_NAME");
         Log.d("Classroom List", "onCreate: " + class_name);
-
         getClassRoomService(class_name);
+
+        downloadcsv_button.setOnClickListener(downloadcsvListener);
+
     }
+
+    View.OnClickListener downloadcsvListener = view -> {
+        if (view.getId() == R.id.downloadcsv_button)
+        {
+            Intent intent = new Intent(getApplicationContext(), DownloadCSVActivity.class);
+            String class_name = getIntent().getStringExtra("CLASS_NAME");
+            intent.putExtra("CLASS_NAME", class_name);
+            startActivity(intent);
+        }
+    };
 
     public void getClassRoomService(String class_name){
 
         db.collection("COURSES")
-                .whereEqualTo("OWNER", user.getEmail())
+                .whereEqualTo("OWNER", "teacher@test6.com")
                 //.whereEqualTo("OWNER", "teacher@test6.com")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
