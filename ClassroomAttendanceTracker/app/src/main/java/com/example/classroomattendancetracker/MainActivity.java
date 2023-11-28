@@ -130,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
             buttonCheckIn.setVisibility(View.GONE);
             buttonCheckOut.setVisibility(View.GONE);
             buttonEnroll.setVisibility(View.GONE);
-            Toast.makeText(getApplicationContext(), "NOT LOGGED IN :(", Toast.LENGTH_LONG).show();
         }
     }
 

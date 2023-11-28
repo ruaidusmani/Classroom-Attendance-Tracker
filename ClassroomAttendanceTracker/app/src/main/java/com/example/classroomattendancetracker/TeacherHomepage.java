@@ -95,7 +95,7 @@ public class TeacherHomepage extends AppCompatActivity implements ClassItemAdapt
 
     public void getClassesService(){
         db.collection("COURSES")
-                .whereEqualTo("OWNER", "teacher@test6.com")
+                .whereEqualTo("OWNER", user.getEmail())
 //                .whereEqualTo("OWNER", user.getEmail())
 //                .whereArrayContains("DAYS", "Monday")
                 .get()
@@ -108,7 +108,6 @@ public class TeacherHomepage extends AppCompatActivity implements ClassItemAdapt
                             }
 
 
-                        Toast.makeText(getApplicationContext(), "Fetching Classes", Toast.LENGTH_SHORT).show();
 
                         // populate the list
                         ClassItemList = findViewById(R.id.recyclerView_ClassItems);
@@ -131,7 +130,6 @@ public class TeacherHomepage extends AppCompatActivity implements ClassItemAdapt
     @Override
     public void onItemClick(int position) {
         vibrator.vibrate(50);
-        Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getApplicationContext(), TeacherClassroomList.class);
         intent.putExtra("CLASS_NAME", ClassItem_Array.get(position).getClass_name());
         startActivity(intent);

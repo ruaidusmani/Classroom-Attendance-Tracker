@@ -2,11 +2,14 @@ package com.example.classroomattendancetracker;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -38,7 +41,7 @@ public class EnrollClassActivity extends AppCompatActivity implements ClassItemE
 
     RecyclerView recyclerViewClassList;
     ClassItemEnrollAdapter adapter;
-    
+
 
 
     @Override
@@ -60,6 +63,15 @@ public class EnrollClassActivity extends AppCompatActivity implements ClassItemE
 
         fetchAllClasses();
 
+        Toolbar check_in_toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(check_in_toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setTitle("Enroll");
+
+        //Toolbar items
+        check_in_toolbar.showOverflowMenu();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 
 
@@ -159,4 +171,18 @@ public class EnrollClassActivity extends AppCompatActivity implements ClassItemE
         adapter.setClickListener(this);
         recyclerViewClassList.setAdapter(adapter);
     }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            this.finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
 }

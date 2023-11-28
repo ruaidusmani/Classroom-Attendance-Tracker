@@ -154,8 +154,8 @@ public class DownloadCSVActivity extends AppCompatActivity {
             sendIntent.setAction(Intent.ACTION_SEND);
 //            sendIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-            Log.d("Path", path + "/test.csv");
-            Log.d("uri" , Uri.parse(path + "/test.csv").toString());
+            Log.d("Path", path + "/"+ classToDownload + ".csv");
+            Log.d("uri" , Uri.parse(path + "/"+classToDownload + ".csv").toString());
 //                Uri fileUri = Uri.fromFile(fileWithinMyDir);
             Uri fileUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", fileWithinMyDir);
             this.grantUriPermission(getApplicationContext().getPackageName(), fileUri,Intent.FLAG_GRANT_READ_URI_PERMISSION);
