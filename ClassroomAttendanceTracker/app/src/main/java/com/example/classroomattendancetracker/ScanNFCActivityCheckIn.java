@@ -128,6 +128,52 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
         startService(serviceIntent1);
     }
 
+    void removeAttendance() {
+
+        DocumentReference docRef = db.collection("COURSES").document(classNameSignIn);
+        Log.d("courseName", classNameSignIn);
+        Calendar currentTime = Calendar.getInstance();
+        int day = (currentTime.get(Calendar.DAY_OF_MONTH));
+        int month = (currentTime.get(Calendar.MONTH)) + 1;
+        int year = (currentTime.get(Calendar.YEAR));
+
+
+
+        String encodedEmail = EncoderHelper.encode(email);
+
+        String stringref = "PRESENT." + day + "_" + month + "_" + year + "." + encodedEmail;
+        Log.d("stringref", stringref);
+
+
+        Map<String, Object> updates = new HashMap<>();
+
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+
+
+                    // Update the document with the modified array
+                    docRef.update(stringref, FieldValue.delete())
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    // Update successful
+                                    Log.d("Success", "DocumentSnapshot successfully updated!");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    // Handle errors
+                                    Log.d("Failure", "Error updating document", e);
+                                }
+                            });
+                }
+            }
+        });
+    }
+
     //when the activity is resumed, start the NFC Reading service
     @Override
     protected void onResume() {
@@ -208,9 +254,11 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
                     imageViewSuccess.setVisibility(View.INVISIBLE);
                     textViewError.setVisibility(View.VISIBLE);
                     textViewError.setText("You are not enrolled in the current Class (" + classNameSignIn + "), or you are too early to class - You must sign-in 15 minutes before class starts or later");
+                    Log.d("MESSAGE", "You are not enrolled in the current Class (" + classNameSignIn + "), or you are too early to class - You must sign-in 15 minutes before class starts or later");
                     imageViewError.setVisibility(View.VISIBLE);
                     Log.d("Calling setPresence", "setPresence");
                     setPresence(false);
+                    removeAttendance();
                 }
                 else{
                     updateFirestoreDocument();
@@ -264,6 +312,7 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
                         public void onSuccess(Void aVoid) {
                             Log.d("A", "DocumentSnapshot successfully updated!");
                             textViewSuccess.setText("You have successfully signed into " + classNameSignIn + ", Room " + roomNumber);
+                            Log.d("MESSAGE", "You have successfully signed into " + classNameSignIn + ", Room " + roomNumber);
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -343,6 +392,7 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
                             imageViewSuccess.setVisibility(View.INVISIBLE);
                             textViewError.setVisibility(View.VISIBLE);
                             textViewError.setText("There is no class happening right now or in the next 15 minutes");
+                            Log.d("MESSAGE", "There is no class happening right now or in the next 15 minutes");
                             imageViewError.setVisibility(View.VISIBLE);
                             setPresence(false);
                         }
@@ -403,38 +453,55 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
 
                     if (tried_to_sign_in) {
                         if (present) {
+                            Log.d("FIRST IF", "FIRST IF");
                             textViewSuccess.setVisibility(View.VISIBLE);
                             textViewSuccess.setText("You have successfully signed in!");
+                            Log.d("MESSAGE", "You have successfully signed in!");
                             imageViewSuccess.setVisibility(View.VISIBLE);
+
                             textViewError.setVisibility(View.INVISIBLE);
+                            Log.d("Setting invisible", "Setting invisible1");
                             imageViewError.setVisibility(View.INVISIBLE);
                             findFirestoreDocument();
 
                         } else {
+                            Log.d("SECOND IF", "SECOND IF");
                             textViewSuccess.setVisibility(View.INVISIBLE);
                             imageViewSuccess.setVisibility(View.INVISIBLE);
-                            textViewError.setVisibility(View.VISIBLE);
-                            if (textViewError.getVisibility() != View.VISIBLE){
-                                textViewError.setText("Something Came Up! Login Failed!");
-                                textViewError.setVisibility(View.VISIBLE);
-                            }
+//                            textViewError.setVisibility(View.VISIBLE);
+//                            if (textViewError.getText().equals("There is no class happening right now or in the next 15 minutes") || textViewError.getText().equals("You are not enrolled in the current Class (" + classNameSignIn + "), or you are too early to class - You must sign-in 15 minutes before class starts or later")){
+//                            }
 //
+//                            else{
+////                            if (textViewError.getVisibility() != View.VISIBLE){
+//                                textViewError.setText("Something Came Up! Login Failed!");
+//                                Log.d("MESSAGE", "Something Came Up! Login Failed!");
+//                                textViewError.setVisibility(View.VISIBLE);
+//                            }
+                            textViewError.setVisibility(View.VISIBLE);
                             imageViewError.setVisibility(View.VISIBLE);
                             roomNumber = "null";
                         }
                     } else {
                         if (present) {
+                            Log.d("THIRD IF", "THIRD IF");
                             textViewSuccess.setVisibility(View.VISIBLE);
                             textViewSuccess.setText("You are already Signed into this class!");
+                            Log.d("MESSAGE", "You are already Signed into this class!");
+
                             imageViewSuccess.setVisibility(View.VISIBLE);
                             textViewError.setVisibility(View.INVISIBLE);
+                            Log.d("Setting invisible", "Setting invisible2");
                             imageViewError.setVisibility(View.INVISIBLE);
 //                            findFirestoreDocument();
                         } else {
+                            Log.d("FOURTH IF", "FOURTH IF");
                             textViewSuccess.setVisibility(View.INVISIBLE);
                             imageViewSuccess.setVisibility(View.INVISIBLE);
                             textViewError.setVisibility(View.INVISIBLE);
+                            Log.d("Setting invisible", "Setting invisible3");
                             textViewError.setText("Please approach the phone to the NFC Reader");
+                            Log.d("MESSAGE", "Please approach the phone to the NFC Reader");
                             imageViewError.setVisibility(View.INVISIBLE);
                             roomNumber = "null";
                         }

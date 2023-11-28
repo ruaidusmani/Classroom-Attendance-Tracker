@@ -7,13 +7,18 @@
          <item name="colorPrimary">@color/Navy</item>
         <item name="colorSecondary">@color/black</item>
         <item name="android:textColorPrimary">@color/Navy</item>
-        <item name="android:textColorSecondary">@color/black</item>
+
+        <item name="colorPrimaryDark">@color/Cream</item>
+        <item name="android:windowLightStatusBar">true</item>>
+        <item name="android:textColorSecondary">@color/Cream</item>
     </style>
 
     <style name="Theme.ClassroomAttendanceTracker" parent="Base.Theme.ClassroomAttendanceTracker" >
 
         <item name="colorPrimary">@color/Navy</item>
         <item name="colorSecondary">@color/Cream</item>
+        <item name="colorPrimaryDark">@color/Cream</item>
+        <item name="android:windowLightStatusBar">true</item>>
         <item name="android:textColorPrimary">@color/Navy</item>
         <item name="android:textColorSecondary">@color/Cream</item>
         <item name="android:background">@color/Cream</item>

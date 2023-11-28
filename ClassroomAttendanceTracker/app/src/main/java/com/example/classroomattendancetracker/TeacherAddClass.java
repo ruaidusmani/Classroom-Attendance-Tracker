@@ -2,10 +2,12 @@ package com.example.classroomattendancetracker;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -123,6 +125,17 @@ public class TeacherAddClass extends AppCompatActivity implements AdapterView.On
 
         //Adding Listeners
         submit_class.setOnClickListener(ActivityClickListener);
+        Toolbar toolbar;
+        toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setTitle("Add Course ");
+
+        toolbar.showOverflowMenu();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+
     }
 
     public void Populate_Map_Building_Rooms(){
@@ -418,6 +431,19 @@ public class TeacherAddClass extends AppCompatActivity implements AdapterView.On
                         Toast.makeText(getApplicationContext(), "Failed to add Class " , Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+
+        //Back button
+        if (id == android.R.id.home){
+            this.finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 
