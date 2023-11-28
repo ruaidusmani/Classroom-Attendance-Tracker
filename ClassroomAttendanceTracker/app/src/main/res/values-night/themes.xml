@@ -20,6 +20,16 @@
 
     </style>
 
+    <style name="spinnerItemStyle" parent="android:Widget.TextView.SpinnerItem">
+        <item name="android:textColor">@color/Cream</item>
+        <item name="android:textSize">35sp</item>
+    </style>
+
+    <style name="spinnerDropDownItemStyle" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
+        <item name="android:textColor">@color/Cream</item>
+        <item name="android:textSize">35sp</item>
+    </style>
+
     <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
         <!-- Customize color of navigation drawer icon and back arrow -->
         <item name="colorControlNormal">@color/Cream</item>
