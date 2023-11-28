@@ -2,6 +2,7 @@ package com.example.classroomattendancetracker;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -65,6 +66,14 @@ public class TeacherHomepage extends AppCompatActivity implements ClassItemAdapt
         logout.setOnClickListener(Activity_Click_Listener);
 
         getClassesService();
+
+        Toolbar toolbar;
+        toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setTitle("Homepage - My Courses");
+
+
     }
 
     View.OnClickListener Activity_Click_Listener = new View.OnClickListener(){

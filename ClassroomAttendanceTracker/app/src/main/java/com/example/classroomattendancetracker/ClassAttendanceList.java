@@ -2,6 +2,7 @@ package com.example.classroomattendancetracker;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.classroomattendancetracker.ClassDateItem;
@@ -50,11 +52,23 @@ public class ClassAttendanceList extends AppCompatActivity {
         String class_name = getIntent().getStringExtra("CLASS_NAME");
         String class_date = getIntent().getStringExtra("CLASS_DATE");
         Log.d("Classroom List 22", "onCreate: " + class_date);
+
+        Toolbar toolbar;
+        toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setTitle(class_name + "        " + class_date);
+
         class_date = class_date.replace('/', '_');
 
 
         getAttendedStudentsService(class_name, class_date);
 
+
+
+        toolbar.showOverflowMenu();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     public void getAttendedStudentsService(String class_name, String class_date){
@@ -183,5 +197,16 @@ public class ClassAttendanceList extends AppCompatActivity {
     }
 
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+
+        //Back button
+        if (id == android.R.id.home){
+            this.finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 }
