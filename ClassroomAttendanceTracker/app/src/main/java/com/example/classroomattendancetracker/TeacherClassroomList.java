@@ -10,10 +10,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
+
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -36,7 +38,8 @@ public class TeacherClassroomList extends AppCompatActivity implements ClassDate
     private FirebaseUser user;
 
 
-    Button downloadcsv_button;
+
+  Button downloadcsv_button;
 
 
     Vibrator vibrator;
@@ -49,6 +52,7 @@ public class TeacherClassroomList extends AppCompatActivity implements ClassDate
         setContentView(R.layout.activity_teacher_classroom);
 
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+        download_csv = (Button) findViewById(R.id.download_csv);
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
@@ -62,6 +66,7 @@ public class TeacherClassroomList extends AppCompatActivity implements ClassDate
         Log.d("Classroom List", "onCreate: " + class_name);
         getClassRoomService(class_name);
 
+
         downloadcsv_button.setOnClickListener(downloadcsvListener);
 
         Toolbar toolbar;
@@ -73,7 +78,21 @@ public class TeacherClassroomList extends AppCompatActivity implements ClassDate
         toolbar.showOverflowMenu();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
     }
+        View.OnClickListener button_listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(view.getId() == download_csv.getId())
+                {
+                    Intent intent = new Intent(getApplicationContext(), DownloadCSVActivity.class);
+                    String class_name = getIntent().getStringExtra("CLASS_NAME");
+                    intent.putExtra("CLASS_NAME", class_name);
+                    startActivity(intent);
+                }
+            }
+        };
+
 
 
     View.OnClickListener downloadcsvListener = view -> {

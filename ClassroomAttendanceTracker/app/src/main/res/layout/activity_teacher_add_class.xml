@@ -154,59 +154,43 @@
         app:layout_constraintVertical_bias="0.975" />
 
     <EditText
-        android:id="@+id/class_name_add_teacher"
-        android:layout_width="358dp"
+        android:id="@+id/subject_title"
+        android:layout_width="170dp"
         android:layout_height="71dp"
-        android:hint="Class + Section Name"
-        android:textCursorDrawable="@null"
-        android:gravity="center"
-        android:maxLength="8"
-        android:selectAllOnFocus="true"
+        android:layout_marginStart="20dp"
         android:cursorVisible="false"
+        android:ems='10'
+        android:gravity="center"
+        android:hint="Subject"
+        android:inputType="textCapCharacters"
+        android:imeOptions="actionNext"
+        android:maxLength="4"
+        android:selectAllOnFocus="true"
         android:singleLine="true"
-        android:inputType="text"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textCursorDrawable="@null"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.129" />
+        app:layout_constraintVertical_bias="0.128" />
 
     <EditText
-        android:id="@+id/room_number"
-        android:layout_width="169dp"
-        android:layout_height="wrap_content"
-        android:hint="Room"
-        android:textCursorDrawable="@null"
-        android:maxLength="10"
-        android:singleLine="true"
-        android:selectAllOnFocus="true"
+        android:id="@+id/course_number"
+        android:layout_width="180dp"
+        android:layout_height="71dp"
+        android:layout_marginEnd="20dp"
         android:cursorVisible="false"
+        android:hint="Number"
+        android:inputType="text"
+        android:gravity="center"
+        android:maxLength="4"
+        android:selectAllOnFocus="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textCursorDrawable="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.657"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.267" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="41dp"
-        android:layout_height="wrap_content"
-        android:foregroundTint="#00C20000"
-        android:gravity="center"
-        android:text="#"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textColor="#E4E0E4"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/room_number"
-        app:layout_constraintHorizontal_bias="0.847"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.276" />
+        app:layout_constraintVertical_bias="0.128" />
 
     <View
         android:id="@+id/divider2"
@@ -219,5 +203,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.882" />
+
+    <Spinner
+        android:id="@+id/building_spinner"
+        android:layout_width="150dp"
+        android:layout_height="65dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="176dp"
+        android:dropDownVerticalOffset="0dp"
+        android:gravity="center"
+        android:overlapAnchor="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/class_spinner"
+        android:layout_width="180dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="176dp"
+        android:layout_marginEnd="20dp"
+        android:dropDownVerticalOffset="0dp"
+        android:gravity="center"
+        android:overlapAnchor="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

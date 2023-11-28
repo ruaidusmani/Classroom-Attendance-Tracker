@@ -18,7 +18,18 @@
         <item name="colorPrimaryDark">@color/Navy</item>
         <item name="android:textColorPrimary">@color/Cream</item>
         <item name="android:textColorSecondary">@color/Navy</item>
+        <item name="colorAccent">@color/Cream</item>
 
+    </style>
+
+    <style name="spinnerItemStyle" parent="android:Widget.TextView.SpinnerItem">
+        <item name="android:textColor">@color/Cream</item>
+        <item name="android:textSize">35sp</item>
+    </style>
+
+    <style name="spinnerDropDownItemStyle" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
+        <item name="android:textColor">@color/Cream</item>
+        <item name="android:textSize">35sp</item>
     </style>
 
     <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">

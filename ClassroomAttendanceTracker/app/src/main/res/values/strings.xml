@@ -11,4 +11,13 @@
     <string name="editPayloadButton">Edit Payload</string>
     <string name="checkIn">Check-In</string>
     <string name="checkOut">Check-Out</string>
+
+    <string-array name="building_array">
+        <item>--</item>
+        <item>H</item>
+        <item>MB</item>
+        <item>LS</item>
+        <item>FB</item>
+        <item>FG</item>
+    </string-array>
 </resources>
