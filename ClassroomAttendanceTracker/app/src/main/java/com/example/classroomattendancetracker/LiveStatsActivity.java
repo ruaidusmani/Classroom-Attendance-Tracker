@@ -234,8 +234,8 @@ public class LiveStatsActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (MostRecentStudentID != null){
-                    removeRecentlyJoinedStudentFirestore();
-//                    removeAttendance();
+//                    removeRecentlyJoinedStudentFirestore();
+                    removeAttendance();
                     Toast.makeText(getApplicationContext(), "Removed " + MostRecentStudentID, Toast.LENGTH_SHORT).show();
                 }
                 else{
@@ -277,7 +277,7 @@ public class LiveStatsActivity extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 Log.d("Search Results", documentSnapshot.toString());
                 if (documentSnapshot.exists()) {
-
+                    Log.d("Document", "Document exists");
 
                     // Update the document with the modified array
                     docRef.update(stringref, FieldValue.delete())
@@ -287,6 +287,7 @@ public class LiveStatsActivity extends AppCompatActivity {
                                     // Update successful
                                     Log.d("DELETE", "DLETED");
                                     Log.d("Success", "DocumentSnapshot successfully updated!");
+
                                     removeRecentlyJoinedStudentRealtime();
                                     refreshMostRecentStudent();
 
@@ -380,6 +381,9 @@ public class LiveStatsActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 String mostRecentStudentID = textViewLastStudentJoinedID.getText().toString();
+                if (mostRecentStudentID == ""){
+                    return;
+                }
 
                 if (task.isSuccessful()) {
                     for (DocumentSnapshot document : task.getResult()) {
@@ -388,14 +392,22 @@ public class LiveStatsActivity extends AppCompatActivity {
                         String android_id = document.getString("android_id");
                         String first_name = document.getString("first name");
                         String last_name = document.getString("last name");
+//                        String[] classes = document.getString("classes").split(",");
 
-                        if (mostRecentStudentID.equals(android_id)){
+                        if (mostRecentStudentID.equals(android_id)){ //  && classes[0].equals(courseName)
                             //change color of card view to warn professor
                             //send notification
                             //create snackbar
+
                             View view = findViewById(android.R.id.content).getRootView();
 
                             Snackbar a = Snackbar.make(findViewById(android.R.id.content).getRootView(), "New student joined the class ", Snackbar.LENGTH_SHORT);
+                            a.setAction("Dismiss", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    a.dismiss();
+                                }
+                            });
                             emailMostRecentlyJoinedStudent = documentId;
                             textViewLastStudentJoinedName.setText(first_name + " " + last_name);
                             MostRecentStudentID = android_id;
@@ -448,6 +460,7 @@ public class LiveStatsActivity extends AppCompatActivity {
                                         mostRecentMinute = minute;
                                         mostRecentSecond = second;
                                         mostRecentStudentID = idSnapshot.getKey();
+
                                         foundOneStudent = true;
                                     }
                                     Log.d("ID", mostRecentStudentID);
@@ -455,6 +468,7 @@ public class LiveStatsActivity extends AppCompatActivity {
                                 }
                             }
                         }
+
                         if (foundOneStudent) {
                             textViewLastStudentJoinedID.setText(mostRecentStudentID);
                             textViewLastStudentJoinedName.setText(mostRecentStudentName);

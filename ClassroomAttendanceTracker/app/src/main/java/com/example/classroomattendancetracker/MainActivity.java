@@ -19,7 +19,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -65,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         String android_id = Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID);
         Log.d("Android ID", android_id);
         preferencesController.setPreference("AndroidID", android_id);
+        refresh();
 
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
@@ -117,8 +122,8 @@ public class MainActivity extends AppCompatActivity {
             registerButton.setVisibility(View.GONE);
             logoutButton.setVisibility(View.VISIBLE);
             editButton.setVisibility(View.VISIBLE);
-            buttonCheckIn.setVisibility(View.VISIBLE);
-            buttonCheckOut.setVisibility(View.VISIBLE);
+//            buttonCheckIn.setVisibility(View.VISIBLE);
+//            buttonCheckOut.setVisibility(View.VISIBLE);
             buttonEnroll.setVisibility(View.VISIBLE);
 //            Toast.makeText(getApplicationContext(), "ALREADY LOGGED IN :)", Toast.LENGTH_LONG).show();
         }else{
@@ -175,6 +180,66 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
+
+    void refresh() {
+        final FirebaseDatabase database = com.google.firebase.database.FirebaseDatabase.getInstance();
+        //TODO: Change path of database to student's ID, should be dynamic as it check if a student is currently logged in
+        //write code that checks if a specific ID is marked as present = true. the path is /Presence/room/ID/present
+
+        String id = preferencesController.getString("AndroidID");
+        DatabaseReference ref = database.getReference("/PRESENCE"); //to be replaced with student
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean present = false;
+                try {
+                    for (DataSnapshot roomNumberSnapshot : dataSnapshot.getChildren()) { // loop through each room
+                        for (DataSnapshot idSnapshot : roomNumberSnapshot.getChildren()) { // loop through each ID
+                            //print all the values
+//                            Log.d("Room Number", roomNumberSnapshot.getKey());
+//                            Log.d("ID", idSnapshot.getKey());
+//                            Log.d("ID2", id);
+                            for (DataSnapshot presentSnapshot : idSnapshot.getChildren()) { // loop through each present status
+                                if (idSnapshot.getKey().equals(id) && presentSnapshot.getKey().equals("present") && presentSnapshot.getValue(Boolean.class) != null && presentSnapshot.getValue(Boolean.class)) {
+                                    Log.d("Updating Present", presentSnapshot.getValue().toString());
+//                                    roomNumber = roomNumberSnapshot.getKey();
+                                    present = true;
+                                }
+                                Log.d("Present", presentSnapshot.getValue().toString());
+                            }
+                        }
+                    }
+                    Log.d("PresentFinal", String.valueOf(present));
+                    //if present, make elements in xml visible
+
+                    if (present) {
+                        buttonCheckIn.setVisibility(View.INVISIBLE);
+                        buttonCheckOut.setVisibility(View.VISIBLE);
+//                        ref.removeEventListener(this);
+
+                    } else {
+                        buttonCheckIn.setVisibility(View.VISIBLE);
+                        buttonCheckOut.setVisibility(View.INVISIBLE);
+//                        ref.removeEventListener(this);
+                    }
+
+
+
+
+                } catch (Exception e) {
+                    Log.d("ERROR", e.toString());
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
     //on resume
 
     
@@ -187,6 +252,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         handleUserType();
+        refresh();
     }
 
 }

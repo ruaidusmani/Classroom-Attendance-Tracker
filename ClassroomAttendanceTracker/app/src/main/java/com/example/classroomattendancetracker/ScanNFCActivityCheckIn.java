@@ -512,6 +512,8 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
                             textViewError.setVisibility(View.INVISIBLE);
                             Log.d("Setting invisible", "Setting invisible2");
                             imageViewError.setVisibility(View.INVISIBLE);
+                            findFirestoreDocument();
+                            ref.removeEventListener(this);
 //                            updateFirestoreDocument();
 //                            findFirestoreDocument();
                         } else {

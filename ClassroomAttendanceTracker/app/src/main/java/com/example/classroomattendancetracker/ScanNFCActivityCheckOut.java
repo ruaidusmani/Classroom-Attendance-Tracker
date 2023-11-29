@@ -266,7 +266,7 @@ public class ScanNFCActivityCheckOut extends AppCompatActivity {
 
         String id = preferencesController.getString("AndroidID");
         DatabaseReference ref = database.getReference("/PRESENCE"); //to be replaced with student
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 boolean present = false;
@@ -297,6 +297,7 @@ public class ScanNFCActivityCheckOut extends AppCompatActivity {
                             imageViewSuccess.setVisibility(View.INVISIBLE);
                             textViewError.setVisibility(View.VISIBLE);
                             imageViewError.setVisibility(View.VISIBLE);
+
                         } else {
                             textViewError.setVisibility(View.INVISIBLE);
                             imageViewSuccess.setVisibility(View.VISIBLE);
@@ -304,6 +305,7 @@ public class ScanNFCActivityCheckOut extends AppCompatActivity {
                             textViewSuccess.setText("Successfully checked out!");
                             imageViewError.setVisibility(View.INVISIBLE);
                             findFirestoreDocument();
+                            ref.removeEventListener(this);
                         }
                     }
                     else{
