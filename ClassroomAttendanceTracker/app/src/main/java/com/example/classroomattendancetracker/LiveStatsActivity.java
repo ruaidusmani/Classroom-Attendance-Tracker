@@ -234,8 +234,8 @@ public class LiveStatsActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (MostRecentStudentID != null){
-//                    removeRecentlyJoinedStudentFirestore();
-                    removeAttendance();
+                    removeRecentlyJoinedStudentFirestore();
+//                    removeAttendance();
                     Toast.makeText(getApplicationContext(), "Removed " + MostRecentStudentID, Toast.LENGTH_SHORT).show();
                 }
                 else{
@@ -275,6 +275,7 @@ public class LiveStatsActivity extends AppCompatActivity {
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Log.d("Search Results", documentSnapshot.toString());
                 if (documentSnapshot.exists()) {
 
 
@@ -284,6 +285,7 @@ public class LiveStatsActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     // Update successful
+                                    Log.d("DELETE", "DLETED");
                                     Log.d("Success", "DocumentSnapshot successfully updated!");
                                     removeRecentlyJoinedStudentRealtime();
                                     refreshMostRecentStudent();
@@ -438,26 +440,13 @@ public class LiveStatsActivity extends AppCompatActivity {
                                     int hour = getHour(presentSnapshot.getValue().toString());
                                     int minute = getMinute(presentSnapshot.getValue().toString());
                                     int second = getSecond(presentSnapshot.getValue().toString());
+
+                                    int totalSeconds = hour*60*60 + minute*60 + second;
                                     //check for most recent time
-                                    if (hour > mostRecentHour) {
+                                    if (totalSeconds > mostRecentHour*60*60 + mostRecentMinute*60 + mostRecentSecond){
                                         mostRecentHour = hour;
                                         mostRecentMinute = minute;
                                         mostRecentSecond = second;
-                                        mostRecentStudentName = idSnapshot.getKey();
-                                        mostRecentStudentID = idSnapshot.getKey();
-                                        foundOneStudent = true;
-                                    } else if (hour == mostRecentHour && minute > mostRecentMinute) {
-                                        mostRecentHour = hour;
-                                        mostRecentMinute = minute;
-                                        mostRecentSecond = second;
-                                        mostRecentStudentName = idSnapshot.getKey();
-                                        mostRecentStudentID = idSnapshot.getKey();
-                                        foundOneStudent = true;
-                                    } else if (hour == mostRecentHour && minute == mostRecentMinute && second > mostRecentSecond) {
-                                        mostRecentHour = hour;
-                                        mostRecentMinute = minute;
-                                        mostRecentSecond = second;
-                                        mostRecentStudentName = idSnapshot.getKey();
                                         mostRecentStudentID = idSnapshot.getKey();
                                         foundOneStudent = true;
                                     }

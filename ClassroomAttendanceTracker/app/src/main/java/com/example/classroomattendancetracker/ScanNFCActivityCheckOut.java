@@ -235,6 +235,9 @@ public class ScanNFCActivityCheckOut extends AppCompatActivity {
         Log.d("onDestroy", "onDestroy");
         Intent serviceIntent1 = new Intent(this, NFCHost.class);
         stopService(serviceIntent1);
+        //kill all listeners
+//        refState.removeEventListener(this.valueEventListener);
+        finish();
     }
 
     @Override
@@ -263,7 +266,7 @@ public class ScanNFCActivityCheckOut extends AppCompatActivity {
 
         String id = preferencesController.getString("AndroidID");
         DatabaseReference ref = database.getReference("/PRESENCE"); //to be replaced with student
-        ref.addValueEventListener(new ValueEventListener() {
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 boolean present = false;
