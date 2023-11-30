@@ -251,12 +251,12 @@ def corroborateEmailWithTime(student, emails, hour, minute, course):
       print("Arrivl seconds: ", arrival_seconds)
       print("Class start seconds: ", class_start_seconds)
       # print("CUrrent email looking at: ", email)
-      if (class_start_seconds - 15*60 <= arrival_seconds):
+      # if (class_start_seconds - 15*60 <= arrival_seconds):
         # path = '/PRESENCE/%s/%s' %(ROOM, student)
         # ref = db.reference(path)
         # ref.update({'present': False})
-        print(email)
-        return email
+      print(email)
+      return email
         #get information in path
       return "null"
     except (Exception):
