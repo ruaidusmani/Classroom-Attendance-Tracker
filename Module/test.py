@@ -5,6 +5,7 @@
 import time
 import binascii
 import json 
+import traceback
 
 from pn532pi import Pn532
 from pn532pi import Pn532Hsu
@@ -221,8 +222,10 @@ def corroborateEmailWithTime(emails, hour, minute, course):
         print(email)
         return email
       #get information in path
-    except:
+    except (Exception as e):
       print("Student did not arrive: ", email)
+      print(e)
+      traceback.print_exc()
       
        
 
