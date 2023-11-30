@@ -223,6 +223,8 @@ def checkIfInAnotherClass(email):
   for a in query:
     if(DAY_HASH[datetime.now(timezone('EST')).weekday()] in a.to_dict()["DAYS"]):
       dicto = a.to_dict()
+      print("CHECKING CLASS: " , a.id)
+      print("FOR EMAIL: ", email)
 
       try:
         encoded_email = ''
