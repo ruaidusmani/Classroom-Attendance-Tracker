@@ -226,7 +226,13 @@ def corroborateEmailWithTime(student, emails, hour, minute, course):
     try:
       arrival_hour =  dicto['PRESENT'][current_day + "_" + current_month + "_" + current_year][encoded_email]["arrival_hour"]
       arrival_minute =  dicto['PRESENT'][current_day + "_" + current_month + "_" + current_year][encoded_email]["arrival_minute"]
-      exit_hour =  dicto['PRESENT'][current_day + "_" + current_month + "_" + current_year][encoded_email]["exit_hour"] # will throw error if student did not exit
+      try:
+        exit_hour =  dicto['PRESENT'][current_day + "_" + current_month + "_" + current_year][encoded_email]["exit_hour"] # will throw error if student did not exit
+      except:
+         exit_hour = "null"
+      if (exit_hour != "null"):
+         print("Student did not exit the class normally")
+         return "null"
       # START_HOUR = dicto["START_HOUR"]
       # START_MINUTE = dicto["START_MIN"]
       END_HOUR = dicto["END_HOUR"]
