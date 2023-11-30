@@ -133,6 +133,10 @@ def checkIfNeedForceRemoveStudents(current_time_sec):
     DAYS = dicto["DAYS"]
     end_sec = (END_HOUR * 60 * 60) + (END_MINUTE * 60)
     start_sec = (START_HOUR * 60 * 60) + (START_MINUTE * 60)
+    print("Class is: ", a.id)
+    print("current time is: ", current_time_sec)
+    print("end sec: ", end_sec)
+    print("start sec: ", start_sec)
 
 
     # print(DAYS)
@@ -141,7 +145,7 @@ def checkIfNeedForceRemoveStudents(current_time_sec):
       #  print("END HOUR: ", END_HOUR)
       #  print("END MINUTE: ", END_MINUTE)
 
-      if (current_time_sec >= (end_sec+ 60*15) and current_time_sec > start_sec):
+      if ( (current_time_sec >= (end_sec+ 60*15)) and (current_time_sec > start_sec) ):
           # print("Current time: ", current_time_sec)
           # print("End time: ", end_sec)
           # print("ID: ", a.id)
