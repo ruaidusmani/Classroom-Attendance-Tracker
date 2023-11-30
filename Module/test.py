@@ -230,7 +230,7 @@ def corroborateEmailWithTime(student, emails, hour, minute, course):
       # START_MINUTE = dicto["START_MIN"]
       END_HOUR = dicto["END_HOUR"]
       END_MINUTE = dicto["END_MIN"]
-      end_seconds = END
+      # end_seconds = END
       end_sec = (END_HOUR * 60 * 60) + (END_MINUTE * 60)
       arrival_seconds = arrival_hour * 60 * 60 + arrival_minute * 60
       class_start_seconds = hour * 60 * 60 + minute * 60
