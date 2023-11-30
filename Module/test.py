@@ -232,6 +232,7 @@ def corroborateEmailWithTime(student, emails, hour, minute, course):
          exit_hour = "null"
       if (exit_hour != "null"):
          print("Student did not exit the class normally")
+         return
       # START_HOUR = dicto["START_HOUR"]
       # START_MINUTE = dicto["START_MIN"]
       END_HOUR = dicto["END_HOUR"]
@@ -281,7 +282,7 @@ def updateForceRemove(studentEmail, course):
 
   path3 = "PRESENT" + "." + current_day + "_" + current_month + "_" + current_year + "." + encodedEmail + "." + "exit_minute"
   docref.update({path3: int(datetime.now(timezone('EST')).strftime("%M"))})
-  
+
 
 def pushFireStoreData(course, date_string, email):
   ref = firestore_db.collection("COURSES").document(course)
@@ -470,7 +471,7 @@ def main():
     # print("Start time: ", start_time_sec)
     # time.sleep(1)
     # print(current_time_sec - start_time_sec)
-    if (current_time_sec - sec_ref >= 60):
+    if (current_time_sec - sec_ref >= 10):
       print("Calling force remove students")
       start_time_hour = int(datetime.now(timezone('EST')).strftime("%H"))
       start_time_minute = int(datetime.now(timezone('EST')).strftime("%M"))
