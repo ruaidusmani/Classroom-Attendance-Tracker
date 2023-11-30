@@ -230,6 +230,8 @@ def corroborateEmailWithTime(student, emails, hour, minute, course):
         exit_hour =  dicto['PRESENT'][current_day + "_" + current_month + "_" + current_year][encoded_email]["exit_hour"] # will throw error if student did not exit class at any point
       except:
          exit_hour = "null"
+
+      print("exit hour: ", exit_hour)
       if (exit_hour != "null"):
          print("Student Exited class normally")
          return ("null")
