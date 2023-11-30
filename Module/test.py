@@ -216,6 +216,9 @@ def getEmailStudentRemoved(student_id):
 def checkIfInAnotherClass(email):
   courses = firestore_db.collection("COURSES")
   query = courses.stream()
+  current_day = datetime.now(timezone('EST')).strftime("%d")
+  current_month = datetime.now(timezone('EST')).strftime("%m")
+  current_year = datetime.now(timezone('EST')).strftime("%Y")
   for a in query:
     dicto = a.to_dict()
     try:
