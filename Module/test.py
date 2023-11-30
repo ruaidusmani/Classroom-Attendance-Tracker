@@ -198,9 +198,8 @@ def forceRemoveStudents(course):
     if (email != "null"):
       path = '/PRESENCE/%s/%s' %(ROOM, student)
       ref = db.reference(path)
-      ref.update({'present': False})
-       
-    updateForceRemove(email, course)
+      ref.update({'present': False}) 
+      updateForceRemove(email, course)
         
 def getEmailStudentRemoved(student_id):
   users = firestore_db.collection("USERS")
@@ -235,10 +234,11 @@ def corroborateEmailWithTime(student, emails, hour, minute, course):
       end_sec = (END_HOUR * 60 * 60) + (END_MINUTE * 60)
       arrival_seconds = arrival_hour * 60 * 60 + arrival_minute * 60
       class_start_seconds = hour * 60 * 60 + minute * 60
+      # print("CUrrent email looking at: ", email)
       if (class_start_seconds - 15*60 <= arrival_seconds):
-        path = '/PRESENCE/%s/%s' %(ROOM, student)
-        ref = db.reference(path)
-        ref.update({'present': False})
+        # path = '/PRESENCE/%s/%s' %(ROOM, student)
+        # ref = db.reference(path)
+        # ref.update({'present': False})
         print(email)
         return email
         #get information in path
