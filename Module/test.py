@@ -220,32 +220,35 @@ def checkIfInAnotherClass(email):
   current_month = datetime.now(timezone('EST')).strftime("%m")
   current_year = datetime.now(timezone('EST')).strftime("%Y")
   for a in query:
-    dicto = a.to_dict()
-    try:
-      encoded_email = ''
-      for character in email:
-          encoded_email = encoded_email + str(ord(character)) + "_"
+    if(DAY_HASH[datetime.now(timezone('EST')).weekday()] in a.to_dict()["DAYS"]):
+      dicto = a.to_dict()
+
       try:
-        arrival_hour =  dicto['PRESENT'][current_day + "_" + current_month + "_" + current_year][encoded_email]["arrival_hour"]
-        arrival_minute =  dicto['PRESENT'][current_day + "_" + current_month + "_" + current_year][encoded_email]["arrival_minute"]
-        
-      except:
-        arrival_hour = "null"
-        arrival_minute = "null"
-      if (arrival_hour != "null" and arrival_minute != "null"):
-        START_HOUR = dicto["START_HOUR"]
-        START_MINUTE = dicto["START_MIN"]
-        END_HOUR = dicto["END_HOUR"]
-        END_MINUTE = dicto["END_MIN"]
-        arrival_seconds = arrival_hour * 60 * 60 + arrival_minute * 60
-        start_seconds = START_HOUR * 60 * 60 + START_MINUTE * 60
-        end_seconds = END_HOUR * 60 * 60 + END_MINUTE * 60
-        if ((start_seconds- 15*60 <= arrival_seconds ) and (arrival_seconds <= end_seconds)):
-          return True
-    except (Exception):
-      print("Student did not arrive: ", email)
-      # print(e)
-      traceback.print_exc()
+        encoded_email = ''
+        for character in email:
+            encoded_email = encoded_email + str(ord(character)) + "_"
+        try:
+          arrival_hour =  dicto['PRESENT'][current_day + "_" + current_month + "_" + current_year][encoded_email]["arrival_hour"]
+          arrival_minute =  dicto['PRESENT'][current_day + "_" + current_month + "_" + current_year][encoded_email]["arrival_minute"]
+          
+        except:
+          arrival_hour = "null"
+          arrival_minute = "null"
+          traceback.print_exc()
+        if (arrival_hour != "null" and arrival_minute != "null"):
+          START_HOUR = dicto["START_HOUR"]
+          START_MINUTE = dicto["START_MIN"]
+          END_HOUR = dicto["END_HOUR"]
+          END_MINUTE = dicto["END_MIN"]
+          arrival_seconds = arrival_hour * 60 * 60 + arrival_minute * 60
+          start_seconds = START_HOUR * 60 * 60 + START_MINUTE * 60
+          end_seconds = END_HOUR * 60 * 60 + END_MINUTE * 60
+          if ((start_seconds- 15*60 <= arrival_seconds ) and (arrival_seconds <= end_seconds)):
+            return True
+      except (Exception):
+        print("Student did not arrive: ", email)
+        # print(e)
+        traceback.print_exc()
   return False
 
   
