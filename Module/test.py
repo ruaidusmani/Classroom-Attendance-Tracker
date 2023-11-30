@@ -88,6 +88,7 @@ def setClassroomNumber(roomNumber):
  
 def getEmail(android_ID):
   global SERIAL
+
   users = firestore_db.collection("USERS")
   query = users.where("android_id", "==", android_ID).stream()
   for a in query:
@@ -215,7 +216,7 @@ def getEmailStudentRemoved(student_id):
 
 def checkIfInAnotherClass(email):
   courses = firestore_db.collection("COURSES")
-  query = courses.stream()
+  query = courses.where("ROOM_NUMBER", "==", ROOM).stream()
   current_day = datetime.now(timezone('EST')).strftime("%d")
   current_month = datetime.now(timezone('EST')).strftime("%m")
   current_year = datetime.now(timezone('EST')).strftime("%Y")
