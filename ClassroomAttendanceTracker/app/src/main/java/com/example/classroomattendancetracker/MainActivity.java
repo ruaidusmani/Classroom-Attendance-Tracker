@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         String android_id = Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID);
         Log.d("Android ID", android_id);
         preferencesController.setPreference("AndroidID", android_id);
-        refresh();
+
 
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         handleUserType();
-
+        refresh();
 
 
 
@@ -212,18 +212,19 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("PresentFinal", String.valueOf(present));
                     //if present, make elements in xml visible
 
-                    if (present) {
-                        buttonCheckIn.setVisibility(View.INVISIBLE);
-                        buttonCheckOut.setVisibility(View.VISIBLE);
-//                        ref.removeEventListener(this);
+                    if (preferencesController.getString("USER_TYPE").equals("Student")) {
+                        if (present) {
+                            buttonCheckIn.setVisibility(View.INVISIBLE);
+                            buttonCheckOut.setVisibility(View.VISIBLE);
+                            //                        ref.removeEventListener(this);
 
-                    } else {
-                        buttonCheckIn.setVisibility(View.VISIBLE);
-                        buttonCheckOut.setVisibility(View.INVISIBLE);
-//                        ref.removeEventListener(this);
+                        } else {
+                            buttonCheckIn.setVisibility(View.VISIBLE);
+                            buttonCheckOut.setVisibility(View.INVISIBLE);
+                            //                        ref.removeEventListener(this);
+                        }
+
                     }
-
-
 
 
                 } catch (Exception e) {

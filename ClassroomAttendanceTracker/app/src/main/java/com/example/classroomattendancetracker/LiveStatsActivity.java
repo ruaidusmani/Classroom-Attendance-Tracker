@@ -563,7 +563,7 @@ public class LiveStatsActivity extends AppCompatActivity {
 
                             if (daysOfWeek.contains(current_day_of_week_string)){
 
-                                if (currentSeconds >= startSeconds && currentSeconds <= endSeconds) {
+                                if (currentSeconds >= (startSeconds - 15*60) && currentSeconds <= endSeconds) {
 //                                    if (current_minute <= endMinute){
                                     Log.d("Found minute", String.valueOf(current_minute));
                                     classFound = true;

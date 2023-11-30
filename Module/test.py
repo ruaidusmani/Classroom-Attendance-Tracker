@@ -151,11 +151,11 @@ def checkIfNeedForceRemoveStudents(current_time_sec):
           # print("Current time: ", current_time_sec)
           # print("End time: ", end_sec)
           # print("ID: ", a.id)x
-	  print("MARKING AS TO BE DELETED: ", a.id)
+	      print("MARKING AS TO BE DELETED: ", a.id)
           
-          classNames.append(a.id)
-          classEndTimes.append(end_sec)
-	  classStartTimes.append(start_sec)
+        classNames.append(a.id)
+        classEndTimes.append(end_sec)
+	      classStartTimes.append(start_sec)
   
   max_end_sec = 0
   most_recent_class = "null"
@@ -174,22 +174,33 @@ def forceRemoveStudents(course):
   students_to_remove = []
   hours = []
   minutes = []
+  students = []
   for student in dicto:
     #  print(student)
      if (dicto[student]['present']):
         # print("Call to remove student")
+      
+        current_hour = int(dicto[student]['time_in'].split(",")[3].split(':')[0])
+        hours.append(current_hour)
+        current_minute = int(dicto[student]['time_in'].split(",")[3].split(':')[1])
+        minutes.append(current_minute)
+        # seconds = current_hour * 60 * 60 + current_minute * 60
+
         students_to_remove.append(student)
-        hours.append(int(dicto[student]['time_in'].split(",")[3].split(':')[0]))
-        minutes.append(int(dicto[student]['time_in'].split(",")[3].split(':')[1]))
   for student in students_to_remove:
-    path = '/PRESENCE/%s/%s' %(ROOM, student)
-    ref = db.reference(path)
-    ref.update({'present': False})
+    # path = '/PRESENCE/%s/%s' %(ROOM, student)
+    # ref = db.reference(path)
+    # ref.update({'present': False})
 
     # pushFireStoreData(getCurrentClass(current_day_of_week, int(datetime.now(timezone('EST')).strftime("%H")), int(datetime.now(timezone('EST')).strftime("%M"))), datetime.now(timezone('EST')).strftime("%d_%m_%Y"), student)
     print("Removed student: ", student)
     emails = getEmailStudentRemoved(student)
-    email = corroborateEmailWithTime(emails, hours[students_to_remove.index(student)], minutes[students_to_remove.index(student)], course)
+    email = corroborateEmailWithTime(student, emails, hours[students_to_remove.index(student)], minutes[students_to_remove.index(student)], course)
+    if (email != "null"):
+      path = '/PRESENCE/%s/%s' %(ROOM, student)
+      ref = db.reference(path)
+      ref.update({'present': False})
+       
     updateForceRemove(email, course)
         
 def getEmailStudentRemoved(student_id):
@@ -202,7 +213,7 @@ def getEmailStudentRemoved(student_id):
     emails.append(a.id)
   return emails
 
-def corroborateEmailWithTime(emails, hour, minute, course):
+def corroborateEmailWithTime(student, emails, hour, minute, course):
   courses = firestore_db.collection("COURSES")
   docref = courses.document(course)
   dicto = docref.get().to_dict()
@@ -226,13 +237,17 @@ def corroborateEmailWithTime(emails, hour, minute, course):
       arrival_seconds = arrival_hour * 60 * 60 + arrival_minute * 60
       class_start_seconds = hour * 60 * 60 + minute * 60
       if (class_start_seconds - 15*60 <= arrival_seconds):
+        path = '/PRESENCE/%s/%s' %(ROOM, student)
+        ref = db.reference(path)
+        ref.update({'present': False})
         print(email)
         return email
-      #get information in path
-    except (Exception as e):
+        #get information in path
+    except (Exception):
       print("Student did not arrive: ", email)
-      print(e)
+      # print(e)
       traceback.print_exc()
+      return "null"
       
        
 
