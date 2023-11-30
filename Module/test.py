@@ -244,11 +244,12 @@ def corroborateEmailWithTime(student, emails, hour, minute, course):
       # end_seconds = END
       print("Hour is: ", hour)
       print("Minute is: ", minute)
-      print("Arrivl seconds: ", arrival_hour * 60 * 60 + arrival_minute * 60)
-      print("Class start seconds: ", hour * 60 * 60 + minute * 60)
+      
       end_sec = (END_HOUR * 60 * 60) + (END_MINUTE * 60)
       arrival_seconds = arrival_hour * 60 * 60 + arrival_minute * 60
       class_start_seconds = hour * 60 * 60 + minute * 60
+      print("Arrivl seconds: ", arrival_seconds)
+      print("Class start seconds: ", class_start_seconds)
       # print("CUrrent email looking at: ", email)
       if (class_start_seconds - 15*60 <= arrival_seconds):
         # path = '/PRESENCE/%s/%s' %(ROOM, student)
