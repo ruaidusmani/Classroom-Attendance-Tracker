@@ -201,7 +201,7 @@ def forceRemoveStudents(course):
         path = '/PRESENCE/%s/%s' %(ROOM, student)
         ref = db.reference(path)
         ref.update({'present': False}) 
-        updateForceRemove(email, course)
+      updateForceRemove(email, course)
         
 def getEmailStudentRemoved(student_id):
   users = firestore_db.collection("USERS")
