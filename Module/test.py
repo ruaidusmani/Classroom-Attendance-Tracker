@@ -235,9 +235,12 @@ def checkIfInAnotherClass(email):
       if (arrival_hour != "null" and arrival_minute != "null"):
         START_HOUR = dicto["START_HOUR"]
         START_MINUTE = dicto["START_MIN"]
+        END_HOUR = dicto["END_HOUR"]
+        END_MINUTE = dicto["END_MIN"]
         arrival_seconds = arrival_hour * 60 * 60 + arrival_minute * 60
         start_seconds = START_HOUR * 60 * 60 + START_MINUTE * 60
-        if (start_seconds- 15*60 <= arrival_seconds):
+        end_seconds = END_HOUR * 60 * 60 + END_MINUTE * 60
+        if ((start_seconds- 15*60 <= arrival_seconds ) and (arrival_seconds <= end_seconds)):
           return True
     except (Exception):
       print("Student did not arrive: ", email)
