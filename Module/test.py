@@ -237,6 +237,7 @@ def corroborateEmailWithTime(student, emails, hour, minute, course):
          return ("null")
       # START_HOUR = dicto["START_HOUR"]
       # START_MINUTE = dicto["START_MIN"]
+      print()
       END_HOUR = dicto["END_HOUR"]
       END_MINUTE = dicto["END_MIN"]
       # end_seconds = END
@@ -251,6 +252,7 @@ def corroborateEmailWithTime(student, emails, hour, minute, course):
         print(email)
         return email
         #get information in path
+      return "null"
     except (Exception):
       print("Student did not arrive: ", email)
       # print(e)
