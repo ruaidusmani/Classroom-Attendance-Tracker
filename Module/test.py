@@ -148,14 +148,13 @@ def checkIfNeedForceRemoveStudents(current_time_sec):
       #  print("END MINUTE: ", END_MINUTE)
 
       if ( (current_time_sec >= (end_sec+ 60*15)) and (current_time_sec > start_sec) ):
-          # print("Current time: ", current_time_sec)
-          # print("End time: ", end_sec)
-          # print("ID: ", a.id)x
-	      print("MARKING AS TO BE DELETED: ", a.id)
-          
+        # print("Current time: ", current_time_sec)
+        # print("End time: ", end_sec)
+        # print("ID: ", a.id)x
+        print("MARKING AS TO BE DELETED: ", a.id)
         classNames.append(a.id)
         classEndTimes.append(end_sec)
-	      classStartTimes.append(start_sec)
+        classStartTimes.append(start_sec)
   
   max_end_sec = 0
   most_recent_class = "null"
