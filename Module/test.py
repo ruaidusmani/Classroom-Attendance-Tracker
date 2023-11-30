@@ -196,7 +196,7 @@ def forceRemoveStudents(course):
     emails = getEmailStudentRemoved(student)
     email = corroborateEmailWithTime(student, emails, hours[students_to_remove.index(student)], minutes[students_to_remove.index(student)], course)
     if (email != "null"):
-      if (checkIfInAnotherClass(email)):
+      if (!checkIfInAnotherClass(email)):
         print("Student is in another class")
         path = '/PRESENCE/%s/%s' %(ROOM, student)
         ref = db.reference(path)
