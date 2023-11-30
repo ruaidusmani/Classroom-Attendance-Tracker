@@ -236,8 +236,8 @@ def corroborateEmailWithTime(student, emails, hour, minute, course):
       if (exit_hour != "null"):
          print("Student Exited class normally")
          return ("null")
-      # START_HOUR = dicto["START_HOUR"]
-      # START_MINUTE = dicto["START_MIN"]
+      START_HOUR = dicto["START_HOUR"]
+      START_MINUTE = dicto["START_MIN"]
       print()
       END_HOUR = dicto["END_HOUR"]
       END_MINUTE = dicto["END_MIN"]
@@ -248,15 +248,16 @@ def corroborateEmailWithTime(student, emails, hour, minute, course):
       end_sec = (END_HOUR * 60 * 60) + (END_MINUTE * 60)
       arrival_seconds = arrival_hour * 60 * 60 + arrival_minute * 60
       class_start_seconds = hour * 60 * 60 + minute * 60
+      class_start_seconds = START_HOUR * 60 * 60 + START_MINUTE * 60
       print("Arrivl seconds: ", arrival_seconds)
       print("Class start seconds: ", class_start_seconds)
       # print("CUrrent email looking at: ", email)
-      # if (class_start_seconds - 15*60 <= arrival_seconds):
+      if (class_start_seconds - 15*60 <= arrival_seconds):
         # path = '/PRESENCE/%s/%s' %(ROOM, student)
         # ref = db.reference(path)
         # ref.update({'present': False})
-      print(email)
-      return email
+        print(email)
+        return email
         #get information in path
       return "null"
     except (Exception):
