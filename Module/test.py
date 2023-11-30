@@ -231,7 +231,7 @@ def corroborateEmailWithTime(student, emails, hour, minute, course):
       except:
          exit_hour = "null"
 
-      print("Looking in this path: ",print('PRESENT'+current_day + "_" + current_month + "_" + current_year+encoded_email+"arrival_minute")
+      print("Looking in this path: ",'PRESENT'+current_day + "_" + current_month + "_" + current_year+encoded_email+"arrival_minute")
       print("exit hour: ", exit_hour)
       if (exit_hour != "null"):
          print("Student Exited class normally")
