@@ -52,6 +52,8 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
     String roomNumber;
     String classNameSignIn;
 
+    FirebaseDatabase database;
+
 
 
     FirebaseUser user;
@@ -74,6 +76,7 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
+        database = com.google.firebase.database.FirebaseDatabase.getInstance();
 
         preferencesController = new PreferencesController(getApplicationContext());
         imageViewError = findViewById(R.id.imageViewError);
@@ -159,6 +162,7 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     // Update successful
+                                    Log.d("DELETE", "data found and deleted");
                                     Log.d("Success", "DocumentSnapshot successfully updated!");
                                 }
                             })
@@ -208,6 +212,12 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
         Log.d("onDestroy", "onDestroy");
         Intent serviceIntent1 = new Intent(this, NFCHost.class);
         stopService(serviceIntent1);
+        //destroy this activity
+
+//
+//        DatabaseReference ref = database.getReference("/PRESENCE");
+//        ref.removeEventListener(database);
+//        finish();
     }
 
     @Override
@@ -237,17 +247,22 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                String[] enrolled = documentSnapshot.get("classes").toString().replace("[", "").replace("]", "").replace(", ", ",").split(",");
-//                Log.d("GJHSDG", enrolled.toString());
-                //check if in enrolled array the class is present
-                enrolledIntoClass = false;
-                for (int i = 0; i < enrolled.length; i++) {
-                    Log.d("GJHSDG", enrolled[i]);
-                    if (enrolled[i].equals(classNameSignIn)) {
-                        enrolledIntoClass = true;
+                if (documentSnapshot.get("classes") == null) {
+                    Log.d("DocumentSnapshot", "null");
+                    enrolledIntoClass = false;
+                }
+                else {
+                    String[] enrolled = documentSnapshot.get("classes").toString().replace("[", "").replace("]", "").replace(", ", ",").split(",");
+                    //                Log.d("GJHSDG", enrolled.toString());
+                    //check if in enrolled array the class is present
+                    enrolledIntoClass = false;
+                    for (int i = 0; i < enrolled.length; i++) {
+                        Log.d("GJHSDG", enrolled[i]);
+                        if (enrolled[i].equals(classNameSignIn)) {
+                            enrolledIntoClass = true;
+                        }
                     }
                 }
-
                 if (!enrolledIntoClass) {
 //                    textViewSuccess.setText("The class that is ongoing right now is not in your enrolled classes.");
                     textViewSuccess.setVisibility(View.INVISIBLE);
@@ -262,7 +277,6 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
                 }
                 else{
                     updateFirestoreDocument();
-
                 }
             }
         });
@@ -303,6 +317,7 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
         int currentMinute = currentTime.get(Calendar.MINUTE);
 
         Log.d("ENROLLED INTO CLASS IS: ", String.valueOf(enrolledIntoClass))   ;
+        Log.d("STRING REF IS: ", stringToPush);
 
         if (enrolledIntoClass) {
 
@@ -384,6 +399,7 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
                                 Log.d("Class name", classNameSignIn);
                                 checkIfEnrolled();
 
+
                             }
 
                         }
@@ -422,12 +438,13 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
     }
 
     void refresh() {
-        final FirebaseDatabase database = com.google.firebase.database.FirebaseDatabase.getInstance();
+
         //TODO: Change path of database to student's ID, should be dynamic as it check if a student is currently logged in
         //write code that checks if a specific ID is marked as present = true. the path is /Presence/room/ID/present
 
         String id = preferencesController.getString("AndroidID");
         DatabaseReference ref = database.getReference("/PRESENCE"); //to be replaced with student
+
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -463,6 +480,7 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
                             Log.d("Setting invisible", "Setting invisible1");
                             imageViewError.setVisibility(View.INVISIBLE);
                             findFirestoreDocument();
+                            ref.removeEventListener(this);
 
                         } else {
                             Log.d("SECOND IF", "SECOND IF");
@@ -486,13 +504,17 @@ public class ScanNFCActivityCheckIn extends AppCompatActivity {
                         if (present) {
                             Log.d("THIRD IF", "THIRD IF");
                             textViewSuccess.setVisibility(View.VISIBLE);
-                            textViewSuccess.setText("You are already Signed into this class!");
+                            //textViewSuccess.setText("You are already Signed into this class!");
+                            textViewSuccess.setText("You have successfully signed in!");
                             Log.d("MESSAGE", "You are already Signed into this class!");
 
                             imageViewSuccess.setVisibility(View.VISIBLE);
                             textViewError.setVisibility(View.INVISIBLE);
                             Log.d("Setting invisible", "Setting invisible2");
                             imageViewError.setVisibility(View.INVISIBLE);
+                            findFirestoreDocument();
+                            ref.removeEventListener(this);
+//                            updateFirestoreDocument();
 //                            findFirestoreDocument();
                         } else {
                             Log.d("FOURTH IF", "FOURTH IF");

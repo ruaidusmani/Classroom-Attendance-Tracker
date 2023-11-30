@@ -75,8 +75,8 @@
 
         <TextView
             android:id="@+id/textViewSuccess"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="301dp"
+            android:layout_height="51dp"
             android:layout_marginTop="30dp"
             android:text="(Placeholder for Errors)"
             android:visibility="invisible" />
@@ -104,8 +104,8 @@
 
         <TextView
             android:id="@+id/textViewError"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="296dp"
+            android:layout_height="56dp"
             android:layout_marginTop="30dp"
             android:text="(Placeholder for Errors)"
             android:visibility="invisible" />

@@ -236,6 +236,9 @@ public class ScanNFCActivityCheckOut extends AppCompatActivity {
         Log.d("onDestroy", "onDestroy");
         Intent serviceIntent1 = new Intent(this, NFCHost.class);
         stopService(serviceIntent1);
+        //kill all listeners
+//        refState.removeEventListener(this.valueEventListener);
+        finish();
     }
 
     @Override
@@ -295,6 +298,7 @@ public class ScanNFCActivityCheckOut extends AppCompatActivity {
                             imageViewSuccess.setVisibility(View.INVISIBLE);
                             textViewError.setVisibility(View.VISIBLE);
                             imageViewError.setVisibility(View.VISIBLE);
+
                         } else {
                             textViewError.setVisibility(View.INVISIBLE);
                             imageViewSuccess.setVisibility(View.VISIBLE);
@@ -302,6 +306,7 @@ public class ScanNFCActivityCheckOut extends AppCompatActivity {
                             textViewSuccess.setText("Successfully checked out!");
                             imageViewError.setVisibility(View.INVISIBLE);
                             findFirestoreDocument();
+                            ref.removeEventListener(this);
                         }
                     }
                     else{

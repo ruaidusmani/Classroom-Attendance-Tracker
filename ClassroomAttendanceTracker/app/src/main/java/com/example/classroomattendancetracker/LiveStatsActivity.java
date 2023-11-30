@@ -234,7 +234,8 @@ public class LiveStatsActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (MostRecentStudentID != null){
-                    removeRecentlyJoinedStudentFirestore();
+//                    removeRecentlyJoinedStudentFirestore();
+                    removeAttendance();
                     Toast.makeText(getApplicationContext(), "Removed " + MostRecentStudentID, Toast.LENGTH_SHORT).show();
                 }
                 else{
@@ -248,6 +249,60 @@ public class LiveStatsActivity extends AppCompatActivity {
         Log.d("Calling remove", "removeRecentlyJoinedStudentRealtime");
         DatabaseReference ref = database.getReference("/PRESENCE/"+ Room + "/" + MostRecentStudentID + "/present");
         ref.setValue(false);
+    }
+
+    void removeAttendance() {
+
+        DocumentReference docRef = db.collection("COURSES").document(courseName);
+        Log.d("courseName", courseName);
+        Calendar currentTime = Calendar.getInstance();
+        int day = (currentTime.get(Calendar.DAY_OF_MONTH));
+        int month = (currentTime.get(Calendar.MONTH)) + 1;
+        int year = (currentTime.get(Calendar.YEAR));
+
+
+
+        String encodedEmail = EncoderHelper.encode(emailMostRecentlyJoinedStudent);
+        Log.d("encodedEmail", encodedEmail);
+        Log.d("Decoded Email", EncoderHelper.decode(encodedEmail));
+
+        String stringref = "PRESENT." + day + "_" + month + "_" + year + "." + encodedEmail;
+        Log.d("stringref", stringref);
+
+
+        Map<String, Object> updates = new HashMap<>();
+
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Log.d("Search Results", documentSnapshot.toString());
+                if (documentSnapshot.exists()) {
+                    Log.d("Document", "Document exists");
+
+                    // Update the document with the modified array
+                    docRef.update(stringref, FieldValue.delete())
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    // Update successful
+                                    Log.d("DELETE", "DLETED");
+                                    Log.d("Success", "DocumentSnapshot successfully updated!");
+
+                                    removeRecentlyJoinedStudentRealtime();
+                                    refreshMostRecentStudent();
+
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    // Handle errors
+                                    Log.d("Failure", "Error updating document", e);
+                                }
+                            });
+                }
+            }
+        });
     }
     void removeRecentlyJoinedStudentFirestore(){
         String mostRecentStudentID = textViewLastStudentJoinedID.getText().toString();
@@ -280,6 +335,7 @@ public class LiveStatsActivity extends AppCompatActivity {
                     }
                     MostRecentStudentID = null;
                     refreshNameMostRecentStudent();
+
 
 
                     // Update the document with the modified array
@@ -325,6 +381,9 @@ public class LiveStatsActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 String mostRecentStudentID = textViewLastStudentJoinedID.getText().toString();
+                if (mostRecentStudentID == ""){
+                    return;
+                }
 
                 if (task.isSuccessful()) {
                     for (DocumentSnapshot document : task.getResult()) {
@@ -333,14 +392,22 @@ public class LiveStatsActivity extends AppCompatActivity {
                         String android_id = document.getString("android_id");
                         String first_name = document.getString("first name");
                         String last_name = document.getString("last name");
+//                        String[] classes = document.getString("classes").split(",");
 
-                        if (mostRecentStudentID.equals(android_id)){
+                        if (mostRecentStudentID.equals(android_id)){ //  && classes[0].equals(courseName)
                             //change color of card view to warn professor
                             //send notification
                             //create snackbar
+
                             View view = findViewById(android.R.id.content).getRootView();
 
                             Snackbar a = Snackbar.make(findViewById(android.R.id.content).getRootView(), "New student joined the class ", Snackbar.LENGTH_SHORT);
+                            a.setAction("Dismiss", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    a.dismiss();
+                                }
+                            });
                             emailMostRecentlyJoinedStudent = documentId;
                             textViewLastStudentJoinedName.setText(first_name + " " + last_name);
                             MostRecentStudentID = android_id;
@@ -385,27 +452,15 @@ public class LiveStatsActivity extends AppCompatActivity {
                                     int hour = getHour(presentSnapshot.getValue().toString());
                                     int minute = getMinute(presentSnapshot.getValue().toString());
                                     int second = getSecond(presentSnapshot.getValue().toString());
+
+                                    int totalSeconds = hour*60*60 + minute*60 + second;
                                     //check for most recent time
-                                    if (hour > mostRecentHour) {
+                                    if (totalSeconds > mostRecentHour*60*60 + mostRecentMinute*60 + mostRecentSecond){
                                         mostRecentHour = hour;
                                         mostRecentMinute = minute;
                                         mostRecentSecond = second;
-                                        mostRecentStudentName = idSnapshot.getKey();
                                         mostRecentStudentID = idSnapshot.getKey();
-                                        foundOneStudent = true;
-                                    } else if (hour == mostRecentHour && minute > mostRecentMinute) {
-                                        mostRecentHour = hour;
-                                        mostRecentMinute = minute;
-                                        mostRecentSecond = second;
-                                        mostRecentStudentName = idSnapshot.getKey();
-                                        mostRecentStudentID = idSnapshot.getKey();
-                                        foundOneStudent = true;
-                                    } else if (hour == mostRecentHour && minute == mostRecentMinute && second > mostRecentSecond) {
-                                        mostRecentHour = hour;
-                                        mostRecentMinute = minute;
-                                        mostRecentSecond = second;
-                                        mostRecentStudentName = idSnapshot.getKey();
-                                        mostRecentStudentID = idSnapshot.getKey();
+
                                         foundOneStudent = true;
                                     }
                                     Log.d("ID", mostRecentStudentID);
@@ -413,6 +468,7 @@ public class LiveStatsActivity extends AppCompatActivity {
                                 }
                             }
                         }
+
                         if (foundOneStudent) {
                             textViewLastStudentJoinedID.setText(mostRecentStudentID);
                             textViewLastStudentJoinedName.setText(mostRecentStudentName);
@@ -507,7 +563,7 @@ public class LiveStatsActivity extends AppCompatActivity {
 
                             if (daysOfWeek.contains(current_day_of_week_string)){
 
-                                if (currentSeconds >= startSeconds && currentSeconds <= endSeconds) {
+                                if (currentSeconds >= (startSeconds - 15*60) && currentSeconds <= endSeconds) {
 //                                    if (current_minute <= endMinute){
                                     Log.d("Found minute", String.valueOf(current_minute));
                                     classFound = true;
