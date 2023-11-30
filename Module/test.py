@@ -231,8 +231,8 @@ def corroborateEmailWithTime(student, emails, hour, minute, course):
       except:
          exit_hour = "null"
       if (exit_hour != "null"):
-         print("Student did not exit the class normally")
-         return
+         print("Student Exited class normally")
+         return ("null")
       # START_HOUR = dicto["START_HOUR"]
       # START_MINUTE = dicto["START_MIN"]
       END_HOUR = dicto["END_HOUR"]
