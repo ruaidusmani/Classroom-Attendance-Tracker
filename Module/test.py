@@ -526,7 +526,7 @@ def main():
     # print("Start time: ", start_time_sec)
     # time.sleep(1)
     # print(current_time_sec - start_time_sec)
-    if (current_time_sec - sec_ref >= 10):
+    if (current_time_sec - sec_ref >= 60):
       print("Calling force remove students")
       start_time_hour = int(datetime.now(timezone('EST')).strftime("%H"))
       start_time_minute = int(datetime.now(timezone('EST')).strftime("%M"))
