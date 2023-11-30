@@ -122,6 +122,7 @@ def checkIfNeedForceRemoveStudents(current_time_sec):
   # query = courses.stream()
   classNames = []
   classEndTimes = []
+  classStartTimes = []
   for a in query:
     dicto = a.to_dict()
     # print(dicto)
@@ -148,15 +149,16 @@ def checkIfNeedForceRemoveStudents(current_time_sec):
       if ( (current_time_sec >= (end_sec+ 60*15)) and (current_time_sec > start_sec) ):
           # print("Current time: ", current_time_sec)
           # print("End time: ", end_sec)
-          # print("ID: ", a.id)
+          # print("ID: ", a.id)x
           
           classNames.append(a.id)
           classEndTimes.append(end_sec)
+	  classStartTimes.append(start_sec)
   
-  max_end_sec = 99999999999
+  max_end_sec = 0
   most_recent_class = "null"
   for i in range(0, len(classEndTimes)):
-      if (classEndTimes[i] < max_end_sec):
+      if (classEndTimes[i] > max_end_sec):
           max_end_sec = classEndTimes[i]
           most_recent_class = classNames[i]
   print(most_recent_class)
