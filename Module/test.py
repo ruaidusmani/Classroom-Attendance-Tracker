@@ -151,6 +151,7 @@ def checkIfNeedForceRemoveStudents(current_time_sec):
           # print("Current time: ", current_time_sec)
           # print("End time: ", end_sec)
           # print("ID: ", a.id)x
+	  print("MARKING AS TO BE DELETED: ", a.id)
           
           classNames.append(a.id)
           classEndTimes.append(end_sec)
@@ -216,9 +217,15 @@ def corroborateEmailWithTime(emails, hour, minute, course):
     try:
       arrival_hour =  dicto['PRESENT'][current_day + "_" + current_month + "_" + current_year][encoded_email]["arrival_hour"]
       arrival_minute =  dicto['PRESENT'][current_day + "_" + current_month + "_" + current_year][encoded_email]["arrival_minute"]
+      # START_HOUR = dicto["START_HOUR"]
+      # START_MINUTE = dicto["START_MIN"]
+      END_HOUR = dicto["END_HOUR"]
+      END_MINUTE = dicto["END_MIN"]
+      end_seconds = END
+      end_sec = (END_HOUR * 60 * 60) + (END_MINUTE * 60)
       arrival_seconds = arrival_hour * 60 * 60 + arrival_minute * 60
       class_start_seconds = hour * 60 * 60 + minute * 60
-      if (class_start_seconds - 15*60 <= arrival_seconds ):
+      if (class_start_seconds - 15*60 <= arrival_seconds):
         print(email)
         return email
       #get information in path
