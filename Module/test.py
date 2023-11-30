@@ -276,6 +276,13 @@ def updateForceRemove(studentEmail, course):
   docref = courses.document(course)
   docref.update({path: True})
 
+  path2 = "PRESENT" + "." + current_day + "_" + current_month + "_" + current_year + "." + encodedEmail + "." + "exit_hour"
+  docref.update({path2: int(datetime.now(timezone('EST')).strftime("%H"))})
+
+  path3 = "PRESENT" + "." + current_day + "_" + current_month + "_" + current_year + "." + encodedEmail + "." + "exit_minute"
+  docref.update({path3: int(datetime.now(timezone('EST')).strftime("%M"))})
+  
+
 def pushFireStoreData(course, date_string, email):
   ref = firestore_db.collection("COURSES").document(course)
   path = "PRESENCE" + "." + date_string 
