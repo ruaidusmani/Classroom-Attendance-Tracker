@@ -52,7 +52,6 @@ public class TeacherClassroomList extends AppCompatActivity implements ClassDate
         setContentView(R.layout.activity_teacher_classroom);
 
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-        download_csv = (Button) findViewById(R.id.download_csv);
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
@@ -80,18 +79,6 @@ public class TeacherClassroomList extends AppCompatActivity implements ClassDate
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
     }
-        View.OnClickListener button_listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(view.getId() == download_csv.getId())
-                {
-                    Intent intent = new Intent(getApplicationContext(), DownloadCSVActivity.class);
-                    String class_name = getIntent().getStringExtra("CLASS_NAME");
-                    intent.putExtra("CLASS_NAME", class_name);
-                    startActivity(intent);
-                }
-            }
-        };
 
 
 
