@@ -95,7 +95,7 @@ public class TeacherHomepage extends AppCompatActivity implements ClassItemAdapt
 
     public void getClassesService(){
         db.collection("COURSES")
-                .whereEqualTo("OWNER", "teacher@test6.com")
+                .whereEqualTo("OWNER", user.getEmail())
 //                .whereEqualTo("OWNER", user.getEmail())
 //                .whereArrayContains("DAYS", "Monday")
                 .get()

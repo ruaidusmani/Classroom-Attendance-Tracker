@@ -109,7 +109,7 @@ public class RegisterActivity extends AppCompatActivity {
                     Log.d("PASSWORD PASSING", password);
                     if(!passwordRegexValidation(password)){
                         Log.d("PASSWORD REGEX FAILED " ,  " doesn't meet requirements");
-                        Toast.makeText(getApplicationContext(), "Password format invalid ", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getApplicationContext(), "Password format invalid ", Toast.LENGTH_LONG).show();
                         //Removed for testing purposes.
                         //return;
                     } else {

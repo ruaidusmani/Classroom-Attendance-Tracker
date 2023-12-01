@@ -95,7 +95,7 @@ public class TeacherClassroomList extends AppCompatActivity implements ClassDate
     public void getClassRoomService(String class_name){
 
         db.collection("COURSES")
-                .whereEqualTo("OWNER", "teacher@test6.com")
+                .whereEqualTo("OWNER", user.getEmail())
                 //.whereEqualTo("OWNER", "teacher@test6.com")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
