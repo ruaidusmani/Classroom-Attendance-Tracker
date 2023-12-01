@@ -88,6 +88,7 @@ def setClassroomNumber(roomNumber):
  
 def getEmail(android_ID):
   global SERIAL
+
   users = firestore_db.collection("USERS")
   query = users.where("android_id", "==", android_ID).stream()
   for a in query:
@@ -196,6 +197,8 @@ def forceRemoveStudents(course):
     emails = getEmailStudentRemoved(student)
     email = corroborateEmailWithTime(student, emails, hours[students_to_remove.index(student)], minutes[students_to_remove.index(student)], course)
     if (email != "null"):
+      # if (not checkIfInAnotherClass(email)):
+      print("Student is in another class")
       path = '/PRESENCE/%s/%s' %(ROOM, student)
       ref = db.reference(path)
       ref.update({'present': False}) 
@@ -211,6 +214,47 @@ def getEmailStudentRemoved(student_id):
     emails.append(a.id)
   return emails
 
+def checkIfInAnotherClass(email):
+  courses = firestore_db.collection("COURSES")
+  query = courses.where("ROOM_NUMBER", "==", ROOM).stream()
+  current_day = datetime.now(timezone('EST')).strftime("%d")
+  current_month = datetime.now(timezone('EST')).strftime("%m")
+  current_year = datetime.now(timezone('EST')).strftime("%Y")
+  for a in query:
+    if(DAY_HASH[datetime.now(timezone('EST')).weekday()] in a.to_dict()["DAYS"]):
+      dicto = a.to_dict()
+      print("CHECKING CLASS: " , a.id)
+      print("FOR EMAIL: ", email)
+
+      try:
+        encoded_email = ''
+        for character in email:
+            encoded_email = encoded_email + str(ord(character)) + "_"
+        try:
+          arrival_hour =  dicto['PRESENT'][current_day + "_" + current_month + "_" + current_year][encoded_email]["arrival_hour"]
+          arrival_minute =  dicto['PRESENT'][current_day + "_" + current_month + "_" + current_year][encoded_email]["arrival_minute"]
+          
+        except:
+          arrival_hour = "null"
+          arrival_minute = "null"
+          traceback.print_exc()
+        if (arrival_hour != "null" and arrival_minute != "null"):
+          START_HOUR = dicto["START_HOUR"]
+          START_MINUTE = dicto["START_MIN"]
+          END_HOUR = dicto["END_HOUR"]
+          END_MINUTE = dicto["END_MIN"]
+          arrival_seconds = arrival_hour * 60 * 60 + arrival_minute * 60
+          start_seconds = START_HOUR * 60 * 60 + START_MINUTE * 60
+          end_seconds = END_HOUR * 60 * 60 + END_MINUTE * 60
+          if ((start_seconds- 15*60 <= arrival_seconds ) and (arrival_seconds <= end_seconds)):
+            return True
+      except (Exception):
+        print("Student did not arrive: ", email)
+        # print(e)
+        traceback.print_exc()
+  return False
+
+  
 def corroborateEmailWithTime(student, emails, hour, minute, course):
   courses = firestore_db.collection("COURSES")
   docref = courses.document(course)
@@ -226,14 +270,31 @@ def corroborateEmailWithTime(student, emails, hour, minute, course):
     try:
       arrival_hour =  dicto['PRESENT'][current_day + "_" + current_month + "_" + current_year][encoded_email]["arrival_hour"]
       arrival_minute =  dicto['PRESENT'][current_day + "_" + current_month + "_" + current_year][encoded_email]["arrival_minute"]
-      # START_HOUR = dicto["START_HOUR"]
-      # START_MINUTE = dicto["START_MIN"]
+      try:
+        exit_hour =  dicto['PRESENT'][current_day + "_" + current_month + "_" + current_year][encoded_email]["exit_hour"] # will throw error if student did not exit class at any point
+      except:
+         exit_hour = "null"
+      print("Course is: " , course)
+      print("Looking in this path: ",'PRESENT'+current_day + "_" + current_month + "_" + current_year+encoded_email+"arrival_minute")
+      print("exit hour: ", exit_hour)
+      if (exit_hour != "null"):
+         print("Student Exited class normally")
+         return ("null")
+      START_HOUR = dicto["START_HOUR"]
+      START_MINUTE = dicto["START_MIN"]
+      print()
       END_HOUR = dicto["END_HOUR"]
       END_MINUTE = dicto["END_MIN"]
       # end_seconds = END
+      print("Hour is: ", hour)
+      print("Minute is: ", minute)
+      
       end_sec = (END_HOUR * 60 * 60) + (END_MINUTE * 60)
       arrival_seconds = arrival_hour * 60 * 60 + arrival_minute * 60
       class_start_seconds = hour * 60 * 60 + minute * 60
+      class_start_seconds = START_HOUR * 60 * 60 + START_MINUTE * 60
+      print("Arrivl seconds: ", arrival_seconds)
+      print("Class start seconds: ", class_start_seconds)
       # print("CUrrent email looking at: ", email)
       if (class_start_seconds - 15*60 <= arrival_seconds):
         # path = '/PRESENCE/%s/%s' %(ROOM, student)
@@ -242,6 +303,7 @@ def corroborateEmailWithTime(student, emails, hour, minute, course):
         print(email)
         return email
         #get information in path
+      return "null"
     except (Exception):
       print("Student did not arrive: ", email)
       # print(e)
@@ -269,6 +331,13 @@ def updateForceRemove(studentEmail, course):
   
   docref = courses.document(course)
   docref.update({path: True})
+
+  path2 = "PRESENT" + "." + current_day + "_" + current_month + "_" + current_year + "." + encodedEmail + "." + "exit_hour"
+  docref.update({path2: int(datetime.now(timezone('EST')).strftime("%H"))})
+
+  path3 = "PRESENT" + "." + current_day + "_" + current_month + "_" + current_year + "." + encodedEmail + "." + "exit_minute"
+  docref.update({path3: int(datetime.now(timezone('EST')).strftime("%M"))})
+
 
 def pushFireStoreData(course, date_string, email):
   ref = firestore_db.collection("COURSES").document(course)
